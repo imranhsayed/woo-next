@@ -7,12 +7,13 @@
 
 # Features
 
-1. SSR
-2. SEO friendly
-3. Automatic Code Splitting
-4. Hot Reloading
-5. Prefetching
-6. Custom Server with Express
+1. WooCommerce Store in React
+2. SSR
+3. SEO friendly
+4. Automatic Code Splitting
+5. Hot Reloading
+6. Prefetching
+7. Custom Server with Express
 
 ## Getting Started :rocket:
 
