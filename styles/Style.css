@@ -1,0 +1,9 @@
+.product-container {
+	display: flex;
+	flex-flow: wrap;
+	padding: 24px;
+}
+
+.product-container img {
+	max-width: 310px;
+}
