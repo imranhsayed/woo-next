@@ -5,7 +5,7 @@
 
 ![](demo-example.gif)
 
-# Features
+# Features:
 
 1. WooCommerce Store in React
 2. SSR
