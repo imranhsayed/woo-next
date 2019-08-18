@@ -1,14 +1,35 @@
 import Layout from "../components/Layout";
-
-import clientConfig from '../client-config';
-
-import fetch from 'isomorphic-unfetch';
 import Product from "../components/Product";
+import client from '../components/ApolloClient';
+import gql from 'graphql-tag';
+
+/**
+ * GraphQL products query.
+ */
+const PRODUCTS_QUERY = gql`query {
+					products(first: 50) {
+						nodes {
+							id
+							productId
+							averageRating
+							slug
+							description
+							image {
+								uri
+								title
+								srcSet
+								sourceUrl
+							}
+							name
+							price
+						}
+					}
+				}`;
 
 const Index = ( props ) => {
 
 	const { products } = props;
-
+	
 	return (
 		<Layout>
 			<div className="product-container">
@@ -21,12 +42,15 @@ const Index = ( props ) => {
 };
 
 Index.getInitialProps = async () => {
-const res = await fetch( `${clientConfig.siteUrl}/getProducts` );
-const productsData = await res.json();
 
-return {
-	products: productsData
-}
+	const result = await client.query({
+		query: PRODUCTS_QUERY
+	});
+
+	return {
+		products: result.data.products.nodes,
+	}
+
 };
 
 export default Index;
