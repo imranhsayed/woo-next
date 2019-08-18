@@ -1,5 +1,5 @@
 # Woo Next React Theme :rocket:
-> * This is a React WooCommerce theme, built with Next JS, Webpack, Babel, Node, Express, using WooCommerce REST API.
+> * This is a React WooCommerce theme, built with Next JS, Webpack, Babel, Node, GraphQl, using WooCommerce REST API.
 
 ## Demo :video_camera:
 
@@ -24,7 +24,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installing :wrench:
 
-1. Clone this repo in `git clone git@github.com:imranhsayed/woo-next`
+1. Clone this repo using terminal `git clone git@github.com:imranhsayed/woo-next`
 2. `cd woo-next`
 3. `npm install`
 
@@ -32,9 +32,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 1. Clone and activate the following plugins , in your WordPress plugin directory:
 
-* a. [wp-graphql](https://github.com/wp-graphql/wp-graphql) Exposes graphql for WordPress.
-* b. [wp-graphiql](https://github.com/wp-graphql/wp-graphiql) Provides GraphiQL IDE (playground) to the WP-Admin.
-* c. [wp-graphql-woocommerce](https://github.com/wp-graphql/wp-graphql-woocommerce) Adds Woocommerce functionality to a WPGraphQL schema.
+* [wp-graphql](https://github.com/wp-graphql/wp-graphql) Exposes graphql for WordPress.
+* [wp-graphiql](https://github.com/wp-graphql/wp-graphiql) Provides GraphiQL IDE (playground) to the WP-Admin.
+* [wp-graphql-woocommerce](https://github.com/wp-graphql/wp-graphql-woocommerce) Adds Woocommerce functionality to a WPGraphQL schema.
 
 You can also import default wooCommerce products that come with wooCommerce Plugin for development ( if you don't have any products in your WordPress install ) `WP Dashboard > Tools > Import > WooCommerce products(CSV)`: The WooCommerce default products csv file is available at `wp-content/plugins/woocommerce/sample-data/sample_products.csv`
 
@@ -45,7 +45,7 @@ You can also import default wooCommerce products that come with wooCommerce Plug
 ```ruby
 const clientConfig = {
 	siteUrl: 'http://xyz.com',
-    graphqlUrl: 'http://wordpressSiteUrl.com/graphql
+        graphqlUrl: 'http://wordpressSiteUrl.com/graphql'
 };
 
 export default clientConfig;
