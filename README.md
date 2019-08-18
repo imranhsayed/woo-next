@@ -1,5 +1,5 @@
 # Woo Next React Theme :rocket:
-> * This is a React WooCommerce theme, built with Next JS, Webpack, Babel, Node, Express, using WooCommerce REST API.
+> * This is a React WooCommerce theme, built with Next JS, Webpack, Babel, Node, GraphQl.
 
 ## Demo :video_camera:
 
@@ -13,7 +13,7 @@
 4. Automatic Code Splitting
 5. Hot Reloading
 6. Prefetching
-7. Custom Server with Express
+7. GraphQl with Apollo Client
 
 ## Getting Started :rocket:
 
@@ -24,9 +24,19 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installing :wrench:
 
-1. Clone this repo in `git clone git@github.com:imranhsayed/woo-next`
+1. Clone this repo using terminal `git clone git@github.com:imranhsayed/woo-next`
 2. `cd woo-next`
 3. `npm install`
+
+## Add GraphQl support for WordPress
+
+1. Clone and activate the following plugins , in your WordPress plugin directory:
+
+* [wp-graphql](https://github.com/wp-graphql/wp-graphql) Exposes graphql for WordPress.
+* [wp-graphiql](https://github.com/wp-graphql/wp-graphiql) Provides GraphiQL IDE (playground) to the WP-Admin.
+* [wp-graphql-woocommerce](https://github.com/wp-graphql/wp-graphql-woocommerce) Adds Woocommerce functionality to a WPGraphQL schema.
+
+You can also import default wooCommerce products that come with wooCommerce Plugin for development ( if you don't have any products in your WordPress install ) `WP Dashboard > Tools > Import > WooCommerce products(CSV)`: The WooCommerce default products csv file is available at `wp-content/plugins/woocommerce/sample-data/sample_products.csv`
 
 ## Configuration :wrench:
 
@@ -34,24 +44,11 @@ These instructions will get you a copy of the project up and running on your loc
 
 ```ruby
 const clientConfig = {
-	siteUrl: 'http://xyz.com'
+	siteUrl: 'http://xyz.com',
+        graphqlUrl: 'http://wordpressSiteUrl.com/graphql'
 };
 
 export default clientConfig;
-```
-
-
-* Rename `wooConfig.example.js` to `wooConfig.js` and update your WordPress Site URL and WooCommerce config keys
-
-```ruby
-const wooConfig = {
-	siteUrl: 'https://xyz.com',
-	consumerKey: 'xxxx',
-	consumerSecret: 'xxx'
-};
-
-module.exports = wooConfig;
-
 ```
 
 ## Common Commands :computer:
@@ -68,7 +65,7 @@ I use [Git](https://github.com/) for versioning.
 
 ## Author :bust_in_silhouette:
 
-* **[Imran Sayed](https://codeytek.com)**
+* **[Imran Sayed](https://twitter.com/imranhsayed)**
 
 ## License :page_with_curl:
 

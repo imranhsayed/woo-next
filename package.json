@@ -10,11 +10,17 @@
   "license": "ISC",
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
+    "apollo-boost": "^0.4.4",
+    "apollo-cache-inmemory": "^1.6.3",
+    "apollo-link-http": "^1.5.15",
     "express": "^4.17.1",
+    "graphql": "^14.4.2",
+    "graphql-tag": "^2.10.1",
     "isomorphic-unfetch": "^3.0.0",
     "next": "^8.1.0",
     "nodemon": "^1.19.1",
     "react": "^16.8.6",
+    "react-apollo": "^3.0.1",
     "react-dom": "^16.8.6",
     "woocommerce-api": "^1.4.2"
   }
