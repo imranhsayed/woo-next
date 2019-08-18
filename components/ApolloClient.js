@@ -2,13 +2,12 @@ import fetch from 'node-fetch';
 import { ApolloClient } from 'apollo-boost';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createHttpLink } from 'apollo-link-http';
-import config from './../client-config';
-console.warn( 'mine', config.graphqlUrl );
+import clientConfig from './../client-config';
 
 // Apollo GraphQL client.
 const client = new ApolloClient({
 	link: createHttpLink({
-		uri: config.graphqlUrl,
+		uri: clientConfig.graphqlUrl,
 		fetch: fetch
 	}),
 	cache: new InMemoryCache(),

@@ -7,7 +7,7 @@ import gql from 'graphql-tag';
  * GraphQL products query.
  */
 const PRODUCTS_QUERY = gql`query {
-					products(first: 50) {
+					products(first: 20) {
 						nodes {
 							id
 							productId
