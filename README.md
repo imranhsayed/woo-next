@@ -51,6 +51,12 @@ const clientConfig = {
 export default clientConfig;
 ```
 
+## Branch details
+
+1. [feature/rest-api](https://github.com/imranhsayed/woo-next/tree/feature/rest-api) Contains REST API Implementation.
+
+The master branch has the GraphQL implementation.  
+
 ## Common Commands :computer:
 
 * `dev` Runs server in development mode
