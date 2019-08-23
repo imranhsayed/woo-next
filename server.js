@@ -27,6 +27,21 @@ app.prepare()
 			});
 		} );
 
+
+		/**
+		 * If user lands directly on the product page,
+		 * extract the product id from the url and handle
+		 * the request.
+		 */
+		server.get( '/product/:slug', ( req, res ) => {
+
+			const actualPage = '/product';
+			const productId = parseInt( req.params.slug.split('-').pop() );
+			const queryParams = { id: productId };
+
+			app.render(req, res, actualPage, queryParams);
+		});
+
 		server.get( '*', ( req, res ) => {
 			return handle( req, res );
 		} );
