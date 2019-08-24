@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "name": "woo-next",
+  "alias": "woo-next",
+  "builds": [
+	{
+	  "src": "package.json",
+	  "use": "@now/next"
+	}
+  ]
+}

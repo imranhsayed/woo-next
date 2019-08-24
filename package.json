@@ -1,10 +1,11 @@
 {
   "name": "woo-next",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "description": "Woocommerce Front end app with Nextjs",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "now dev",
+    "build": "next build",
+    "start": "next start"
   },
   "author": "Imran Sayed",
   "license": "ISC",
