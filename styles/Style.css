@@ -7,3 +7,13 @@
 .product-container img {
 	max-width: 310px;
 }
+
+.woo-next-single {
+	display: flex;
+	justify-content: center;
+	margin-top: 30px
+}
+
+.woo-next-single__product {
+	max-width: 600px;
+}

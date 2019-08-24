@@ -1,61 +1,65 @@
 import Layout from "../components/Layout";
 import { withRouter } from 'next/router';
-import client from '../components/ApolloClient';
+import client from "../components/ApolloClient";
 import gql from 'graphql-tag';
 
-const Product = withRouter(props => {
+const Product = withRouter( props => {
 
 	const { product } = props;
 
 	return (
 		<Layout>
-			{product ? (
-				<div className="card bg-light mb-3 p-5">
-					<div className="card-header">{product.name}</div>
-					<div className="card-body">
-						<h4 className="card-title">{product.name}</h4>
-						<img className="product-image"  width="300" src={product.image.sourceUrl} srcSet={product.image.srcSet} alt={product.name} />
-						<p className="card-text">{product.price}</p>
-						<p className="card-text" key={product.id}>
-							{product.description}
-						</p>
+			{ product ? (
+				<div className="woo-next-single">
+					<div className="woo-next-single__product card bg-light mb-3 p-5">
+						<div className="card-header">{ product.name }</div>
+						<div className="card-body">
+							<h4 className="card-title">{ product.name }</h4>
+							<img src={ product.image.sourceUrl } alt="Product Image" width="200" srcSet={ product.image.srcSet }/>
+							<p className="card-text">{ product.description }</p>
+						</div>
 					</div>
 				</div>
-			) : ''}
+			) : '' }
 		</Layout>
-
 	)
 });
 
+Product.getInitialProps = async function( context ) {
 
-Product.getInitialProps = async function (context) {
+	console.warn( context );
+
 	let { query: { slug } } = context;
-	const id = slug ? parseInt(slug.split('-').pop()) : context.query.id;
+	const id = slug ? parseInt( slug.split( '-' ).pop() ) : context.query.id;
 
-	const PRODUCT_QUERY = gql`query Product( $id: Int! ) {
-		productBy( productId: $id ) {
-			name
-			price
-			slug
-			description
-			productId
-			image {
-				uri
-				title
-				srcSet
-				sourceUrl
-			}
-		}
-	}`;
+	const PRODUCT_QUERY = gql` query Product( $id: Int ! ) {
+			productBy( productId: $id ) {
+							id
+							productId
+							averageRating
+							slug
+							description
+							image {
+								uri
+								title
+								srcSet
+								sourceUrl
+							}
+							name
+							price
+				
+			} 
+	 }`;
 
-	const res = await client.query({
+	const res = await client.query(({
 		query: PRODUCT_QUERY,
 		variables: { id }
-	});
+	}));
 
 	return {
 		product: res.data.productBy
 	}
+
 };
 
-export default Product
+export default Product;
