@@ -4,10 +4,6 @@
   "alias": "woo-next",
   "builds": [
 	{
-	  "src": "/static/*",
-	  "use": "@now/static"
-	},
-	{
 	  "src": "package.json",
 	  "use": "@now/next"
 	}
