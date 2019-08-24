@@ -7,5 +7,11 @@
 	  "src": "package.json",
 	  "use": "@now/next"
 	}
+  ],
+  "routes": [
+	{
+	  "src": "/product/(?<slug>[^/]+)$",
+	  "dest": "/product?slug=$slug"
+	}
   ]
 }
