@@ -4,10 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-	"dev": "now dev",
-	"dev:server": "nodemon server.js",
-	"build": "next build",
-	"start": "next start"
+    "dev": "now dev",
+    "build": "next build",
+    "start": "next start"
   },
   "author": "Imran Sayed",
   "license": "ISC",
