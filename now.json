@@ -7,11 +7,5 @@
 	  "src": "package.json",
 	  "use": "@now/next"
 	}
-  ],
-  "routes": [
-	{
-	  "src": "/static/(.*)",
-	  "dest": "/static/$1"
-	}
   ]
 }
