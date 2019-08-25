@@ -17,3 +17,38 @@
 .woo-next-single__product {
 	max-width: 600px;
 }
+
+/**
+ * Cart Icon
+ */
+
+.woo-next-cart-wrap {
+	cursor: pointer;
+	padding-right: 16px;
+}
+
+.woo-next-cart-price {
+	color: #fff;
+}
+
+.woo-next-cart-icon-container {
+	position: relative;
+}
+
+.woo-next-cart-icon {
+	font-size: 20px;
+}
+
+.woo-next-cart-count {
+	top: -13px;
+	left: 12px;
+	padding-left: 5px;
+	padding-right: 5px;
+	line-height: 16px;
+	color: #fff;
+	min-height: 16px;
+	font-weight: 700;
+	border-radius: 50%;
+	background-color: #868484;
+	position: absolute;
+}
