@@ -25,7 +25,7 @@ export const addFirstProduct = ( product ) => {
 	let newCart = {
 		products: [],
 		totalProductsCount: 1,
-		totalProductsPrice: parseFloat( productPrice.toFixed( 2 ) )
+		totalProductsPrice: productPrice
 	};
 
 	const newProduct = createNewProduct( product, productPrice, 1 );
