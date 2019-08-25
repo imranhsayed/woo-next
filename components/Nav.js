@@ -1,4 +1,7 @@
 import Link from 'next/link';
+import CartIcon from "./cart/CartIcon";
+
+
 const Nav = () => {
 	return (
 		<nav className="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -16,6 +19,7 @@ const Nav = () => {
 						<a className="nav-link" href="#">My Account</a>
 					</li>
 				</ul>
+				<CartIcon/>
 			</div>
 		</nav>
 	)
