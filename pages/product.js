@@ -2,6 +2,7 @@ import Layout from "../components/Layout";
 import { withRouter } from 'next/router';
 import client from "../components/ApolloClient";
 import gql from 'graphql-tag';
+import AddToCartButton from "../components/cart/AddToCartButton";
 
 const Product = withRouter( props => {
 
@@ -17,6 +18,7 @@ const Product = withRouter( props => {
 							<h4 className="card-title">{ product.name }</h4>
 							<img src={ product.image.sourceUrl } alt="Product Image" width="200" srcSet={ product.image.srcSet }/>
 							<p className="card-text">{ product.description }</p>
+							<AddToCartButton product={ product }/>
 						</div>
 					</div>
 				</div>
