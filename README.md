@@ -17,7 +17,7 @@
 4. Automatic Code Splitting
 5. Hot Reloading
 6. Prefetching
-7. GraphQl with Apollo Client
+7. GraphQL with Apollo Client
 
 ## Getting Started :rocket:
 
