@@ -1,11 +1,21 @@
+/*Common styles*/
+a:hover {
+	text-decoration: none;
+}
+
 .product-container {
 	display: flex;
 	flex-flow: wrap;
 	padding: 24px;
+
+}
+
+.product-container a {
+	display: block;
 }
 
 .product-container img {
-	max-width: 310px;
+	width: 100%;
 }
 
 .woo-next-single {
@@ -68,4 +78,10 @@
 
 .woo-next-cart-close-icon i {
 	font-size: 20px;
+}
+
+/* Cart menu button*/
+.woo-next-menu-btn:focus {
+	user-select: none;
+	outline: none;
 }
