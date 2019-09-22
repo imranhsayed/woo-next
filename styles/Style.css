@@ -56,3 +56,16 @@
 .woo-next-view-cart-btn {
 	margin-left: 10px;
 }
+
+/* Cart Page */
+.table .woo-next-cart-element {
+	vertical-align: middle;
+}
+
+.woo-next-cart-qty-input {
+	max-width: 64px;
+}
+
+.woo-next-cart-close-icon i {
+	font-size: 20px;
+}
