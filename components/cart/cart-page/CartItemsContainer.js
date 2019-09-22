@@ -61,11 +61,11 @@ const CartItemsContainer = () => {
 								<tbody>
 								<tr className="table-light">
 									<td className="woo-next-cart-element-total">Subtotal</td>
-									<td className="woo-next-cart-element-amt">${ cart.totalProductsPrice.toFixed( 2 ) }</td>
+									<td className="woo-next-cart-element-amt">{ cart.totalProductsPrice.toFixed( 2 ) }</td>
 								</tr>
 								<tr className="table-light">
 									<td className="woo-next-cart-element-total">Total</td>
-									<td className="woo-next-cart-element-amt">${ cart.totalProductsPrice.toFixed( 2 ) }</td>
+									<td className="woo-next-cart-element-amt">{ cart.totalProductsPrice.toFixed( 2 ) }</td>
 								</tr>
 								</tbody>
 							</table>

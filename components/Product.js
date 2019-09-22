@@ -4,6 +4,7 @@ import AddToCartButton from "../components/cart/AddToCartButton";
 const Product = ( props ) => {
 
 	const { product } = props;
+	console.warn( product );
 	return (
 		<div className="col-lg-3 col-md-6 col-sm-12" >
 			<h3 className="card-header text-center">{product.name}</h3>
