@@ -7,22 +7,17 @@ const Nav = () => {
 	const [ show, setDisplay ] = useState( false );
 
 	return (
-		<nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+		<nav className="woo-next-menu-container navbar-dark bg-primary">
 			{/*Branding*/}
-			<Link href="/">
-				<a className="navbar-brand nav-link">WooNext</a>
-			</Link>
+			<div className="woo-next-branding">
+				<Link href="/">
+					<a className="">WooNext</a>
+				</Link>
+			</div>
 
-			{/*Menu toggle button for mobile*/}
-			<button
-				onClick={ () => setDisplay( ! show ) }
-				className="navbar-toggler woo-next-menu-btn" type="button" data-toggle="collapse" data-target="#navbarColor01"
-			        aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-				<span className="navbar-toggler-icon"></span>
-			</button>
 			{/*Navigation menu*/}
-			<div className={ `collapse navbar-collapse ${ show ? 'show' : '' }` } id="navbarColor01">
-				<ul className="navbar-nav mr-auto">
+			<div className={ `woo-next-sub-menu-wrap ${ show ? 'show' : '' }` } id="">
+				<ul className="navbar-nav">
 					<li className="nav-item">
 						<a className="nav-link" href="#">Categories</a>
 					</li>
@@ -31,10 +26,20 @@ const Nav = () => {
 					</li>
 				</ul>
 			</div>
+
+		{/*	Cart and Menu button*/}
+		<div className="woo-next-cart-and-menu-btn">
 			{/*Cart Icon*/}
 			<div>
 				<CartIcon />
 			</div>
+			{/*Menu toggle button for mobile*/}
+			<button
+				onClick={ () => setDisplay( ! show ) }
+				className="woo-next-menu-btn" type="button" aria-label="Toggle navigation">
+				<span className="navbar-toggler-icon"></span>
+			</button>
+		</div>
 		</nav>
 	)
 };

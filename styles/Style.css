@@ -1,8 +1,118 @@
-/*Common styles*/
+a {
+	transition: 0.3s;
+}
 a:hover {
 	text-decoration: none;
 }
 
+/* Branding */
+.woo-next-branding {
+	display: flex;
+	align-items: center;
+	font-size: 20px;
+}
+
+/* Nav Menu */
+.woo-next-menu-container {
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+	padding: 14px;
+}
+
+/* Menu Button */
+.woo-next-menu-btn {
+	background-color: #2C3E50;
+	border: none;
+}
+
+/* Submenu */
+.woo-next-sub-menu-wrap {
+	position: absolute;
+	overflow:hidden;
+	max-height:0;
+	-webkit-transition:max-height 500ms ease;
+	-moz-transition:max-height 500ms ease;
+	-o-transition:max-height 500ms ease;
+	transition:max-height 500ms ease;
+	top: 58px;
+	left: 0;
+	right: 0;
+	z-index: 1;
+	width: 100%;
+	background-color: #2C3E50;
+}
+
+/* Show Submenu */
+.woo-next-sub-menu-wrap.show {
+	max-height:150px;
+}
+
+/* Menu links */
+.woo-next-sub-menu-wrap .nav-link {
+	padding: 10px 14px;
+	border-bottom: 1px solid #7c7c7c;
+}
+
+/* Cart and Menu Button */
+.woo-next-cart-and-menu-btn {
+	display: flex;
+	align-items: center;
+}
+
+/* Cart Container */
+.woo-next-cart-wrap {
+	display: flex;
+}
+
+/* Media Query */
+
+/* Mobile */
+@media only screen and ( max-width: 640px ) {
+	.row {
+		margin-left: 0;
+		margin-right: 0;
+	}
+
+}
+
+/* Tablet */
+@media only screen and ( min-width: 769px ) {
+	.row {
+		margin-left: 0;
+		margin-right: 0;
+	}
+
+	/* Submenu */
+	.woo-next-sub-menu-wrap {
+		position: static;
+		overflow:hidden;
+		max-height:unset;
+		top: unset;
+		width: 100%;
+		background-color: #2C3E50;
+		display: flex;
+		padding-left: 24px;
+	}
+
+	.woo-next-sub-menu-wrap ul {
+		flex-direction: row;
+	}
+
+	/* Menu Button */
+	.woo-next-menu-btn {
+		display: none;
+	}
+
+	/* Menu links */
+	.woo-next-sub-menu-wrap .nav-link {
+		padding: 10px 14px;
+		border: none;
+	}
+}
+
+
+/* Product */
 .product-container {
 	display: flex;
 	flex-flow: wrap;
@@ -84,4 +194,16 @@ a:hover {
 .woo-next-menu-btn:focus {
 	user-select: none;
 	outline: none;
+}
+
+.woo-next-cart-qty-input {
+	text-align: center;
+}
+
+.woo-next-cart-total-container > div {
+	padding: 0;
+}
+
+input[type=number]::-webkit-inner-spin-button {
+	margin-top: 3px;
 }
