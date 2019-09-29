@@ -2,11 +2,27 @@ import Layout from "../components/Layout";
 import Product from "../components/Product";
 import client from '../components/ApolloClient';
 import gql from 'graphql-tag';
+import ParentCategoriesBlock from "../components/category/category-block/ParentCategoriesBlock";
 
 /**
  * GraphQL products query.
  */
-const PRODUCTS_QUERY = gql`query {
+const PRODUCTS_AND_CATEGORIES_QUERY = gql`query {
+
+					  productCategories {
+					    edges {
+					      node {
+					        id
+					        name
+					        slug
+					        image {
+					          id
+					          sourceUrl
+					        }
+					      }
+					    }
+					  }
+
 					products(first: 20) {
 						nodes {
 							id
@@ -24,14 +40,17 @@ const PRODUCTS_QUERY = gql`query {
 							price
 						}
 					}
+					
 				}`;
 
 const Index = ( props ) => {
 
-	const { products } = props;
+	const { products, productCategories } = props;
+	console.warn( productCategories );
 
 	return (
 		<Layout>
+			<ParentCategoriesBlock productCategories={ productCategories }/>
 			<div className="product-container row">
 				{ products.length ? (
 					products.map( product => <Product key={ product.id } product={ product } /> )
@@ -44,10 +63,11 @@ const Index = ( props ) => {
 Index.getInitialProps = async () => {
 
 	const result = await client.query({
-		query: PRODUCTS_QUERY
+		query: PRODUCTS_AND_CATEGORIES_QUERY,
 	});
 
 	return {
+		productCategories: result.data.productCategories.edges,
 		products: result.data.products.nodes,
 	}
 
