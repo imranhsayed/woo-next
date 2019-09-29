@@ -1,16 +1,19 @@
 import client from "../../ApolloClient";
 import Layout from "../../Layout";
-import Product from "../../Product";
+import ProductCategoryBlock from "./ParentCategoryBlock";
 import gql from 'graphql-tag';
 
 const ParentCategoriesBlock = ( props ) => {
 
 	const { productCategories } = props;
-	console.warn( 'e', productCategories );
 
 	return (
-		<div></div>
 
+		<div className="product-container row">
+			{ productCategories.length ? (
+				productCategories.map( productCategories => <ProductCategoryBlock key={ productCategories.node.id }  category={ productCategories.node }/> )
+			) : '' }
+		</div>
 
 	)
 

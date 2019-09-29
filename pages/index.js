@@ -9,19 +9,19 @@ import ParentCategoriesBlock from "../components/category/category-block/ParentC
  */
 const PRODUCTS_AND_CATEGORIES_QUERY = gql`query {
 
-					  productCategories {
-					    edges {
-					      node {
-					        id
-					        name
-					        slug
-					        image {
-					          id
-					          sourceUrl
-					        }
-					      }
-					    }
-					  }
+				  productCategories {
+				    edges {
+				      node {
+				        id
+				        name
+				        image {
+				          id
+				          sourceUrl
+				          date
+				        }
+				      }
+				    }
+				  }
 
 					products(first: 20) {
 						nodes {
@@ -46,7 +46,8 @@ const PRODUCTS_AND_CATEGORIES_QUERY = gql`query {
 const Index = ( props ) => {
 
 	const { products, productCategories } = props;
-	console.warn( productCategories );
+	console.warn( 'prod', products );
+	console.warn( 'ate' , productCategories );
 
 	return (
 		<Layout>
@@ -66,6 +67,7 @@ Index.getInitialProps = async () => {
 		query: PRODUCTS_AND_CATEGORIES_QUERY,
 	});
 
+	console.warn( 'resut', result );
 	return {
 		productCategories: result.data.productCategories.edges,
 		products: result.data.products.nodes,

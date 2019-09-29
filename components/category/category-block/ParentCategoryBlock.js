@@ -10,9 +10,9 @@ const ParentCategoryBlock = ( props ) => {
 
 			<Link as={`/category/${category.slug}-${category.id}`} href={`/category?slug=${category.slug}-${category.id}`}>
 				<a>
-					<img
-						src={ category.image.sourceUrl }
-						alt="ParentCategoryBlock image"/>
+					{/*<img*/}
+					{/*	src={ null !== category.image.sourceUrl ? category.image.sourceUrl : '' }*/}
+					{/*	alt="ParentCategoryBlock image"/>*/}
 				</a>
 			</Link>
 			<div className="card-body text-center">
