@@ -29,6 +29,8 @@ const Product = withRouter( props => {
 
 Product.getInitialProps = async function( context ) {
 
+	console.warn( context );
+
 	let { query: { slug } } = context;
 	const id = slug ? parseInt( slug.split( '-' ).pop() ) : context.query.id;
 

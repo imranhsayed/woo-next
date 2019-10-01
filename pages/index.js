@@ -5,23 +5,21 @@ import gql from 'graphql-tag';
 import ParentCategoriesBlock from "../components/category/category-block/ParentCategoriesBlock";
 
 /**
- * GraphQL products query.
+ * GraphQL categories and products query.
  */
 const PRODUCTS_AND_CATEGORIES_QUERY = gql`query {
 
-				  productCategories {
-				    edges {
-				      node {
-				        id
-				        name
-				        image {
-				          id
-				          sourceUrl
-				          date
-				        }
-				      }
-				    }
-				  }
+					productCategories(first: 3) {
+						nodes {
+							id
+							name
+							slug
+							image {
+								sourceUrl
+								srcSet
+							}
+						}
+					}
 
 					products(first: 20) {
 						nodes {
@@ -46,12 +44,17 @@ const PRODUCTS_AND_CATEGORIES_QUERY = gql`query {
 const Index = ( props ) => {
 
 	const { products, productCategories } = props;
-	console.warn( 'prod', products );
-	console.warn( 'ate' , productCategories );
 
 	return (
 		<Layout>
-			<ParentCategoriesBlock productCategories={ productCategories }/>
+			{/*Categories*/}
+			<div className="mt-5 text-center">
+				<h2>Categories</h2>
+				<ParentCategoriesBlock productCategories={ productCategories }/>
+			</div>
+			{/*Products*/}
+
+			<h2 className="mt-5 text-center">Products</h2>
 			<div className="product-container row">
 				{ products.length ? (
 					products.map( product => <Product key={ product.id } product={ product } /> )
@@ -67,9 +70,8 @@ Index.getInitialProps = async () => {
 		query: PRODUCTS_AND_CATEGORIES_QUERY,
 	});
 
-	console.warn( 'resut', result );
 	return {
-		productCategories: result.data.productCategories.edges,
+		productCategories: result.data.productCategories.nodes,
 		products: result.data.products.nodes,
 	}
 

@@ -1,7 +1,4 @@
-import client from "../../ApolloClient";
-import Layout from "../../Layout";
 import ProductCategoryBlock from "./ParentCategoryBlock";
-import gql from 'graphql-tag';
 
 const ParentCategoriesBlock = ( props ) => {
 
@@ -9,9 +6,9 @@ const ParentCategoriesBlock = ( props ) => {
 
 	return (
 
-		<div className="product-container row">
+		<div className="product-container row d-flex justify-content-center">
 			{ productCategories.length ? (
-				productCategories.map( productCategories => <ProductCategoryBlock key={ productCategories.node.id }  category={ productCategories.node }/> )
+				productCategories.map( productCategories => <ProductCategoryBlock key={ productCategories.id }  category={ productCategories }/> )
 			) : '' }
 		</div>
 
