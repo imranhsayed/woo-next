@@ -9,6 +9,9 @@
 
 ![](tablet-mobile.gif)
 
+## Categories
+![](Categories.png)
+
 ## Live Demo:
 
 [Live Demo Site](https://woo-next.imranhsayed.now.sh/)
