@@ -8,7 +8,7 @@ const ParentCategoriesBlock = ( props ) => {
 
 		<div className="product-container row d-flex justify-content-center">
 			{ productCategories.length ? (
-				productCategories.map( productCategories => <ProductCategoryBlock key={ productCategories.id }  category={ productCategories }/> )
+				productCategories.map( productCategory => <ProductCategoryBlock key={ productCategory.id }  category={ productCategory }/> )
 			) : '' }
 		</div>
 

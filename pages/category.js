@@ -4,31 +4,7 @@ import client from "../components/ApolloClient";
 import gql from 'graphql-tag';
 import Product from "../components/Product";
 
-const Category = withRouter( props => {
-
-	const { categoryName, products } = props;
-	console.warn( 'prod', products );
-
-	return (
-		<Layout>
-			{ categoryName ? <h3>{ categoryName }</h3> : '' }
-			<div className="product-container row">
-				{ undefined !== products && products.length ? (
-					products.map( product => <Product key={ product.node.id } product={ product.node } /> )
-				) : ''}
-			</div>
-		</Layout>
-	)
-});
-
-Category.getInitialProps = async function( context ) {
-
-	let { query: { slug } } = context;
-
-	const id = slug ? slug.split( '-' ).pop() : context.query.id;
-
-
-	const PRODUCT_BY_CATEGORY_ID = gql` query Product_Category( $id: ID ! ) {
+const PRODUCT_BY_CATEGORY_ID = gql` query Product_Category( $id: ID ! ) {
 			productCategory( id: $id ) {
 						name
 						products {
@@ -53,6 +29,28 @@ Category.getInitialProps = async function( context ) {
 
 			}
 	 }`;
+
+const Category = withRouter( props => {
+
+	const { categoryName, products } = props;
+
+	return (
+		<Layout>
+			{ categoryName ? <h3 className="product-container pl-5">{ categoryName }</h3> : '' }
+			<div className="product-container row">
+				{ undefined !== products && products.length ? (
+					products.map( product => <Product key={ product.node.id } product={ product.node } /> )
+				) : ''}
+			</div>
+		</Layout>
+	)
+});
+
+Category.getInitialProps = async function( context ) {
+
+	let { query: { slug } } = context;
+
+	const id = slug ? slug.split( '-' ).pop() : context.query.id;
 
 	const res = await client.query(({
 		query: PRODUCT_BY_CATEGORY_ID,
