@@ -1,7 +1,6 @@
 const wooConfig = {
 	siteUrl: 'https://xyz.com',
-	consumerKey: 'xxxx',
-	consumerSecret: 'xxx'
+	graphqlUrl: 'https://xxwordpresssitexx.com/graphql',
 };
 
 module.exports = wooConfig;
