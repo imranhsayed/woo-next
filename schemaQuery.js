@@ -1,7 +1,8 @@
 const fetch = require('node-fetch');
 const fs = require('fs');
+const wooConfig = require('./wooConfig');
 
-fetch(`http://localhost:8888/woo-next/graphql`, {
+fetch(`${ wooConfig.graphqlUrl }`, {
 	method: 'POST',
 	headers: { 'Content-Type': 'application/json' },
 	body: JSON.stringify({
