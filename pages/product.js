@@ -48,9 +48,32 @@ Product.getInitialProps = async function( context ) {
 								sourceUrl
 							}
 							name
-							price
+						  ... on SimpleProduct {
+					        price
+					        id
+					      }
+					      ... on VariableProduct {
+					        price
+					        id
+					      }
+					      ... on ExternalProduct {
+					        price
+					        id
+					      }
+					      ... on GroupProduct {
+					        products {
+					          nodes {
+					            ... on SimpleProduct {
+					              price
+					            }
+					          }
+					        }
+					        id
+					      }
+					    }
+
 				
-			} 
+			
 	 }`;
 
 	const res = await client.query(({
