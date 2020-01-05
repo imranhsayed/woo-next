@@ -21,45 +21,66 @@ const PRODUCTS_AND_CATEGORIES_QUERY = gql`query {
 						}
 					}
 
-					products(first: 20) {
-						nodes {
-							id
-							productId
-							averageRating
-							slug
-							description
-							image {
-								uri
-								title
-								srcSet
-								sourceUrl
-							}
-							name
-							price
-						}
-					}
-					
+					  products(first: 50) {
+					    nodes {
+					      id
+					      productId
+					      averageRating
+					      slug
+					      description
+					      image {
+					        uri
+					        title
+					        srcSet
+					        sourceUrl
+					      }
+					      name
+					      ... on SimpleProduct {
+					        price
+					        id
+					      }
+					      ... on VariableProduct {
+					        price
+					        id
+					      }
+					      ... on ExternalProduct {
+					        price
+					        id
+					      }
+					      ... on GroupProduct {
+					        products {
+					          nodes {
+					            ... on SimpleProduct {
+					              price
+					            }
+					          }
+					        }
+					        id
+					      }
+					    }
+					  }
+										
 				}`;
 
 const Index = ( props ) => {
 
 	const { products, productCategories } = props;
 
-console.warn( productCategories );
+	console.warn( products, productCategories );
 	return (
 		<Layout>
-			{/*Categories*/}
+			{/*Categories*/ }
 			<div className="mt-5 text-center">
 				<h2>Categories</h2>
 				<ParentCategoriesBlock productCategories={ productCategories }/>
 			</div>
-			{/*Products*/}
+			{/*Products*/ }
 
 			<h2 className="mt-5 text-center">Products</h2>
 			<div className="product-container row">
 				{ products.length ? (
-					products.map( product => <Product key={ product.id } product={ product } /> )
-				) : ''}
+					products.map( product => <Product key={ product.id } product={ product }/> )
+				) : '' }
 			</div>
 		</Layout>
 	)
@@ -67,9 +88,9 @@ console.warn( productCategories );
 
 Index.getInitialProps = async () => {
 
-	const result = await client.query({
+	const result = await client.query( {
 		query: PRODUCTS_AND_CATEGORIES_QUERY,
-	});
+	} );
 
 	return {
 		productCategories: result.data.productCategories.nodes,
