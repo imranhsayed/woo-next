@@ -4,7 +4,8 @@
   "description": "Woocommerce Front end app with Nextjs",
   "scripts": {
     "dev": "now dev",
-    "build": "next build",
+    "build": "npm run build-fragment && next build",
+	"build-fragment": "node schemaQuery.js",
     "start": "next start"
   },
   "author": "Imran Sayed",

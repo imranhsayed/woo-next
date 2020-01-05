@@ -45,21 +45,32 @@ These instructions will get you a copy of the project up and running on your loc
 
 * [wp-graphql](https://github.com/wp-graphql/wp-graphql) Exposes graphql for WordPress
 * [wp-graphiql](https://github.com/wp-graphql/wp-graphiql) Provides GraphiQL IDE (playground) to the WP-Admin.
-* [wp-graphql-woocommerce](https://github.com/wp-graphql/wp-graphql-woocommerce) Adds Woocommerce functionality to a WPGraphQL schema ( **Tested with v-0.2.0** of this plugin )
+* [wp-graphql-woocommerce](https://github.com/wp-graphql/wp-graphql-woocommerce) Adds Woocommerce functionality to a WPGraphQL schema ( **Tested with v-0.3.2** of this plugin )
 
 You can also import default wooCommerce products that come with wooCommerce Plugin for development ( if you don't have any products in your WordPress install ) `WP Dashboard > Tools > Import > WooCommerce products(CSV)`: The WooCommerce default products csv file is available at `wp-content/plugins/woocommerce/sample-data/sample_products.csv`
 
 ## Configuration :wrench:
 
-* Rename `client-config-example.js` to `client-config.js` and update your React Site URL
+* 1.Rename `client-config-example.js` to `client-config.js` and update your React Site URL and WordPressSite URL ( Used access it in ES6 file. )
 
 ```ruby
 const clientConfig = {
 	siteUrl: 'http://xyz.com',
-        graphqlUrl: 'http://wordpressSiteUrl.com/graphql'
+    graphqlUrl: 'http://wordpressSiteUrl.com/graphql'
 };
 
 export default clientConfig;
+```
+
+* 2. Rename `wooConfig.example.js` to `wooConfig.example.js` and update your React Site URL and WordPressSite URL ( Used access it in common js file. )
+
+```ruby
+const wooConfig = {
+	siteUrl: 'https://xyz.com',
+	graphqlUrl: 'https://xxwordpresssitexx.com/graphql',
+};
+
+module.exports = wooConfig;
 ```
 
 ## Branch details
