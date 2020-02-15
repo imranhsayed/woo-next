@@ -1,6 +1,8 @@
 # Woo Next React Theme :rocket:
 > * This is a React WooCommerce theme, built with Next JS, Webpack, Babel, Node, GraphQl
 
+[Full Course Video Tutorial](https://codeytek.com/course/woocommerce-with-react-course/)
+
 ## Demo Desktop :video_camera:
 
 ![](desktop-example.gif)
