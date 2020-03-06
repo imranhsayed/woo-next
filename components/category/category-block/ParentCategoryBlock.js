@@ -3,7 +3,6 @@ import Link from 'next/link';;
 const ParentCategoryBlock = ( props ) => {
 
 	const { category } = props;
-	console.warn( category );
 
 	return (
 		<div className="col-lg-3 col-md-6 col-sm-12" >
