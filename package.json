@@ -5,14 +5,14 @@
   "scripts": {
     "dev": "now dev",
     "build": "npm run build-fragment && next build",
-	"build-fragment": "node schemaQuery.js",
+    "build-fragment": "node schemaQuery.js",
     "start": "next start"
   },
   "author": "Imran Sayed",
   "license": "ISC",
   "engines": {
-	"node": ">=8.12.0",
-	"npm": ">=6.4.1"
+    "node": ">=8.12.0",
+    "npm": ">=6.4.1"
   },
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
@@ -23,7 +23,7 @@
     "graphql": "^14.4.2",
     "graphql-tag": "^2.10.1",
     "isomorphic-unfetch": "^3.0.0",
-    "next": "^8.1.0",
+    "next": "^9.2.2",
     "nodemon": "^1.19.1",
     "react": "^16.8.6",
     "react-apollo": "^3.0.1",

@@ -10,3 +10,5 @@ dist/
 client-config.js
 .next
 wooConfig.js
+
+.now
