@@ -34,8 +34,8 @@ Product.getInitialProps = async function( context ) {
 	let { query: { slug } } = context;
 	const id = slug ? parseInt( slug.split( '-' ).pop() ) : context.query.id;
 
-	const PRODUCT_QUERY = gql` query Product( $id: Int ! ) {
-			productBy( productId: $id ) {
+	const PRODUCT_QUERY = gql` query Product( $id: ID! ) {
+			product ( id: $id, idType: DATABASE_ID ) {
 							id
 							productId
 							averageRating
@@ -82,7 +82,7 @@ Product.getInitialProps = async function( context ) {
 	}));
 
 	return {
-		product: res.data.productBy
+		product: res.data.product
 	}
 
 };
