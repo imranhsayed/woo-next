@@ -45,9 +45,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 1. Clone and activate the following plugins , in your WordPress plugin directory:
 
-* [wp-graphql](https://github.com/wp-graphql/wp-graphql) Exposes graphql for WordPress
+* [wp-graphql](https://github.com/wp-graphql/wp-graphql) Exposes graphql for WordPress ( **Tested with v-0.8.0** of this plugin )
 * [wp-graphiql](https://github.com/wp-graphql/wp-graphiql) Provides GraphiQL IDE (playground) to the WP-Admin.
-* [wp-graphql-woocommerce](https://github.com/wp-graphql/wp-graphql-woocommerce) Adds Woocommerce functionality to a WPGraphQL schema ( **Tested with v-0.3.2** of this plugin )
+* [wp-graphql-woocommerce](https://github.com/wp-graphql/wp-graphql-woocommerce) Adds Woocommerce functionality to a WPGraphQL schema ( **Tested with v-0.5.0** of this plugin )
 
 You can also import default wooCommerce products that come with wooCommerce Plugin for development ( if you don't have any products in your WordPress install ) `WP Dashboard > Tools > Import > WooCommerce products(CSV)`: The WooCommerce default products csv file is available at `wp-content/plugins/woocommerce/sample-data/sample_products.csv`
 

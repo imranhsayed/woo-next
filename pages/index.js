@@ -66,7 +66,6 @@ const Index = ( props ) => {
 
 	const { products, productCategories } = props;
 
-	console.warn( products, productCategories );
 	return (
 		<Layout>
 			{/*Categories*/ }
