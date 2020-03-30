@@ -59,7 +59,7 @@ const PRODUCTS_AND_CATEGORIES_QUERY = gql`query {
 					      }
 					    }
 					  }
-										
+
 				}`;
 
 const Index = ( props ) => {
