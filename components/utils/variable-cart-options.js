@@ -64,7 +64,7 @@ const VariableCartOptions = ({ id, productId, soldIndividually }) => {
 	};
 
 	const { data, error, loading } = useQuery( GET_VARIATIONS, {
-		variables: 27,
+		variables: { id },
 		onCompleted: ( results ) => selectVariation( get( results, 'product.variations.nodes[0]' ) ),
 	} );
 

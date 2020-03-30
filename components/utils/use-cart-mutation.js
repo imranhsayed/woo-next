@@ -16,9 +16,6 @@ export const GET_CART = gql`
             description
             type
             onSale
-            price
-            regularPrice
-            salePrice
             slug
             averageRating
             reviewCount
@@ -34,14 +31,7 @@ export const GET_CART = gql`
                 altText
               }
             }
-            defaultAttributes {
-              nodes {
-                id
-                attributeId
-                name
-                value
-              }
-            }
+
           }
           variation {
             id
@@ -116,9 +106,6 @@ export const ADD_TO_CART = gql`
           description
           type
           onSale
-          price
-          regularPrice
-          salePrice
           slug
           averageRating
           reviewCount
@@ -134,14 +121,7 @@ export const ADD_TO_CART = gql`
               altText
             }
           }
-          defaultAttributes {
-            nodes {
-              id
-              attributeId
-              name
-              value
-            }
-          }
+
         }
         variation {
           id
@@ -188,7 +168,6 @@ export const UPDATE_ITEM_QUANTITIES = gql`
           description
           type
           onSale
-          price
           regularPrice
           salePrice
           slug
@@ -204,14 +183,6 @@ export const UPDATE_ITEM_QUANTITIES = gql`
               id
               sourceUrl
               altText
-            }
-          }
-          defaultAttributes {
-            nodes {
-              id
-              attributeId
-              name
-              value
             }
           }
         }

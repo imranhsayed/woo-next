@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 // import { ApolloClient } from 'apollo-client';
 // import { InMemoryCache } from 'apollo-cache-inmemory';
-// import { createHttpLink } from 'apollo-link-http';
+import { createHttpLink } from 'apollo-link-http';
 //
 // import { IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 // import introspectionQueryResultData from '../fragmentTypes';
@@ -99,7 +99,10 @@ const onForbidden = onError(({ networkError }) => {
 	}
 });
 
-const httpLink = new HttpLink({ uri: clientConfig.graphqlUrl });
+const httpLink = createHttpLink({
+	uri: clientConfig.graphqlUrl,
+	fetch: fetch
+});
 const client = new ApolloClient({
 	link: onForbidden.concat(middleware.concat(afterware.concat(httpLink))),
 	cache,
