@@ -114,7 +114,7 @@ const CartItemsContainer = () => {
 	const { loading, error, data, refetch } = useQuery( GET_CART, {
 		notifyOnNetworkStatusChange: true,
 		onCompleted: () => {
-			console.warn( 'completed GET_CART', data );
+			// console.warn( 'completed GET_CART', data );
 		}
 	} );
 

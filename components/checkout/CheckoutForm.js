@@ -128,41 +128,42 @@ mutation CHECKOUT_QUERY( $input: CheckoutInput! ) {
 
 const CheckoutForm = () => {
 
-	// const initialState = {
-	// 	firstName: '',
-	// 	lastName: '',
-	// 	company: '',
-	// 	country: '',
-	// 	address1: '',
-	// 	address2: '',
-	// 	city: '',
-	// 	state: '',
-	// 	postcode: '',
-	// 	phone: '',
-	// 	email: '',
-	// 	createAccount: false,
-	// 	orderNotes: '',
-	// 	paymentMethod: '',
-	// 	errors: null
-	// };
-
 	const initialState = {
-		firstName: 'Imran',
-		lastName: 'Sayed',
-		address1: '109 Hills Road Valley',
-		address2: 'Station Road',
-		city: 'Pune',
-		state: 'Maharastra',
-		country: 'ID',
-		postcode: '400298',
-		phone: '9959338989',
-		email: 'imran@gmail.com',
-		company: 'Tech',
+		firstName: '',
+		lastName: '',
+		company: '',
+		country: '',
+		address1: '',
+		address2: '',
+		city: '',
+		state: '',
+		postcode: '',
+		phone: '',
+		email: '',
 		createAccount: false,
 		orderNotes: '',
-		paymentMethod: 'cod',
+		paymentMethod: '',
 		errors: null
 	};
+
+	// Use this for testing puposes, so you dont have to fill the checkout form over an over again.
+	// const initialState = {
+	// 	firstName: 'Imran',
+	// 	lastName: 'Sayed',
+	// 	address1: '109 Hills Road Valley',
+	// 	address2: 'Station Road',
+	// 	city: 'Pune',
+	// 	state: 'Maharastra',
+	// 	country: 'ID',
+	// 	postcode: '400298',
+	// 	phone: '9959338989',
+	// 	email: 'imran@gmail.com',
+	// 	company: 'Tech',
+	// 	createAccount: false,
+	// 	orderNotes: '',
+	// 	paymentMethod: 'cod',
+	// 	errors: null
+	// };
 
 	const [ cart, setCart ] = useContext( AppContext );
 	const [ input, setInput ] = useState( initialState );
