@@ -220,6 +220,7 @@ export const getFormattedCart = ( data ) => {
 		const total = getFloatVal( givenProducts[ i ].total );
 
 		product.productId = givenProduct.productId;
+		product.name = givenProduct.name;
 		product.qty = givenProducts[ i ].quantity;
 		product.price = total / product.qty;
 		product.totalPrice = givenProducts[ i ].total;

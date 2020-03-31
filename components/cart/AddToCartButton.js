@@ -5,7 +5,6 @@ import { cartData } from "./data";
 import { AppContext } from "../context/AppContext";
 import { addFirstProduct, getFormattedCart, updateCart } from "../../functions";
 import Link from "next/link";
-import clientConfig from "../../client-config";
 import { v4 } from 'uuid';
 
 const GET_CART = gql`
@@ -244,11 +243,10 @@ const AddToCart = ( props ) => {
 		onCompleted: () => {
 			// console.warn( 'completed GET_CART' );
 			// Update cart in the localStorage.
-
-			console.warn( 'cartData', data );
 			const updatedCart = getFormattedCart( data );
-			console.warn( 'cartData', data, updatedCart );
 			localStorage.setItem( 'woo-next-cart', JSON.stringify( updatedCart ) );
+
+			// Update cart data in React Context.
 			setCart( updatedCart );
 		}
 	} );

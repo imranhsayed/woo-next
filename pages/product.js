@@ -3,7 +3,6 @@ import { withRouter } from 'next/router';
 import client from "../components/ApolloClient";
 import gql from 'graphql-tag';
 import AddToCartButton from "../components/cart/AddToCartButton";
-import clientConfig from "../client-config";
 
 const Product = withRouter( props => {
 
