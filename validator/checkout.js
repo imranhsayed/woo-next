@@ -27,7 +27,7 @@ const validateAndSanitizeCheckoutForm = ( data ) => {
 	data.email = ( ! isEmpty( data.email ) ) ? data.email : '';
 	data.createAccount = ( ! isEmpty( data.createAccount ) ) ? data.createAccount : '';
 	data.orderNotes = ( ! isEmpty( data.orderNotes ) ) ? data.orderNotes : '';
-	data.paymentMode = ( ! isEmpty( data.paymentMode ) ) ? data.paymentMode : '';
+	data.paymentMethod = ( ! isEmpty( data.paymentMethod ) ) ? data.paymentMethod : '';
 
 	/**
 	 * Checks for error if required is true
@@ -82,7 +82,7 @@ const validateAndSanitizeCheckoutForm = ( data ) => {
 	addErrorAndSanitizedData( 'lastName', 'Last name', 2, 35, 'string', true );
 	addErrorAndSanitizedData( 'company', 'Company Name', 0, 35, 'string', false );
 	addErrorAndSanitizedData( 'country', 'Country name', 2, 55, 'string', true );
-	addErrorAndSanitizedData( 'address1', 'Street address line 1', 35, 100,'string',true );
+	addErrorAndSanitizedData( 'address1', 'Street address line 1', 20, 100,'string',true );
 	addErrorAndSanitizedData( 'address2', '', 0, 254, 'string', false );
 	addErrorAndSanitizedData( 'city', 'City field', 3, 25, 'string', true );
 	addErrorAndSanitizedData( 'state', 'State/County', 0, 254, 'string', true );
@@ -93,7 +93,7 @@ const validateAndSanitizeCheckoutForm = ( data ) => {
 	// The data.createAccount is a boolean value.
 	sanitizedData.createAccount = data.createAccount;
 	addErrorAndSanitizedData( 'orderNotes', '', 0, 254, 'string', false );
-	addErrorAndSanitizedData( 'paymentMode', 'Payment mode field', 2, 20, 'string', true );
+	addErrorAndSanitizedData( 'paymentMethod', 'Payment mode field', 2, 20, 'string', true );
 
 
 	return {

@@ -111,20 +111,20 @@ const Billing = ( { input, handleOnChange } ) => {
 					</div>
 				</div>
 			</div>
-			{/*	Create an Account */}
-			<div className="form-check">
-				<label className="form-check-label">
-					<input onChange={ handleOnChange } className="form-check-input" name="createAccount" type="checkbox"/>
-						Create an account?
-				</label>
-			</div>
-			<h2 className="mt-4 mb-4">Additional Information</h2>
-			{/* Order Notes */}
-			<div className="form-group">
-				<label htmlFor="order-notes">Order Notes</label>
-				<textarea onChange={ handleOnChange } defaultValue={ input.orderNotes } name="orderNotes" className="form-control woo-next-checkout-textarea" id="order-notes" rows="4"/>
-				<Error errors={ input.errors } fieldName={ 'orderNotes' }/>
-			</div>
+			{/*	@TODO Create an Account */}
+			{/*<div className="form-check">*/}
+			{/*	<label className="form-check-label">*/}
+			{/*		<input onChange={ handleOnChange } className="form-check-input" name="createAccount" type="checkbox"/>*/}
+			{/*			Create an account?*/}
+			{/*	</label>*/}
+			{/*</div>*/}
+			{/*<h2 className="mt-4 mb-4">Additional Information</h2>*/}
+			{/* @TODO Order Notes */}
+			{/*<div className="form-group">*/}
+			{/*	<label htmlFor="order-notes">Order Notes</label>*/}
+			{/*	<textarea onChange={ handleOnChange } defaultValue={ input.orderNotes } name="orderNotes" className="form-control woo-next-checkout-textarea" id="order-notes" rows="4"/>*/}
+			{/*	<Error errors={ input.errors } fieldName={ 'orderNotes' }/>*/}
+			{/*</div>*/}
 		</React.Fragment>
 	);
 };

@@ -1,6 +1,5 @@
 const CheckoutCartItem = ( { item } ) => {
 
-	console.warn( 'item', item );
 	return (
 		<tr className="woo-next-cart-item" key={ item.productId }>
 			<td className="woo-next-cart-element">

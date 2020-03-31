@@ -1,7 +1,6 @@
 import { useState, useContext } from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
-import { cartData } from "./data";
 import { AppContext } from "../context/AppContext";
 import { addFirstProduct, getFormattedCart, updateCart } from "../../functions";
 import Link from "next/link";
@@ -165,27 +164,6 @@ const ADD_TO_CART = gql`
   }
 `;
 
-const CHECKOUT_QUERY = gql`
-mutation CHECKOUT_QUERY( $input: CheckoutInput! ) {
-        checkout(input: $input ) {
-            clientMutationId
-            order {
-                id
-                refunds {
-                    nodes {
-                        amount
-                    }
-                }
-            }
-            customer {
-                id
-            }
-            result
-            redirect
-        }
-}
-`;
-
 const AddToCart = ( props ) => {
 
 	const { product } = props;
@@ -258,26 +236,18 @@ const AddToCart = ( props ) => {
 		},
 		onCompleted: () => {
 			// console.warn( 'completed ADD_TO_CART' );
+
+			// If error.
 			if ( addToCartError ) {
 				setRequestError( addToCartError.graphQLErrors[ 0 ].message );
 			}
-			refetch();
-		},
-		onError: ( error ) => {
-			if ( error ) {
-				setRequestError( error.graphQLErrors[ 0 ].message );
-			}
-		}
-	} );
 
-	// Checkout or CreateOrder Mutation.
-	const [checkout, { loading: checkoutLoading, error: checkoutError }] = useMutation( CHECKOUT_QUERY, {
-		variables: {
-			input: cartData
-		},
-		onCompleted: () => {
-			// console.warn( 'completed CHECKOUT_QUERY' );
+			// On Success:
+			// 1. Make the GET_CART query to update the cart with new values in React context.
 			refetch();
+
+			// 2. Show View Cart Button
+			setShowViewCart( true )
 		},
 		onError: ( error ) => {
 			if ( error ) {
@@ -292,32 +262,10 @@ const AddToCart = ( props ) => {
 		addToCart();
 	};
 
-	const handleCheckout = () => {
-		setRequestError( null );
-		checkout();
-	};
-
-	if (loading) {
-		return <p>Loading Live Cart...</p>;
-	}
-	if (error) {
-		return <p>Error: ${error.message}</p>;
-	}
-
 	return (
 		<div>
-			{/*  Cart Data */}
-			{data && <pre>{JSON.stringify(data, null, 2)}</pre>}
-			{
-				! data.cart.isEmpty && <button onClick={() => handleCheckout()}>Checkout</button>
-			}
-
 			{/* Add To Cart Loading*/}
 			{addToCartLoading && <p>Adding to Cart...</p>}
-
-			{/* Checkout Loading*/}
-			{checkoutLoading && <p>Processing Order...</p>}
-			{requestError && <p>Error : { requestError } :( Please try again</p>}
 
 			{/*	Check if its an external product then put its external buy link */}
 			{ "ExternalProduct" === product.__typename ? (

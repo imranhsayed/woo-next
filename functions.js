@@ -1,3 +1,4 @@
+import { v4 } from 'uuid';
 
 /**
  * Extracts and returns float value from a string.
@@ -204,8 +205,6 @@ export const getFormattedCart = ( data ) => {
 		return formattedCart;
 	}
 
-	console.warn( 'data', data );
-
 	const givenProducts = data.cart.contents.nodes;
 
 	// Create an empty object.
@@ -239,8 +238,45 @@ export const getFormattedCart = ( data ) => {
 	formattedCart.totalProductsCount = totalProductsCount;
 	formattedCart.totalProductsPrice = data.cart.total;
 
-	console.warn( 'formatted', formattedCart );
-
 	return formattedCart;
 
+};
+
+export const createCheckoutData = ( order ) => {
+	const checkoutData = {
+		clientMutationId: v4(),
+
+		billing: {
+			firstName: order.firstName,
+			lastName: order.lastName,
+			address1: order.address1,
+			address2: order.address2,
+			city: order.city,
+			country: order.country,
+			state: order.state,
+			postcode: order.postcode,
+			email: order.email,
+			phone: order.phone,
+			company: order.company,
+		},
+		shipping: {
+			firstName: order.firstName,
+			lastName: order.lastName,
+			address1: order.address1,
+			address2: order.address2,
+			city: order.city,
+			country: order.country,
+			state: order.state,
+			postcode: order.postcode,
+			email: order.email,
+			phone: order.phone,
+			company: order.company,
+		},
+		shipToDifferentAddress: false,
+		paymentMethod: order.paymentMethod,
+		isPaid: false,
+		transactionId: "hjkhjkhsdsdiui"
+	};
+
+	return checkoutData;
 };

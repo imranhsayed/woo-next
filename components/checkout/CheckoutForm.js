@@ -1,4 +1,4 @@
-import { useState, useContext, Fragment } from 'react';
+import { useState, useContext, useEffect, Fragment } from 'react';
 import Billing from "./Billing";
 import YourOrder from "./YourOrder";
 import PaymentModes from "./PaymentModes";
@@ -6,8 +6,7 @@ import { AppContext } from "../context/AppContext";
 import validateAndSanitizeCheckoutForm from '../../validator/checkout';
 import gql from "graphql-tag";
 import { useMutation, useQuery } from "@apollo/react-hooks";
-import { getFormattedCart } from "../../functions";
-import { cartData } from "../cart/data";
+import { getFormattedCart, createCheckoutData } from "../../functions";
 
 const GET_CART = gql`
   query GET_CART {
@@ -129,8 +128,6 @@ mutation CHECKOUT_QUERY( $input: CheckoutInput! ) {
 
 const CheckoutForm = () => {
 
-	const [ cart, setCart ] = useContext( AppContext );
-
 	// const initialState = {
 	// 	firstName: '',
 	// 	lastName: '',
@@ -145,29 +142,31 @@ const CheckoutForm = () => {
 	// 	email: '',
 	// 	createAccount: false,
 	// 	orderNotes: '',
-	// 	paymentMode: '',
+	// 	paymentMethod: '',
 	// 	errors: null
 	// };
 
 	const initialState = {
-		firstName: '',
-		lastName: '',
-		address1: '',
-		address2: '',
-		company: '',
-		country: '',
-		city: '',
-		state: '',
-		postcode: '',
-		phone: '',
-		email: '',
+		firstName: 'Imran',
+		lastName: 'Sayed',
+		address1: '109 Hills Road Valley',
+		address2: 'Station Road',
+		city: 'Pune',
+		state: 'Maharastra',
+		country: 'ID',
+		postcode: '400298',
+		phone: '9959338989',
+		email: 'imran@gmail.com',
+		company: 'Tech',
 		createAccount: false,
 		orderNotes: '',
-		paymentMode: '',
+		paymentMethod: 'cod',
 		errors: null
 	};
 
+	const [ cart, setCart ] = useContext( AppContext );
 	const [ input, setInput ] = useState( initialState );
+	const [ orderData, setOrderData ] = useState( null );
 	const [ requestError, setRequestError ] = useState( null );
 
 	// Get Cart Data.
@@ -185,9 +184,9 @@ const CheckoutForm = () => {
 	} );
 
 	// Checkout or CreateOrder Mutation.
-	const [ checkout, { loading: checkoutLoading, error: checkoutError }] = useMutation( CHECKOUT_QUERY, {
+	const [ checkout, { loading: checkoutLoading, error: checkoutError } ] = useMutation( CHECKOUT_QUERY, {
 		variables: {
-			input: cartData
+			input: orderData
 		},
 		onCompleted: () => {
 			// console.warn( 'completed CHECKOUT_QUERY' );
@@ -214,9 +213,9 @@ const CheckoutForm = () => {
 			setInput( { ...input,  errors: result.errors } );
 			return;
 		}
-
+		const checkOutData = createCheckoutData( input );
+		setOrderData( checkOutData );
 		setRequestError( null );
-		addToCart();
 	};
 
 	/*
@@ -237,6 +236,14 @@ const CheckoutForm = () => {
 		}
 	};
 
+	useEffect( () => {
+
+		if ( null !== orderData ) {
+			// Call the checkout mutation when the value for orderData changes/updates.
+			checkout();
+		}
+
+	}, [ orderData ] );
 
 	return (
 		<Fragment>
@@ -261,6 +268,10 @@ const CheckoutForm = () => {
 									Place Order
 								</button>
 							</div>
+
+							{/* Checkout Loading*/}
+							{checkoutLoading && <p>Processing Order...</p>}
+							{requestError && <p>Error : { requestError } :( Please try again</p>}
 						</div>
 					</div>
 				</form>
