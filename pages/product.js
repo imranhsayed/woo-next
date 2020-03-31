@@ -8,7 +8,6 @@ import clientConfig from "../client-config";
 const Product = withRouter( props => {
 
 	const { product } = props;
-	console.warn( 'product', product );
 
 	return (
 

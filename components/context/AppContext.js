@@ -10,6 +10,7 @@ export const AppProvider = ( props ) => {
 
 	useEffect( () => {
 
+		// @TODO Will add option to show the cart with localStorage later.
 		if ( process.browser ) {
 
 			let cartData = localStorage.getItem( 'woo-next-cart' );
