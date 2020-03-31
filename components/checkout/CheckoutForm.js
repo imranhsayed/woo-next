@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, Fragment } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import Billing from "./Billing";
 import YourOrder from "./YourOrder";
 import PaymentModes from "./PaymentModes";
@@ -7,6 +7,7 @@ import validateAndSanitizeCheckoutForm from '../../validator/checkout';
 import gql from "graphql-tag";
 import { useMutation, useQuery } from "@apollo/react-hooks";
 import { getFormattedCart, createCheckoutData } from "../../functions";
+import OrderSuccess from "./OrderSucess";
 
 const GET_CART = gql`
   query GET_CART {
@@ -107,22 +108,21 @@ const GET_CART = gql`
 
 const CHECKOUT_QUERY = gql`
 mutation CHECKOUT_QUERY( $input: CheckoutInput! ) {
-        checkout(input: $input ) {
-            clientMutationId
-            order {
-                id
-                refunds {
-                    nodes {
-                        amount
-                    }
-                }
-            }
-            customer {
-                id
-            }
-            result
-            redirect
+  checkout(input: $input) {
+    clientMutationId
+    order {
+      id
+      orderId
+      refunds {
+        nodes {
+          amount
         }
+      }
+      status
+    }
+    result
+    redirect
+  }
 }
 `;
 
@@ -184,7 +184,7 @@ const CheckoutForm = () => {
 	} );
 
 	// Checkout or CreateOrder Mutation.
-	const [ checkout, { loading: checkoutLoading, error: checkoutError } ] = useMutation( CHECKOUT_QUERY, {
+	const [ checkout, { data: checkoutResponse, loading: checkoutLoading, error: checkoutError } ] = useMutation( CHECKOUT_QUERY, {
 		variables: {
 			input: orderData
 		},
@@ -246,7 +246,7 @@ const CheckoutForm = () => {
 	}, [ orderData ] );
 
 	return (
-		<Fragment>
+		<>
 			{ cart ? (
 				<form onSubmit={ handleFormSubmit } className="woo-next-checkout-form">
 					<div className="row">
@@ -276,7 +276,10 @@ const CheckoutForm = () => {
 					</div>
 				</form>
 			) : '' }
-		</Fragment>
+
+		{/*	Show message if Order Sucess*/}
+		<OrderSuccess response={ checkoutResponse }/>
+		</>
 	);
 };
 

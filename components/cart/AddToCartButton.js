@@ -230,7 +230,7 @@ const AddToCart = ( props ) => {
 	} );
 
 	// Add to Cart Mutation.
-	const [ addToCart, { loading: addToCartLoading, error: addToCartError }] = useMutation( ADD_TO_CART, {
+	const [ addToCart, { data: addToCartRes, loading: addToCartLoading, error: addToCartError }] = useMutation( ADD_TO_CART, {
 		variables: {
 			input: productQryInput,
 		},
