@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import AddToCartButton from "../components/cart/AddToCartButton";
+import clientConfig from "../client-config";
 
 const Product = ( props ) => {
 
@@ -20,7 +21,10 @@ const Product = ( props ) => {
 				</Link>
 				<div className="card-body text-center">
 					<h6 className="card-subtitle mb-3">{ product.price }</h6>
-					<AddToCartButton product={product} />
+					<AddToCartButton product={product} productQryInput={{
+						clientMutationId: clientConfig.addToCartClientMutationID,
+						productId: product.productId,
+					}}/>
 				</div>
 
 			</div>
