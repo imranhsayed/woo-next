@@ -16,13 +16,13 @@ const validateAndSanitizeCheckoutForm = ( data ) => {
 	 */
 	data.firstName = ( ! isEmpty( data.firstName ) ) ? data.firstName : '';
 	data.lastName = ( ! isEmpty( data.lastName ) ) ? data.lastName : '';
-	data.companyName = ( ! isEmpty( data.companyName ) ) ? data.companyName : '';
+	data.company = ( ! isEmpty( data.company ) ) ? data.company : '';
 	data.country = ( ! isEmpty( data.country ) ) ? data.country : '';
-	data.streetAddressOne = ( ! isEmpty( data.streetAddressOne ) ) ? data.streetAddressOne : '';
-	data.streetAddressTwo = ( ! isEmpty( data.streetAddressTwo ) ) ? data.streetAddressTwo : '';
+	data.address1 = ( ! isEmpty( data.address1 ) ) ? data.address1 : '';
+	data.address2 = ( ! isEmpty( data.address2 ) ) ? data.address2 : '';
 	data.city = ( ! isEmpty( data.city ) ) ? data.city : '';
-	data.county = ( ! isEmpty( data.county ) ) ? data.county : '';
-	data.postCode = ( ! isEmpty( data.postCode ) ) ? data.postCode : '';
+	data.state = ( ! isEmpty( data.state ) ) ? data.state : '';
+	data.postcode = ( ! isEmpty( data.postcode ) ) ? data.postcode : '';
 	data.phone = ( ! isEmpty( data.phone ) ) ? data.phone : '';
 	data.email = ( ! isEmpty( data.email ) ) ? data.email : '';
 	data.createAccount = ( ! isEmpty( data.createAccount ) ) ? data.createAccount : '';
@@ -60,7 +60,7 @@ const validateAndSanitizeCheckoutForm = ( data ) => {
 			errors[ fieldName ] = `${errorContent} is not valid`;
 		}
 
-		if ( 'postCode' === type && postCodeLocale && ! validator.isPostalCode( data[ fieldName ], postCodeLocale ) ) {
+		if ( 'postcode' === type && postCodeLocale && ! validator.isPostalCode( data[ fieldName ], postCodeLocale ) ) {
 			errors[ fieldName ] = `${errorContent} is not valid`;
 		}
 
@@ -80,13 +80,13 @@ const validateAndSanitizeCheckoutForm = ( data ) => {
 
 	addErrorAndSanitizedData( 'firstName', 'First name', 2, 35, 'string', true );
 	addErrorAndSanitizedData( 'lastName', 'Last name', 2, 35, 'string', true );
-	addErrorAndSanitizedData( 'companyName', 'Company Name', 0, 35, 'string', false );
+	addErrorAndSanitizedData( 'company', 'Company Name', 0, 35, 'string', false );
 	addErrorAndSanitizedData( 'country', 'Country name', 2, 55, 'string', true );
-	addErrorAndSanitizedData( 'streetAddressOne', 'Street address line 1', 35, 100,'string',true );
-	addErrorAndSanitizedData( 'streetAddressTwo', '', 0, 254, 'string', false );
+	addErrorAndSanitizedData( 'address1', 'Street address line 1', 35, 100,'string',true );
+	addErrorAndSanitizedData( 'address2', '', 0, 254, 'string', false );
 	addErrorAndSanitizedData( 'city', 'City field', 3, 25, 'string', true );
-	addErrorAndSanitizedData( 'county', '', false );
-	addErrorAndSanitizedData( 'postCode', 'Post code', 2, 9, 'postCode', true );
+	addErrorAndSanitizedData( 'state', 'State/County', 0, 254, 'string', true );
+	addErrorAndSanitizedData( 'postcode', 'Post code', 2, 9, 'postcode', true );
 	addErrorAndSanitizedData( 'phone', 'Phone number', 10, 15, 'phone', true );
 	addErrorAndSanitizedData( 'email', 'Email', 11, 254, 'email', true );
 

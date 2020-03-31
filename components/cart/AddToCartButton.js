@@ -270,7 +270,6 @@ const AddToCart = ( props ) => {
 		}
 	} );
 
-
 	// Checkout or CreateOrder Mutation.
 	const [checkout, { loading: checkoutLoading, error: checkoutError }] = useMutation( CHECKOUT_QUERY, {
 		variables: {

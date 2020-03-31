@@ -12,7 +12,8 @@ export const cartData = {
 		state: "Maharastra",
 		postcode: "411028",
 		email: "smit.soni22@gmail.com",
-		phone: "9960119050"
+		phone: "9960119050",
+		company: 'Tech',
 	},
 	shipping: {
 		firstName: "Imran",
@@ -24,7 +25,8 @@ export const cartData = {
 		state: "Maharastra",
 		postcode: "411028",
 		email: "smit.soni22@gmail.com",
-		phone: "9960119050"
+		phone: "9960119050",
+		company: 'Tech',
 	},
 	shipToDifferentAddress: false,
 	paymentMethod: "cod",

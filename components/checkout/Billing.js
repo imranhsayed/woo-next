@@ -7,7 +7,7 @@ const Billing = ( { input, handleOnChange } ) => {
 		<React.Fragment>
 			{/*Name*/}
 			<div className="row">
-				<div className="col-lg-6 col-md-12">
+				<div className="col-lg-6 col-md-12 p-0 pr-2">
 					<div className="form-group">
 						<label htmlFor="first-name">
 							First Name
@@ -17,7 +17,7 @@ const Billing = ( { input, handleOnChange } ) => {
 						<Error errors={ input.errors } fieldName={ 'firstName' }/>
 					</div>
 				</div>
-				<div className="col-lg-6 col-sm-12">
+				<div className="col-lg-6 col-sm-12 p-0">
 					<div className="form-group">
 						<label htmlFor="last-name">
 							Last Name
@@ -31,8 +31,8 @@ const Billing = ( { input, handleOnChange } ) => {
 			{/* Company Name */}
 			<div className="form-group">
 				<label htmlFor="first-name">Company Name</label>
-				<input onChange={ handleOnChange } value={ input.companyName } type="text" name="companyName" className="form-control woo-next-checkout-input" id="first-name"/>
-				<Error errors={ input.errors } fieldName={ 'companyName' }/>
+				<input onChange={ handleOnChange } value={ input.company } type="text" name="company" className="form-control woo-next-checkout-input" id="first-name"/>
+				<Error errors={ input.errors } fieldName={ 'company' }/>
 			</div>
 			{/* Country */}
 			<div className="form-group">
@@ -44,7 +44,7 @@ const Billing = ( { input, handleOnChange } ) => {
 					<option value="">Select a country...</option>
 					{ countryList.length && (
 						countryList.map( ( country, index ) => (
-							<option key={ `${country}-${index}` } value={ country }>{ country }</option>
+							<option key={ `${country}-${index}` } value={ country.countryCode }>{ country.countryName }</option>
 						) )
 					) }
 				</select>
@@ -56,10 +56,10 @@ const Billing = ( { input, handleOnChange } ) => {
 					Street Address
 					<abbr className="required" title="required">*</abbr>
 				</label>
-				<input type="text" onChange={ handleOnChange } value={ input.streetAddressOne } name="streetAddressOne" placeholder="House number and street name" className="form-control woo-next-checkout-input" id="street-address"/>
-				<Error errors={ input.errors } fieldName={ 'streetAddressOne' }/>
+				<input type="text" onChange={ handleOnChange } value={ input.address1 } name="address1" placeholder="House number and street name" className="form-control woo-next-checkout-input" id="street-address"/>
+				<Error errors={ input.errors } fieldName={ 'address1' }/>
 				<br/>
-				<input type="text" onChange={ handleOnChange } value={ input.streetAddressTwo } name="streetAddressTwo" placeholder="Apartment, suite, unit etc.(optional)" className="form-control woo-next-checkout-input" id="first-name"/>
+				<input type="text" onChange={ handleOnChange } value={ input.address2 } name="address2" placeholder="Apartment, suite, unit etc.(optional)" className="form-control woo-next-checkout-input" id="first-name"/>
 			</div>
 			{/* Town/City */}
 			<div className="form-group">
@@ -72,9 +72,12 @@ const Billing = ( { input, handleOnChange } ) => {
 			</div>
 			{/* County */}
 			<div className="form-group">
-				<label htmlFor="county">County</label>
-				<input onChange={ handleOnChange } value={ input.county } type="text" name="county" className="form-control woo-next-checkout-input" id="county"/>
-				<Error errors={ input.errors } fieldName={ 'county' }/>
+				<label htmlFor="state">
+					State/County
+					<abbr className="required" title="required">*</abbr>
+				</label>
+				<input onChange={ handleOnChange } value={ input.state } type="text" name="state" className="form-control woo-next-checkout-input" id="state"/>
+				<Error errors={ input.errors } fieldName={ 'state' }/>
 			</div>
 			{/* Post Code */}
 			<div className="form-group">
@@ -82,12 +85,12 @@ const Billing = ( { input, handleOnChange } ) => {
 					Postcode
 					<abbr className="required" title="required">*</abbr>
 				</label>
-				<input onChange={ handleOnChange } value={ input.postCode } type="text" name="postCode" className="form-control woo-next-checkout-input" id="post-code"/>
-				<Error errors={ input.errors } fieldName={ 'postCode' }/>
+				<input onChange={ handleOnChange } value={ input.postcode } type="text" name="postcode" className="form-control woo-next-checkout-input" id="post-code"/>
+				<Error errors={ input.errors } fieldName={ 'postcode' }/>
 			</div>
 			{/*Phone & Email*/}
 			<div className="row">
-				<div className="col-lg-6 col-md-12">
+				<div className="col-lg-6 col-md-12 p-0 pr-2">
 					<div className="form-group">
 						<label htmlFor="phone">
 							Phone
@@ -97,7 +100,7 @@ const Billing = ( { input, handleOnChange } ) => {
 						<Error errors={ input.errors } fieldName={ 'phone' }/>
 					</div>
 				</div>
-				<div className="col-lg-6 col-sm-12">
+				<div className="col-lg-6 col-sm-12 p-0">
 					<div className="form-group">
 						<label htmlFor="email">
 							Email
