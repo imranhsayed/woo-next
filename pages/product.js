@@ -3,8 +3,6 @@ import { withRouter } from 'next/router';
 import client from "../components/ApolloClient";
 import gql from 'graphql-tag';
 import AddToCartButton from "../components/cart/AddToCartButton";
-import { ApolloProvider, Mutation } from 'react-apollo';
-import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks';
 import clientConfig from "../client-config";
 
 const Product = withRouter( props => {
@@ -13,8 +11,7 @@ const Product = withRouter( props => {
 	console.warn( 'product', product );
 
 	return (
-		<ApolloProvider client={ client }>
-			<ApolloHooksProvider client={client}>
+
 				<Layout>
 					{ product ? (
 						<div className="woo-next-single">
@@ -39,8 +36,6 @@ const Product = withRouter( props => {
 						</div>
 					) : '' }
 				</Layout>
-			</ApolloHooksProvider>
-		</ApolloProvider>
 
 	)
 });
