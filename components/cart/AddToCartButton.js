@@ -5,6 +5,8 @@ import { cartData } from "./data";
 import { AppContext } from "../context/AppContext";
 import { addFirstProduct, updateCart } from "../../functions";
 import Link from "next/link";
+import clientConfig from "../../client-config";
+import v4 from 'uuid/v4';
 
 const GET_CART = gql`
   query GET_CART {
@@ -111,7 +113,13 @@ mutation CHECKOUT_QUERY( $input: CheckoutInput! ) {
 
 const AddToCart = ( props ) => {
 
-	const { product, productQryInput } = props;
+	const { product } = props;
+
+	const productQryInput = {
+		clientMutationId: v4(), // Generate a unique id.
+		productId: product.productId,
+	};
+
 	const [ cart, setCart ] = useContext( AppContext );
 	const [ showViewCart, setShowViewCart ] = useState( false );
 	const [ requestError, setRequestError ] = useState( null );
@@ -157,7 +165,7 @@ const AddToCart = ( props ) => {
 	const { loading, error, data, refetch } = useQuery( GET_CART, {
 		notifyOnNetworkStatusChange: true,
 		onCompleted: () => {
-			console.warn( 'completed GET_CART' );
+			// console.warn( 'completed GET_CART' );
 		}
 	} );
 
@@ -167,7 +175,7 @@ const AddToCart = ( props ) => {
 			input: productQryInput,
 		},
 		onCompleted: () => {
-			console.warn( 'completed ADD_TO_CART' );
+			// console.warn( 'completed ADD_TO_CART' );
 			if ( addToCartError ) {
 				setRequestError( addToCartError.graphQLErrors[ 0 ].message );
 			}
@@ -187,7 +195,7 @@ const AddToCart = ( props ) => {
 			input: cartData
 		},
 		onCompleted: () => {
-			console.warn( 'completed CHECKOUT_QUERY' );
+			// console.warn( 'completed CHECKOUT_QUERY' );
 			refetch();
 		},
 		onError: ( error ) => {
@@ -214,8 +222,6 @@ const AddToCart = ( props ) => {
 	if (error) {
 		return <p>Error: ${error.message}</p>;
 	}
-
-	console.warn( 'data', data );
 
 	return (
 		<div>

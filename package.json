@@ -30,6 +30,7 @@
     "react": "^16.8.6",
     "react-apollo": "^3.0.1",
     "react-dom": "^16.8.6",
+    "uuid": "^7.0.2",
     "woocommerce-api": "^1.4.2"
   }
 }

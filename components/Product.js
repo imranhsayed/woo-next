@@ -21,10 +21,7 @@ const Product = ( props ) => {
 				</Link>
 				<div className="card-body text-center">
 					<h6 className="card-subtitle mb-3">{ product.price }</h6>
-					<AddToCartButton product={product} productQryInput={{
-						clientMutationId: clientConfig.addToCartClientMutationID,
-						productId: product.productId,
-					}}/>
+					<AddToCartButton product={product}/>
 				</div>
 
 			</div>

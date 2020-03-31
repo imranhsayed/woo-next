@@ -191,3 +191,50 @@ export const removeItemFromCart = ( productId ) => {
 		return existingCart;
 	}
 };
+
+/**
+ * Returns cart data in the required format.
+ * @param {String} data Cart data
+ */
+export const getFormattedCart = ( data ) => {
+
+	let formattedCart = null;
+
+	if ( undefined === data || ! data.cart.contents.nodes.length ) {
+		return formattedCart;
+	}
+
+	const givenProducts = data.cart.contents.nodes;
+
+	// Create an empty object.
+	formattedCart = {};
+	formattedCart.products = [];
+	let totalProductsCount = 0;
+
+
+	for( let i = 0; i < givenProducts.length; i++  ) {
+		const givenProduct = givenProducts[ i ].product;
+		const product = {};
+
+		product.productId = givenProduct.productId;
+		product.price = givenProduct.total / givenProduct.quantity;
+		product.qty = givenProduct.quantity;
+		product.totalPrice = givenProduct.total;
+		product.image = {
+			sourceUrl: givenProduct.image.sourceUrl,
+			srcSet: givenProduct.image.srcSet,
+			title: givenProduct.image.title
+		};
+
+		totalProductsCount += givenProduct.quantity;
+
+		// Push each item into the products array.
+		formattedCart.products.push( product );
+	}
+
+	formattedCart.totalProductsCount = totalProductsCount;
+	formattedCart.totalProductsPrice = givenProducts.total;
+
+	return formattedCart;
+
+};

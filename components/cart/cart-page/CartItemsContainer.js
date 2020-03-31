@@ -1,13 +1,127 @@
 import Link from 'next/link';
 import { useContext } from 'react';
 import { AppContext } from "../../context/AppContext";
-import { removeItemFromCart } from '../../../functions';
+import { getFormattedCart, removeItemFromCart } from '../../../functions';
 import CartItem from "./CartItem";
+import gql from "graphql-tag";
+import { useQuery } from "@apollo/react-hooks";
+
+const GET_CART = gql`
+  query GET_CART {
+    cart {
+      contents {
+        nodes {
+          key
+          product {
+            id
+            productId
+            name
+            description
+            type
+            onSale
+            slug
+            averageRating
+            reviewCount
+            image {
+              id
+              sourceUrl
+              altText      
+            }
+            galleryImages {
+              nodes {
+                id
+                sourceUrl
+                altText
+              }
+            }
+
+          }
+          variation {
+            id
+            variationId
+            name
+            description
+            type
+            onSale
+            price
+            regularPrice
+            salePrice
+            image {
+              id
+              sourceUrl
+              srcSet
+              altText
+              title      
+            }
+            attributes {
+              nodes {
+                id
+                name
+                value
+              }
+            }
+          }
+          quantity
+          total
+          subtotal
+          subtotalTax
+        }
+      }
+      appliedCoupons {
+        nodes {
+          couponId
+          discountType
+          amount
+          dateExpiry
+          products {
+            nodes {
+              id
+            }
+          }
+          productCategories {
+            nodes {
+              id
+            }
+          }
+        }
+      }
+      subtotal
+      subtotalTax
+      shippingTax
+      shippingTotal
+      total
+      totalTax
+      feeTax
+      feeTotal
+      discountTax
+      discountTotal
+    }
+  }
+`;
 
 const CartItemsContainer = () => {
 
 
-	const [ cart, setCart ] = useContext( AppContext );
+	// const [ cart, setCart ] = useContext( AppContext );
+
+	// Get Cart Data.
+	const { loading, error, data, refetch } = useQuery( GET_CART, {
+		notifyOnNetworkStatusChange: true,
+		onCompleted: () => {
+			console.warn( 'completed GET_CART', data );
+		}
+	} );
+
+	// console.warn( 'mycart', data );
+
+
+
+	const cart = undefined !== data ? getFormattedCart( data ) : null;
+
+	console.warn( 'mycart', cart );
+
+	return <div>Hey</div>;
+
 
 	/*
 	 * Handle remove product click.

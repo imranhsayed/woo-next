@@ -26,10 +26,7 @@ const Product = withRouter( props => {
 										} }
 										className="card-text"/>
 
-									<AddToCartButton product={ product } productQryInput={{
-										clientMutationId: clientConfig.addToCartClientMutationID,
-										productId: product.productId,
-									}}/>
+									<AddToCartButton product={ product }/>
 
 								</div>
 							</div>
