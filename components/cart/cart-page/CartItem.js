@@ -37,27 +37,30 @@ const CartItem = ( { item, handleRemoveProductClick, setCart } ) => {
 	return (
 		<tr className="woo-next-cart-item" key={item.productId}>
 			<th className="woo-next-cart-element woo-next-cart-el-close">
-				<span className="woo-next-cart-close-icon" onClick={ ( event ) => handleRemoveProductClick( event, item.productId )  }>
-					<i className="fa fa-times-circle"/>
-				</span>
+				{/* @TODO Need to update this with graphQL query */}
+				{/*<span className="woo-next-cart-close-icon" onClick={ ( event ) => handleRemoveProductClick( event, item.productId )  }>*/}
+				{/*	<i className="fa fa-times-circle"/>*/}
+				{/*</span>*/}
 			</th>
 			<td className="woo-next-cart-element">
 				<img width="64" src={ item.image.sourceUrl } srcSet={ item.image.srcSet } alt={item.image.title}/>
 			</td>
 			<td className="woo-next-cart-element">{ item.name }</td>
-			<td className="woo-next-cart-element">{ item.price.toFixed(2) }</td>
+			<td className="woo-next-cart-element">{ ( 'string' !== typeof item.price ) ? item.price.toFixed(2) : item.price }</td>
 
 			{/* Qty Input */}
 			<td className="woo-next-cart-element">
-				<input
-					type="number"
-					min="1"
-					className="woo-next-cart-qty-input"
-					value={ productCount }
-					onChange={ handleQtyChange }
-				/>
+				<span className="text-center">{ productCount }</span>
+				{/* @TODO Need to update this with graphQL query */}
+				{/*<input*/}
+				{/*	type="number"*/}
+				{/*	min="1"*/}
+				{/*	className="woo-next-cart-qty-input"*/}
+				{/*	value={ productCount }*/}
+				{/*	onChange={ handleQtyChange }*/}
+				{/*/>*/}
 			</td>
-			<td className="woo-next-cart-element">{ item.totalPrice.toFixed(2) }</td>
+			<td className="woo-next-cart-element">{ ( 'string' !== typeof item.totalPrice ) ? item.totalPrice.toFixed(2) : item.totalPrice }</td>
 		</tr>
 	)
 };

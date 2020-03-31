@@ -1,5 +1,6 @@
 const clientConfig = {
-	siteUrl: 'http://xyz.com'
+	siteUrl: 'https://WordPressSiteURL.com/',
+	graphqlUrl: 'https://WordPressSiteURL.com/graphql',
 };
 
 export default clientConfig;

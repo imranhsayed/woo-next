@@ -1,3 +1,4 @@
+import { v4 } from 'uuid';
 
 /**
  * Extracts and returns float value from a string.
@@ -190,4 +191,92 @@ export const removeItemFromCart = ( productId ) => {
 	} else {
 		return existingCart;
 	}
+};
+
+/**
+ * Returns cart data in the required format.
+ * @param {String} data Cart data
+ */
+export const getFormattedCart = ( data ) => {
+
+	let formattedCart = null;
+
+	if ( undefined === data || ! data.cart.contents.nodes.length ) {
+		return formattedCart;
+	}
+
+	const givenProducts = data.cart.contents.nodes;
+
+	// Create an empty object.
+	formattedCart = {};
+	formattedCart.products = [];
+	let totalProductsCount = 0;
+
+
+	for( let i = 0; i < givenProducts.length; i++  ) {
+		const givenProduct = givenProducts[ i ].product;
+		const product = {};
+		const total = getFloatVal( givenProducts[ i ].total );
+
+		product.productId = givenProduct.productId;
+		product.name = givenProduct.name;
+		product.qty = givenProducts[ i ].quantity;
+		product.price = total / product.qty;
+		product.totalPrice = givenProducts[ i ].total;
+		product.image = {
+			sourceUrl: givenProduct.image.sourceUrl,
+			srcSet: givenProduct.image.srcSet,
+			title: givenProduct.image.title
+		};
+
+		totalProductsCount += givenProducts[ i ].quantity;
+
+		// Push each item into the products array.
+		formattedCart.products.push( product );
+	}
+
+	formattedCart.totalProductsCount = totalProductsCount;
+	formattedCart.totalProductsPrice = data.cart.total;
+
+	return formattedCart;
+
+};
+
+export const createCheckoutData = ( order ) => {
+	const checkoutData = {
+		clientMutationId: v4(),
+
+		billing: {
+			firstName: order.firstName,
+			lastName: order.lastName,
+			address1: order.address1,
+			address2: order.address2,
+			city: order.city,
+			country: order.country,
+			state: order.state,
+			postcode: order.postcode,
+			email: order.email,
+			phone: order.phone,
+			company: order.company,
+		},
+		shipping: {
+			firstName: order.firstName,
+			lastName: order.lastName,
+			address1: order.address1,
+			address2: order.address2,
+			city: order.city,
+			country: order.country,
+			state: order.state,
+			postcode: order.postcode,
+			email: order.email,
+			phone: order.phone,
+			company: order.company,
+		},
+		shipToDifferentAddress: false,
+		paymentMethod: order.paymentMethod,
+		isPaid: false,
+		transactionId: "hjkhjkhsdsdiui"
+	};
+
+	return checkoutData;
 };

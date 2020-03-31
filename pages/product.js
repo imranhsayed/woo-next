@@ -9,27 +9,33 @@ const Product = withRouter( props => {
 	const { product } = props;
 
 	return (
-		<Layout>
-			{ product ? (
-				<div className="woo-next-single">
-					<div className="woo-next-single__product card bg-light mb-3 p-5">
-						<div className="card-header">{ product.name }</div>
-						<div className="card-body">
-							<h4 className="card-title">{ product.name }</h4>
-							<img src={ product.image.sourceUrl } alt="Product Image" width="200" srcSet={ product.image.srcSet }/>
-							<p className="card-text">{ product.description }</p>
-							<AddToCartButton product={ product }/>
+
+				<Layout>
+					{ product ? (
+						<div className="woo-next-single">
+							<div className="woo-next-single__product card bg-light mb-3 p-5">
+								<div className="card-header">{ product.name }</div>
+								<div className="card-body">
+									<h4 className="card-title">{ product.name }</h4>
+									<img src={ product.image.sourceUrl } alt="Product Image" width="200" srcSet={ product.image.srcSet }/>
+									<p
+										dangerouslySetInnerHTML={ {
+											__html: product.description,
+										} }
+										className="card-text"/>
+
+									<AddToCartButton product={ product }/>
+
+								</div>
+							</div>
 						</div>
-					</div>
-				</div>
-			) : '' }
-		</Layout>
+					) : '' }
+				</Layout>
+
 	)
 });
 
 Product.getInitialProps = async function( context ) {
-
-	console.warn( context );
 
 	let { query: { slug } } = context;
 	const id = slug ? parseInt( slug.split( '-' ).pop() ) : context.query.id;
@@ -59,6 +65,7 @@ Product.getInitialProps = async function( context ) {
 					      ... on ExternalProduct {
 					        price
 					        id
+					        externalUrl
 					      }
 					      ... on GroupProduct {
 					        products {
@@ -72,8 +79,7 @@ Product.getInitialProps = async function( context ) {
 					      }
 					    }
 
-				
-			
+
 	 }`;
 
 	const res = await client.query(({
@@ -86,5 +92,6 @@ Product.getInitialProps = async function( context ) {
 	}
 
 };
+
 
 export default Product;

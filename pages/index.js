@@ -46,6 +46,7 @@ const PRODUCTS_AND_CATEGORIES_QUERY = gql`query {
 					      ... on ExternalProduct {
 					        price
 					        id
+					        externalUrl
 					      }
 					      ... on GroupProduct {
 					        products {
@@ -67,21 +68,21 @@ const Index = ( props ) => {
 	const { products, productCategories } = props;
 
 	return (
-		<Layout>
-			{/*Categories*/ }
-			<div className="mt-5 text-center">
-				<h2>Categories</h2>
-				<ParentCategoriesBlock productCategories={ productCategories }/>
-			</div>
-			{/*Products*/ }
+			<Layout>
+				{/*Categories*/ }
+				<div className="mt-5 text-center">
+					<h2>Categories</h2>
+					<ParentCategoriesBlock productCategories={ productCategories }/>
+				</div>
+				{/*Products*/ }
 
-			<h2 className="mt-5 text-center">Products</h2>
-			<div className="product-container row">
-				{ products.length ? (
-					products.map( product => <Product key={ product.id } product={ product }/> )
-				) : '' }
-			</div>
-		</Layout>
+				<h2 className="mt-5 text-center">Products</h2>
+				<div className="product-container row">
+					{ products.length ? (
+						products.map( product => <Product key={ product.id } product={ product }/> )
+					) : '' }
+				</div>
+			</Layout>
 	)
 };
 
