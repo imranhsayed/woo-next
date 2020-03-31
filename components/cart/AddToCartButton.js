@@ -121,7 +121,7 @@ const AddToCart = ( props ) => {
 	 *
 	 * @return {void}
 	 */
-	const handleAddToCartClick = () => {
+	const handleAddToCartLocalStorage = () => {
 
 		// If component is rendered client side.
 		if ( process.browser ) {
@@ -197,7 +197,8 @@ const AddToCart = ( props ) => {
 		}
 	} );
 
-	const handleAddToCart = () => {
+	const handleAddToCartClick = () => {
+		handleAddToCartLocalStorage();
 		setRequestError( null );
 		addToCart();
 	};
@@ -220,7 +221,6 @@ const AddToCart = ( props ) => {
 		<div>
 			{/*  Cart Data */}
 			{data && <pre>{JSON.stringify(data, null, 2)}</pre>}
-			<button onClick={() => handleAddToCart()}>Add To Cart Mutation</button>
 			{
 				! data.cart.isEmpty && <button onClick={() => handleCheckout()}>Checkout</button>
 			}
@@ -232,7 +232,12 @@ const AddToCart = ( props ) => {
 			{checkoutLoading && <p>Processing Order...</p>}
 			{requestError && <p>Error : { requestError } :( Please try again</p>}
 
-			<button onClick={ handleAddToCartClick } className="btn btn-secondary">Add to cart</button>
+			{/*	Check if its an external product then put its external buy link */}
+			{ "ExternalProduct" === product.__typename ? (
+					<a href={ product.externalUrl } target="_blank" className="btn btn-secondary">Buy</a>
+				) :
+				<button onClick={ handleAddToCartClick } className="btn btn-secondary">Add to cart</button>
+			}
 			{ showViewCart ? (
 				<Link href="/cart"><button className="woo-next-view-cart-btn btn btn-secondary">View Cart</button></Link>
 			) : '' }

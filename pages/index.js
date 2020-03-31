@@ -48,6 +48,7 @@ const PRODUCTS_AND_CATEGORIES_QUERY = gql`query {
 					      ... on ExternalProduct {
 					        price
 					        id
+					        externalUrl
 					      }
 					      ... on GroupProduct {
 					        products {

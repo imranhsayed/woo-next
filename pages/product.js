@@ -1,4 +1,3 @@
-import { useQuery, useMutation } from "@apollo/react-hooks";
 import Layout from "../components/Layout";
 import { withRouter } from 'next/router';
 import client from "../components/ApolloClient";
@@ -6,7 +5,6 @@ import gql from 'graphql-tag';
 import AddToCartButton from "../components/cart/AddToCartButton";
 import { ApolloProvider, Mutation } from 'react-apollo';
 import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks';
-import AddToCartButton from "../components/product/AddToCartButton";
 import clientConfig from "../client-config";
 
 const Product = withRouter( props => {
@@ -30,10 +28,12 @@ const Product = withRouter( props => {
 											__html: product.description,
 										} }
 										className="card-text"/>
+
 									<AddToCartButton product={ product } productQryInput={{
 										clientMutationId: clientConfig.addToCartClientMutationID,
 										productId: product.productId,
 									}}/>
+
 								</div>
 							</div>
 						</div>
@@ -75,6 +75,7 @@ Product.getInitialProps = async function( context ) {
 					      ... on ExternalProduct {
 					        price
 					        id
+					        externalUrl
 					      }
 					      ... on GroupProduct {
 					        products {
@@ -95,8 +96,6 @@ Product.getInitialProps = async function( context ) {
 		query: PRODUCT_QUERY,
 		variables: { id }
 	}));
-
-	console.warn( 'res', res );
 
 	return {
 		product: res.data.product
