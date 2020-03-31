@@ -24,14 +24,18 @@ const GET_CART = gql`
             reviewCount
             image {
               id
-              sourceUrl
-              altText      
+                sourceUrl
+                srcSet
+                altText
+                title       
             }
             galleryImages {
               nodes {
                 id
                 sourceUrl
+                srcSet
                 altText
+                title   
               }
             }
 
@@ -102,7 +106,9 @@ const GET_CART = gql`
 const CartItemsContainer = () => {
 
 
+	// @TODO wil use it in future variations of the project.
 	// const [ cart, setCart ] = useContext( AppContext );
+	const setCart = () => {};
 
 	// Get Cart Data.
 	const { loading, error, data, refetch } = useQuery( GET_CART, {
@@ -117,10 +123,6 @@ const CartItemsContainer = () => {
 
 
 	const cart = undefined !== data ? getFormattedCart( data ) : null;
-
-	console.warn( 'mycart', cart );
-
-	return <div>Hey</div>;
 
 
 	/*
@@ -175,11 +177,11 @@ const CartItemsContainer = () => {
 								<tbody>
 								<tr className="table-light">
 									<td className="woo-next-cart-element-total">Subtotal</td>
-									<td className="woo-next-cart-element-amt">{ cart.totalProductsPrice.toFixed( 2 ) }</td>
+									<td className="woo-next-cart-element-amt">{ ( 'string' !== typeof cart.totalProductsPrice ) ? cart.totalProductsPrice.toFixed(2) : cart.totalProductsPrice }</td>
 								</tr>
 								<tr className="table-light">
 									<td className="woo-next-cart-element-total">Total</td>
-									<td className="woo-next-cart-element-amt">{ cart.totalProductsPrice.toFixed( 2 ) }</td>
+									<td className="woo-next-cart-element-amt">{ ( 'string' !== typeof cart.totalProductsPrice ) ? cart.totalProductsPrice.toFixed(2) : cart.totalProductsPrice }</td>
 								</tr>
 								</tbody>
 							</table>

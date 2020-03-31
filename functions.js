@@ -204,6 +204,8 @@ export const getFormattedCart = ( data ) => {
 		return formattedCart;
 	}
 
+	console.warn( 'data', data );
+
 	const givenProducts = data.cart.contents.nodes;
 
 	// Create an empty object.
@@ -215,25 +217,28 @@ export const getFormattedCart = ( data ) => {
 	for( let i = 0; i < givenProducts.length; i++  ) {
 		const givenProduct = givenProducts[ i ].product;
 		const product = {};
+		const total = getFloatVal( givenProducts[ i ].total );
 
 		product.productId = givenProduct.productId;
-		product.price = givenProduct.total / givenProduct.quantity;
-		product.qty = givenProduct.quantity;
-		product.totalPrice = givenProduct.total;
+		product.qty = givenProducts[ i ].quantity;
+		product.price = total / product.qty;
+		product.totalPrice = givenProducts[ i ].total;
 		product.image = {
 			sourceUrl: givenProduct.image.sourceUrl,
 			srcSet: givenProduct.image.srcSet,
 			title: givenProduct.image.title
 		};
 
-		totalProductsCount += givenProduct.quantity;
+		totalProductsCount += givenProducts[ i ].quantity;
 
 		// Push each item into the products array.
 		formattedCart.products.push( product );
 	}
 
 	formattedCart.totalProductsCount = totalProductsCount;
-	formattedCart.totalProductsPrice = givenProducts.total;
+	formattedCart.totalProductsPrice = data.cart.total;
+
+	console.warn( 'formatted', formattedCart );
 
 	return formattedCart;
 
