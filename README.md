@@ -18,9 +18,18 @@
 
 [Live Demo Site](https://woo-next.imranhsayed.now.sh/)
 
+## Checkout Page Demo
+![](Checkout-page.gif)
+
+## Payment Demo ( Paypal example )
+![](paypal-payment-demo.gif)
+
+## Order Received Demo
+![](order-received-demo.gif)
+
 # Features:
 
-1. WooCommerce Store in React
+1. WooCommerce Store in React( contains: Products Page, Single Product Page, AddToCart, CartPage and Checkout Page )
 2. SSR
 3. SEO friendly
 4. Automatic Code Splitting
