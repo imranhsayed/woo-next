@@ -66,8 +66,8 @@ You can also import default wooCommerce products that come with wooCommerce Plug
 
 ```ruby
 const clientConfig = {
-	siteUrl: 'http://xyz.com',
-    graphqlUrl: 'http://wordpressSiteUrl.com/graphql'
+	siteUrl: 'xxxxx', // e.g. 'http://xyz.com'
+    graphqlUrl: 'xxxxx' // e.g. 'http://wordpressSiteUrl.com/graphql'
 };
 
 export default clientConfig;
@@ -77,8 +77,8 @@ export default clientConfig;
 
 ```ruby
 const wooConfig = {
-	siteUrl: 'https://xyz.com',
-	graphqlUrl: 'https://xxwordpresssitexx.com/graphql',
+	siteUrl: 'xxxxx', // e.g. 'http://xyz.com'
+    graphqlUrl: 'xxxxx' // e.g. 'http://wordpressSiteUrl.com/graphql'
 };
 
 module.exports = wooConfig;

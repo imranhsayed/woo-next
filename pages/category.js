@@ -6,26 +6,46 @@ import Product from "../components/Product";
 
 const PRODUCT_BY_CATEGORY_ID = gql` query Product_Category( $id: ID ! ) {
 			productCategory( id: $id ) {
-						name
-						products {
-							  edges {
-							    node {
-							        id
-									productId
-									averageRating
-									slug
-									description
-									image {
-											uri
-											title
-											srcSet
-											sourceUrl
-									}
-									name
-									price
-							    }
-						  }
-					}
+			          name
+					  products(first: 50) {
+					    nodes {
+					      id
+					      productId
+					      averageRating
+					      slug
+					      description
+					      image {
+					        uri
+					        title
+					        srcSet
+					        sourceUrl
+					      }
+					      name
+					      ... on SimpleProduct {
+					        price
+					        id
+					      }
+					      ... on VariableProduct {
+					        price
+					        id
+					      }
+					      ... on ExternalProduct {
+					        price
+					        id
+					        externalUrl
+					      }
+					      ... on GroupProduct {
+					        products {
+					          nodes {
+					            ... on SimpleProduct {
+					              price
+					            }
+					          }
+					        }
+					        id
+					      }
+					    }
+					  }
 
 			}
 	 }`;
@@ -39,7 +59,7 @@ const Category = withRouter( props => {
 			{ categoryName ? <h3 className="product-container pl-5">{ categoryName }</h3> : '' }
 			<div className="product-container row">
 				{ undefined !== products && products.length ? (
-					products.map( product => <Product key={ product.node.id } product={ product.node } /> )
+					products.map( product => <Product key={ product.id } product={ product } /> )
 				) : ''}
 			</div>
 		</Layout>
@@ -59,7 +79,7 @@ Category.getInitialProps = async function( context ) {
 
 	return {
 		categoryName: res.data.productCategory.name,
-		products: res.data.productCategory.products.edges
+		products: res.data.productCategory.products.nodes
 	}
 
 };
