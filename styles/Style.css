@@ -9,8 +9,25 @@ a:hover {
 	height: 84vh;
 }
 
+.clear-cart {
+	text-align: right;
+	padding: 24px 0;
+}
+
+button.woo-next-large-black-btn {
+	background: #24292E;
+}
+
+.content-wrap-cart {
+	height: 100vh;
+}
+
 @media only screen and (max-width: 600px) {
 	.content-wrap {
+		height: auto;
+	}
+
+	.content-wrap-cart {
 		height: auto;
 	}
 }

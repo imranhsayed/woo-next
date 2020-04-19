@@ -7,6 +7,7 @@ import { v4 } from 'uuid';
 import { useMutation, useQuery } from "@apollo/react-hooks";
 import UPDATE_CART from "../../../mutations/update-cart";
 import GET_CART from "../../../queries/get-cart";
+import CLEAR_CART_MUTATION from "../../../mutations/clear-cart";
 
 
 const CartItemsContainer = () => {
@@ -44,14 +45,26 @@ const CartItemsContainer = () => {
 		}
 	} );
 
+	// Update Cart Mutation.
+	const [clearCart, { data: clearCartRes, loading: clearCartProcessing, error: clearCartError }] = useMutation( CLEAR_CART_MUTATION, {
+		onCompleted: () => {
+			refetch();
+		},
+		onError: ( error ) => {
+			if ( error ) {
+				setRequestError( error.graphQLErrors[ 0 ].message );
+			}
+		}
+	} );
+
 	/*
- * Handle remove product click.
- *
- * @param {Object} event event
- * @param {Integer} Product Id.
- *
- * @return {void}
- */
+	 * Handle remove product click.
+	 *
+	 * @param {Object} event event
+	 * @param {Integer} Product Id.
+	 *
+	 * @return {void}
+	 */
 	const handleRemoveProductClick = ( event, cartKey, products ) => {
 
 		event.stopPropagation();
@@ -72,8 +85,27 @@ const CartItemsContainer = () => {
 		}
 	};
 
+	// Clear the entire cart.
+	const handleClearCart = ( event ) => {
+
+		event.stopPropagation();
+
+		if ( clearCartProcessing ) {
+			return;
+		}
+
+		clearCart( {
+			variables: {
+				input: {
+					clientMutationId: v4(),
+					all: true
+				}
+			},
+		} );
+	}
+
 	return (
-		<div className="content-wrap">
+		<div className="content-wrap-cart">
 			{ cart ? (
 				<div className="woo-next-cart-wrapper container">
 					<h1 className="woo-next-cart-heading mt-5">Cart</h1>
@@ -103,6 +135,15 @@ const CartItemsContainer = () => {
 						) }
 						</tbody>
 					</table>
+
+					{/*Clear entire cart*/}
+					<div className="clear-cart">
+						<button className="btn btn-secondary " onClick={ ( event ) => handleClearCart( event ) } disabled={ clearCartProcessing }>
+							<span className="woo-next-cart">Clear Cart</span>
+							<i className="fa fa-arrow-alt-right"/>
+						</button>
+						{ clearCartProcessing ? <p>Clearing...</p> : '' }
+					</div>
 
 					{/* Display Errors if any */}
 					{ requestError ? <div className="row woo-next-cart-total-container mt-5"> { requestError } </div> : '' }
