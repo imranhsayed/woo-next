@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { AppProvider } from "./context/AppContext";
 import Header from "./Header";
+import Footer from "./Footer";
 import '../styles/Style.css';
 import client from "./ApolloClient";
 import { ApolloProvider } from 'react-apollo';
@@ -19,7 +20,8 @@ const Layout = ( props ) => {
 							<link rel="stylesheet" href="https://bootswatch.com/4/flatly/bootstrap.min.css"/>
 						</Head>
 						<Header/>
-						{ props.children }
+							{ props.children }
+						<Footer/>
 					</div>
 				</ApolloHooksProvider>
 			</ApolloProvider>

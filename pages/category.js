@@ -10,11 +10,13 @@ const Category = withRouter( props => {
 
 	return (
 		<Layout>
-			{ categoryName ? <h3 className="product-container pl-5">{ categoryName }</h3> : '' }
-			<div className="product-container row">
-				{ undefined !== products && products.length ? (
-					products.map( product => <Product key={ product.id } product={ product } /> )
-				) : ''}
+			<div className="content-wrap">
+				{ categoryName ? <h3 className="product-container pl-5">{ categoryName }</h3> : '' }
+				<div className="product-container row">
+					{ undefined !== products && products.length ? (
+						products.map( product => <Product key={ product.id } product={ product } /> )
+					) : ''}
+				</div>
 			</div>
 		</Layout>
 	)

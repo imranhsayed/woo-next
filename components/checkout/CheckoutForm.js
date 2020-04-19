@@ -59,6 +59,7 @@ const CheckoutForm = () => {
 		notifyOnNetworkStatusChange: true,
 		onCompleted: () => {
 			// console.warn( 'completed GET_CART' );
+
 			// Update cart in the localStorage.
 			const updatedCart = getFormattedCart( data );
 			localStorage.setItem( 'woo-next-cart', JSON.stringify( updatedCart ) );

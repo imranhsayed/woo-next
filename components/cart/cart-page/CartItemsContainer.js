@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useContext, useState, useEffect } from 'react';
 import { AppContext } from "../../context/AppContext";
-import { getFormattedCart, removeItemFromCart } from '../../../functions';
+import { getFormattedCart, getUpdatedItems, removeItemFromCart } from '../../../functions';
 import CartItem from "./CartItem";
 import { v4 } from 'uuid';
 import { useMutation, useQuery } from "@apollo/react-hooks";
@@ -14,18 +14,17 @@ const CartItemsContainer = () => {
 
 	// @TODO wil use it in future variations of the project.
 	const [ cart, setCart ] = useContext( AppContext );
-
-	const [processing, setProcessing]     = useState( false );
 	const [requestError, setRequestError] = useState( null );
 
 	// Get Cart Data.
 	const { loading, error, data, refetch } = useQuery( GET_CART, {
 		notifyOnNetworkStatusChange: true,
 		onCompleted: () => {
+
 			// console.warn( 'completed GET_CART', data );
+
 			// Update cart in the localStorage.
 			const updatedCart = getFormattedCart( data );
-			console.warn( 'updatedCArt', updatedCart );
 			localStorage.setItem( 'woo-next-cart', JSON.stringify( updatedCart ) );
 
 			// Update cart data in React Context.
@@ -53,18 +52,28 @@ const CartItemsContainer = () => {
  *
  * @return {void}
  */
-	const handleRemoveProductClick = ( event, productId ) => {
+	const handleRemoveProductClick = ( event, cartKey, products ) => {
 
-		const updatedCart = removeItemFromCart( productId );
-		setCart( updatedCart );
+		event.stopPropagation();
+		if ( products.length ) {
+
+			// By passing the newQty to 0 in updateCart Mutation, it will remove the item.
+			const newQty = 0;
+			const updatedItems = getUpdatedItems( products, newQty, cartKey );
+
+			updateCart( {
+				variables: {
+					input: {
+						clientMutationId: v4(),
+						items: updatedItems
+					}
+				},
+			} );
+		}
 	};
 
-	// if ( loading ) {
-	// 	return <p>Loading...</p>;
-	// }
-
 	return (
-		<div>
+		<div className="content-wrap">
 			{ cart ? (
 				<div className="woo-next-cart-wrapper container">
 					<h1 className="woo-next-cart-heading mt-5">Cart</h1>
@@ -87,7 +96,6 @@ const CartItemsContainer = () => {
 									item={ item }
 									updateCartProcessing={ updateCartProcessing }
 									products={ cart.products }
-									setProcessing={ setProcessing }
 									handleRemoveProductClick={ handleRemoveProductClick }
 									updateCart={ updateCart }
 								/>
@@ -95,6 +103,9 @@ const CartItemsContainer = () => {
 						) }
 						</tbody>
 					</table>
+
+					{/* Display Errors if any */}
+					{ requestError ? <div className="row woo-next-cart-total-container mt-5"> { requestError } </div> : '' }
 
 					{/*Cart Total*/ }
 					<div className="row woo-next-cart-total-container mt-5">
