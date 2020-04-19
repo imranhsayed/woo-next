@@ -1,26 +1,7 @@
 import Layout from "../components/Layout";
 import client from '../components/ApolloClient';
-import gql from 'graphql-tag';
 import ParentCategoriesBlock from "../components/category/category-block/ParentCategoriesBlock";
-
-/**
- * GraphQL categories query.
- */
-const CATEGORIES_QUERY = gql`query {
-
-					productCategories(first: 3) {
-						nodes {
-							id
-							name
-							slug
-							image {
-								sourceUrl
-								srcSet
-							}
-						}
-					}
-					
-				}`;
+import GET_CATEGORIES_QUERY from "../queries/get-categories";
 
 const Categories = ( props ) => {
 
@@ -40,7 +21,7 @@ const Categories = ( props ) => {
 Categories.getInitialProps = async () => {
 
 	const result = await client.query({
-		query: CATEGORIES_QUERY,
+		query: GET_CATEGORIES_QUERY,
 	});
 
 	return {

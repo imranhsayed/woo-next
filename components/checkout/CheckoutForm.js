@@ -4,166 +4,50 @@ import YourOrder from "./YourOrder";
 import PaymentModes from "./PaymentModes";
 import { AppContext } from "../context/AppContext";
 import validateAndSanitizeCheckoutForm from '../../validator/checkout';
-import gql from "graphql-tag";
 import { useMutation, useQuery } from "@apollo/react-hooks";
 import { getFormattedCart, createCheckoutData } from "../../functions";
 import OrderSuccess from "./OrderSucess";
-
-const GET_CART = gql`
-  query GET_CART {
-    cart {
-      contents {
-        nodes {
-          key
-          product {
-            id
-            productId
-            name
-            description
-            type
-            onSale
-            slug
-            averageRating
-            reviewCount
-            image {
-              id
-                sourceUrl
-                srcSet
-                altText
-                title       
-            }
-            galleryImages {
-              nodes {
-                id
-                sourceUrl
-                srcSet
-                altText
-                title   
-              }
-            }
-
-          }
-          variation {
-            id
-            variationId
-            name
-            description
-            type
-            onSale
-            price
-            regularPrice
-            salePrice
-            image {
-              id
-              sourceUrl
-              srcSet
-              altText
-              title      
-            }
-            attributes {
-              nodes {
-                id
-                name
-                value
-              }
-            }
-          }
-          quantity
-          total
-          subtotal
-          subtotalTax
-        }
-      }
-      appliedCoupons {
-        nodes {
-          couponId
-          discountType
-          amount
-          dateExpiry
-          products {
-            nodes {
-              id
-            }
-          }
-          productCategories {
-            nodes {
-              id
-            }
-          }
-        }
-      }
-      subtotal
-      subtotalTax
-      shippingTax
-      shippingTotal
-      total
-      totalTax
-      feeTax
-      feeTotal
-      discountTax
-      discountTotal
-    }
-  }
-`;
-
-const CHECKOUT_QUERY = gql`
-mutation CHECKOUT_QUERY( $input: CheckoutInput! ) {
-  checkout(input: $input) {
-    clientMutationId
-    order {
-      id
-      orderId
-      refunds {
-        nodes {
-          amount
-        }
-      }
-      status
-    }
-    result
-    redirect
-  }
-}
-`;
+import GET_CART from "../../queries/get-cart";
+import CHECKOUT_MUTATION from "../../mutations/checkout";
 
 const CheckoutForm = () => {
 
-	const initialState = {
-		firstName: '',
-		lastName: '',
-		company: '',
-		country: '',
-		address1: '',
-		address2: '',
-		city: '',
-		state: '',
-		postcode: '',
-		phone: '',
-		email: '',
-		createAccount: false,
-		orderNotes: '',
-		paymentMethod: '',
-		errors: null
-	};
-
-	// Use this for testing puposes, so you dont have to fill the checkout form over an over again.
 	// const initialState = {
-	// 	firstName: 'Imran',
-	// 	lastName: 'Sayed',
-	// 	address1: '109 Hills Road Valley',
-	// 	address2: 'Station Road',
-	// 	city: 'Pune',
-	// 	state: 'Maharastra',
-	// 	country: 'ID',
-	// 	postcode: '400298',
-	// 	phone: '9959338989',
-	// 	email: 'imran@gmail.com',
-	// 	company: 'Tech',
+	// 	firstName: '',
+	// 	lastName: '',
+	// 	company: '',
+	// 	country: '',
+	// 	address1: '',
+	// 	address2: '',
+	// 	city: '',
+	// 	state: '',
+	// 	postcode: '',
+	// 	phone: '',
+	// 	email: '',
 	// 	createAccount: false,
 	// 	orderNotes: '',
-	// 	paymentMethod: 'cod',
+	// 	paymentMethod: '',
 	// 	errors: null
 	// };
+
+	// Use this for testing purposes, so you dont have to fill the checkout form over an over again.
+	const initialState = {
+		firstName: 'Imran',
+		lastName: 'Sayed',
+		address1: '109 Hills Road Valley',
+		address2: 'Station Road',
+		city: 'Pune',
+		state: 'Maharastra',
+		country: 'ID',
+		postcode: '400298',
+		phone: '9959338989',
+		email: 'imran@gmail.com',
+		company: 'Tech',
+		createAccount: false,
+		orderNotes: '',
+		paymentMethod: 'cod',
+		errors: null
+	};
 
 	const [ cart, setCart ] = useContext( AppContext );
 	const [ input, setInput ] = useState( initialState );
@@ -185,12 +69,12 @@ const CheckoutForm = () => {
 	} );
 
 	// Checkout or CreateOrder Mutation.
-	const [ checkout, { data: checkoutResponse, loading: checkoutLoading, error: checkoutError } ] = useMutation( CHECKOUT_QUERY, {
+	const [ checkout, { data: checkoutResponse, loading: checkoutLoading, error: checkoutError } ] = useMutation( CHECKOUT_MUTATION, {
 		variables: {
 			input: orderData
 		},
 		onCompleted: () => {
-			// console.warn( 'completed CHECKOUT_QUERY' );
+			// console.warn( 'completed CHECKOUT_MUTATION' );
 			refetch();
 		},
 		onError: ( error ) => {

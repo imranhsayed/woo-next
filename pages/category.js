@@ -1,54 +1,8 @@
 import Layout from "../components/Layout";
 import { withRouter } from 'next/router';
 import client from "../components/ApolloClient";
-import gql from 'graphql-tag';
 import Product from "../components/Product";
-
-const PRODUCT_BY_CATEGORY_ID = gql` query Product_Category( $id: ID ! ) {
-			productCategory( id: $id ) {
-			          name
-					  products(first: 50) {
-					    nodes {
-					      id
-					      productId
-					      averageRating
-					      slug
-					      description
-					      image {
-					        uri
-					        title
-					        srcSet
-					        sourceUrl
-					      }
-					      name
-					      ... on SimpleProduct {
-					        price
-					        id
-					      }
-					      ... on VariableProduct {
-					        price
-					        id
-					      }
-					      ... on ExternalProduct {
-					        price
-					        id
-					        externalUrl
-					      }
-					      ... on GroupProduct {
-					        products {
-					          nodes {
-					            ... on SimpleProduct {
-					              price
-					            }
-					          }
-					        }
-					        id
-					      }
-					    }
-					  }
-
-			}
-	 }`;
+import PRODUCT_BY_CATEGORY_ID from "../queries/product-by-category";
 
 const Category = withRouter( props => {
 

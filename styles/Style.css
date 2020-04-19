@@ -207,3 +207,30 @@ a:hover {
 input[type=number]::-webkit-inner-spin-button {
 	margin-top: 3px;
 }
+
+.woo-next-cart-disabled {
+	background-color: #eee;
+	opacity: 1;
+	cursor: not-allowed;
+}
+
+.woo-next-cart-disabled:focus {
+	background-color: #eee;
+	opacity: 1;
+}
+
+td.woo-next-cart-qty {
+	display: flex;
+	align-items: center;
+	position: relative;
+	padding: 25px 0 25px 14px;
+}
+
+.woo-next-cart-item-spinner {
+	position: absolute;
+	left: 78px;
+}
+
+.table thead th {
+	border-bottom: none;
+}

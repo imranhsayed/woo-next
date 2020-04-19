@@ -216,7 +216,7 @@ export const getFormattedCart = ( data ) => {
 		const givenProduct = givenProducts[ i ].product;
 		const product = {};
 		const total = getFloatVal( givenProducts[ i ].total );
-		
+
 		product.productId = givenProduct.productId;
 		product.cartKey = givenProducts[ i ].key;
 		product.name = givenProduct.name;

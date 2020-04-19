@@ -1,143 +1,67 @@
 import Link from 'next/link';
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { AppContext } from "../../context/AppContext";
 import { getFormattedCart, removeItemFromCart } from '../../../functions';
 import CartItem from "./CartItem";
-import gql from "graphql-tag";
-import { useQuery } from "@apollo/react-hooks";
+import { v4 } from 'uuid';
+import { useMutation, useQuery } from "@apollo/react-hooks";
+import UPDATE_CART from "../../../mutations/update-cart";
+import GET_CART from "../../../queries/get-cart";
 
-const GET_CART = gql`
-  query GET_CART {
-    cart {
-      contents {
-        nodes {
-          key
-          product {
-            id
-            productId
-            name
-            description
-            type
-            onSale
-            slug
-            averageRating
-            reviewCount
-            image {
-              id
-                sourceUrl
-                srcSet
-                altText
-                title       
-            }
-            galleryImages {
-              nodes {
-                id
-                sourceUrl
-                srcSet
-                altText
-                title   
-              }
-            }
-
-          }
-          variation {
-            id
-            variationId
-            name
-            description
-            type
-            onSale
-            price
-            regularPrice
-            salePrice
-            image {
-              id
-              sourceUrl
-              srcSet
-              altText
-              title      
-            }
-            attributes {
-              nodes {
-                id
-                name
-                value
-              }
-            }
-          }
-          quantity
-          total
-          subtotal
-          subtotalTax
-        }
-      }
-      appliedCoupons {
-        nodes {
-          couponId
-          discountType
-          amount
-          dateExpiry
-          products {
-            nodes {
-              id
-            }
-          }
-          productCategories {
-            nodes {
-              id
-            }
-          }
-        }
-      }
-      subtotal
-      subtotalTax
-      shippingTax
-      shippingTotal
-      total
-      totalTax
-      feeTax
-      feeTotal
-      discountTax
-      discountTotal
-    }
-  }
-`;
 
 const CartItemsContainer = () => {
 
 
 	// @TODO wil use it in future variations of the project.
-	// const [ cart, setCart ] = useContext( AppContext );
-	const setCart = () => {};
+	const [ cart, setCart ] = useContext( AppContext );
+
+	const [processing, setProcessing]     = useState( false );
+	const [requestError, setRequestError] = useState( null );
 
 	// Get Cart Data.
 	const { loading, error, data, refetch } = useQuery( GET_CART, {
 		notifyOnNetworkStatusChange: true,
 		onCompleted: () => {
 			// console.warn( 'completed GET_CART', data );
+			// Update cart in the localStorage.
+			const updatedCart = getFormattedCart( data );
+			console.warn( 'updatedCArt', updatedCart );
+			localStorage.setItem( 'woo-next-cart', JSON.stringify( updatedCart ) );
+
+			// Update cart data in React Context.
+			setCart( updatedCart );
 		}
 	} );
 
-	console.warn( 'mycart', data );
-
-
-
-	const cart = undefined !== data ? getFormattedCart( data ) : null;
-
+	// Update Cart Mutation.
+	const [updateCart, { data: updateCartResponse, loading: updateCartProcessing, error: updateCartError }] = useMutation( UPDATE_CART, {
+		onCompleted: () => {
+			refetch();
+		},
+		onError: ( error ) => {
+			if ( error ) {
+				setRequestError( error.graphQLErrors[ 0 ].message );
+			}
+		}
+	} );
 
 	/*
-	 * Handle remove product click.
-	 *
-	 * @param {Object} event event
-	 * @param {Integer} Product Id.
-	 *
-	 * @return {void}
-	 */
+ * Handle remove product click.
+ *
+ * @param {Object} event event
+ * @param {Integer} Product Id.
+ *
+ * @return {void}
+ */
 	const handleRemoveProductClick = ( event, productId ) => {
 
 		const updatedCart = removeItemFromCart( productId );
 		setCart( updatedCart );
 	};
+
+	// if ( loading ) {
+	// 	return <p>Loading...</p>;
+	// }
 
 	return (
 		<div>
@@ -161,8 +85,11 @@ const CartItemsContainer = () => {
 								<CartItem
 									key={ item.productId }
 									item={ item }
+									updateCartProcessing={ updateCartProcessing }
+									products={ cart.products }
+									setProcessing={ setProcessing }
 									handleRemoveProductClick={ handleRemoveProductClick }
-									setCart={ setCart }
+									updateCart={ updateCart }
 								/>
 							) )
 						) }

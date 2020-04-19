@@ -9,7 +9,7 @@ const CartIcon = () => {
 	const totalPrice = ( null !== cart && Object.keys( cart ).length ) ? cart.totalProductsPrice : '';
 
 	return (
-		<React.Fragment>
+		<>
 			<Link href="/cart">
 				<a>
 					<div className="woo-next-cart-wrap">
@@ -21,7 +21,7 @@ const CartIcon = () => {
 					</div>
 				</a>
 			</Link>
-		</React.Fragment>
+		</>
 
 	)
 };
