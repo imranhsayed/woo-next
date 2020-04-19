@@ -212,13 +212,13 @@ export const getFormattedCart = ( data ) => {
 	formattedCart.products = [];
 	let totalProductsCount = 0;
 
-
 	for( let i = 0; i < givenProducts.length; i++  ) {
 		const givenProduct = givenProducts[ i ].product;
 		const product = {};
 		const total = getFloatVal( givenProducts[ i ].total );
-
+		
 		product.productId = givenProduct.productId;
+		product.cartKey = givenProducts[ i ].key;
 		product.name = givenProduct.name;
 		product.qty = givenProducts[ i ].quantity;
 		product.price = total / product.qty;

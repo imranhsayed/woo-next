@@ -118,7 +118,7 @@ const CartItemsContainer = () => {
 		}
 	} );
 
-	// console.warn( 'mycart', data );
+	console.warn( 'mycart', data );
 
 
 
