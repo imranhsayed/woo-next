@@ -1,9 +1,16 @@
 import { useState } from 'react';
-import { updateCart } from "../../../functions";
+import { v4 } from "uuid";
+import { getUpdatedItems } from "../../../functions";
 
-const CartItem = ( { item, handleRemoveProductClick, setCart } ) => {
+const CartItem = ( {
+	                   item,
+	                   products,
+	                   updateCartProcessing,
+	                   handleRemoveProductClick,
+	                   updateCart,
+                   } ) => {
 
-	const [ productCount, setProductCount ] = useState( item.qty );
+	const [productCount, setProductCount] = useState( item.qty );
 
 	/*
 	 * When user changes the qty from product input update the cart in localStorage
@@ -13,54 +20,71 @@ const CartItem = ( { item, handleRemoveProductClick, setCart } ) => {
 	 *
 	 * @return {void}
 	 */
-	const handleQtyChange = ( event ) => {
+	const handleQtyChange = ( event, cartKey ) => {
 
 		if ( process.browser ) {
 
-			const newQty = event.target.value;
+			event.stopPropagation();
 
-			// Set the new qty in State
+			// If the previous update cart mutation request is still processing, then return.
+			if ( updateCartProcessing ) {
+				return;
+			}
+
+			// If the user tries to delete the count of product, set that to 1 by default ( This will not allow him to reduce it less than zero )
+			const newQty = ( event.target.value ) ? parseInt( event.target.value ) : 1;
+
+			// Set the new qty in state.
 			setProductCount( newQty );
 
-			let existingCart = localStorage.getItem( 'woo-next-cart' );
-			existingCart = JSON.parse( existingCart );
+			if ( products.length ) {
 
-			// Update the cart in localStorage.
-			const updatedCart = updateCart( existingCart, item, false, newQty );
+				const updatedItems = getUpdatedItems( products, newQty, cartKey );
 
-			// Update the cart in global context
-			setCart( updatedCart );
+				updateCart( {
+					variables: {
+						input: {
+							clientMutationId: v4(),
+							items: updatedItems
+						}
+					},
+				} );
+			}
 
 		}
 	};
 
+
 	return (
-		<tr className="woo-next-cart-item" key={item.productId}>
+		<tr className="woo-next-cart-item" key={ item.productId }>
 			<th className="woo-next-cart-element woo-next-cart-el-close">
-				{/* @TODO Need to update this with graphQL query */}
-				{/*<span className="woo-next-cart-close-icon" onClick={ ( event ) => handleRemoveProductClick( event, item.productId )  }>*/}
-				{/*	<i className="fa fa-times-circle"/>*/}
-				{/*</span>*/}
+				{/* Remove item */}
+				<span className="woo-next-cart-close-icon"
+				      onClick={ ( event ) => handleRemoveProductClick( event, item.cartKey, products ) }>
+					<i className="fa fa-times-circle"/>
+				</span>
 			</th>
 			<td className="woo-next-cart-element">
-				<img width="64" src={ item.image.sourceUrl } srcSet={ item.image.srcSet } alt={item.image.title}/>
+				<img width="64" src={ item.image.sourceUrl } srcSet={ item.image.srcSet } alt={ item.image.title }/>
 			</td>
 			<td className="woo-next-cart-element">{ item.name }</td>
-			<td className="woo-next-cart-element">{ ( 'string' !== typeof item.price ) ? item.price.toFixed(2) : item.price }</td>
+			<td className="woo-next-cart-element">{ ( 'string' !== typeof item.price ) ? item.price.toFixed( 2 ) : item.price }</td>
 
-			{/* Qty Input */}
-			<td className="woo-next-cart-element">
-				<span className="text-center">{ productCount }</span>
-				{/* @TODO Need to update this with graphQL query */}
-				{/*<input*/}
-				{/*	type="number"*/}
-				{/*	min="1"*/}
-				{/*	className="woo-next-cart-qty-input"*/}
-				{/*	value={ productCount }*/}
-				{/*	onChange={ handleQtyChange }*/}
-				{/*/>*/}
+			{/* Qty Input */ }
+			<td className="woo-next-cart-element woo-next-cart-qty">
+				{/* @TODO Need to update this with graphQL query */ }
+				<input
+					type="number"
+					min="1"
+					data-cart-key={ item.cartKey }
+					className={ `woo-next-cart-qty-input form-control ${ updateCartProcessing ? 'woo-next-cart-disabled' : '' } ` }
+					value={ productCount }
+					onChange={ ( event ) => handleQtyChange( event, item.cartKey ) }
+				/>
+				{ updateCartProcessing ?
+					<img className="woo-next-cart-item-spinner" src="/cart-spinner.gif" alt="spinner"/> : '' }
 			</td>
-			<td className="woo-next-cart-element">{ ( 'string' !== typeof item.totalPrice ) ? item.totalPrice.toFixed(2) : item.totalPrice }</td>
+			<td className="woo-next-cart-element">{ ( 'string' !== typeof item.totalPrice ) ? item.totalPrice.toFixed( 2 ) : item.totalPrice }</td>
 		</tr>
 	)
 };

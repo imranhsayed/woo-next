@@ -212,13 +212,13 @@ export const getFormattedCart = ( data ) => {
 	formattedCart.products = [];
 	let totalProductsCount = 0;
 
-
 	for( let i = 0; i < givenProducts.length; i++  ) {
 		const givenProduct = givenProducts[ i ].product;
 		const product = {};
 		const total = getFloatVal( givenProducts[ i ].total );
 
 		product.productId = givenProduct.productId;
+		product.cartKey = givenProducts[ i ].key;
 		product.name = givenProduct.name;
 		product.qty = givenProducts[ i ].quantity;
 		product.price = total / product.qty;
@@ -279,4 +279,45 @@ export const createCheckoutData = ( order ) => {
 	};
 
 	return checkoutData;
+};
+
+/**
+ * Get the updated items in the below format required for mutation input.
+ *
+ * [
+ * { "key": "33e75ff09dd601bbe6dd51039152189", "quantity": 1 },
+ * { "key": "02e74f10e0327ad868d38f2b4fdd6f0", "quantity": 1 },
+ * ]
+ *
+ * Creates an array in above format with the newQty (updated Qty ).
+ *
+ */
+export const getUpdatedItems = ( products, newQty, cartKey ) => {
+
+	// Create an empty array.
+	const updatedItems = [];
+
+	// Loop through the product array.
+	products.map( ( cartItem ) => {
+
+		// If you find the cart key of the product user is trying to update, push the key and new qty.
+		if ( cartItem.cartKey === cartKey ) {
+
+			updatedItems.push( {
+				key: cartItem.cartKey,
+				quantity: parseInt( newQty )
+			} );
+
+			// Otherwise just push the existing qty without updating.
+		} else {
+			updatedItems.push( {
+				key: cartItem.cartKey,
+				quantity: cartItem.qty
+			} );
+		}
+	} );
+
+	// Return the updatedItems array with new Qtys.
+	return updatedItems;
+
 };

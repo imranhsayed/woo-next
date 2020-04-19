@@ -1,168 +1,11 @@
 import { useState, useContext } from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
-import gql from "graphql-tag";
 import { AppContext } from "../context/AppContext";
 import { addFirstProduct, getFormattedCart, updateCart } from "../../functions";
 import Link from "next/link";
 import { v4 } from 'uuid';
-
-const GET_CART = gql`
-  query GET_CART {
-    cart {
-      contents {
-        nodes {
-          key
-          product {
-            id
-            productId
-            name
-            description
-            type
-            onSale
-            slug
-            averageRating
-            reviewCount
-            image {
-              id
-                sourceUrl
-                srcSet
-                altText
-                title       
-            }
-            galleryImages {
-              nodes {
-                id
-                sourceUrl
-                srcSet
-                altText
-                title   
-              }
-            }
-
-          }
-          variation {
-            id
-            variationId
-            name
-            description
-            type
-            onSale
-            price
-            regularPrice
-            salePrice
-            image {
-              id
-              sourceUrl
-              srcSet
-              altText
-              title      
-            }
-            attributes {
-              nodes {
-                id
-                name
-                value
-              }
-            }
-          }
-          quantity
-          total
-          subtotal
-          subtotalTax
-        }
-      }
-      appliedCoupons {
-        nodes {
-          couponId
-          discountType
-          amount
-          dateExpiry
-          products {
-            nodes {
-              id
-            }
-          }
-          productCategories {
-            nodes {
-              id
-            }
-          }
-        }
-      }
-      subtotal
-      subtotalTax
-      shippingTax
-      shippingTotal
-      total
-      totalTax
-      feeTax
-      feeTotal
-      discountTax
-      discountTotal
-    }
-  }
-`;
-
-const ADD_TO_CART = gql`
-  mutation ($input: AddToCartInput!) {
-    addToCart(input: $input) {
-      cartItem {
-        key
-        product {
-          id
-          productId
-          name
-          description
-          type
-          onSale
-          slug
-          averageRating
-          reviewCount
-          image {
-            id
-            sourceUrl
-            altText      
-          }
-          galleryImages {
-            nodes {
-              id
-              sourceUrl
-              altText
-            }
-          }
-        }
-        variation {
-          id
-          variationId
-          name
-          description
-          type
-          onSale
-          price
-          regularPrice
-          salePrice
-          image {
-            id
-            sourceUrl
-            altText      
-          }
-          attributes {
-            nodes {
-              id
-              attributeId
-              name
-              value
-            }
-          }
-        }
-        quantity
-        total
-        subtotal
-        subtotalTax
-      }
-    }
-  }
-`;
+import GET_CART from "../../queries/get-cart";
+import ADD_TO_CART from "../../mutations/add-to-cart";
 
 const AddToCart = ( props ) => {
 
@@ -220,6 +63,7 @@ const AddToCart = ( props ) => {
 		notifyOnNetworkStatusChange: true,
 		onCompleted: () => {
 			// console.warn( 'completed GET_CART' );
+
 			// Update cart in the localStorage.
 			const updatedCart = getFormattedCart( data );
 			localStorage.setItem( 'woo-next-cart', JSON.stringify( updatedCart ) );
