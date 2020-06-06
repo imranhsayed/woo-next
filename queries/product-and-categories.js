@@ -6,11 +6,13 @@ import gql from "graphql-tag";
 const PRODUCTS_AND_CATEGORIES_QUERY = gql`query {
 
 	productCategories(first: 3) {
+    
 		nodes {
 			id
 			name
 			slug
 			image {
+        		id
 				sourceUrl
 				srcSet
 			}
@@ -25,7 +27,8 @@ const PRODUCTS_AND_CATEGORIES_QUERY = gql`query {
 	      slug
 	      description
 	      image {
-	        uri
+	        id
+          	uri
 	        title
 	        srcSet
 	        sourceUrl
@@ -45,9 +48,11 @@ const PRODUCTS_AND_CATEGORIES_QUERY = gql`query {
 	        externalUrl
 	      }
 	      ... on GroupProduct {
+          	id
 	        products {
 	          nodes {
 	            ... on SimpleProduct {
+				  id
 	              price
 	            }
 	          }
