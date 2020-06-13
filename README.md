@@ -52,13 +52,15 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Add GraphQl support for WordPress
 
-1. Clone and activate the following plugins , in your WordPress plugin directory:
+1. Download and activate the following plugins , in your WordPress plugin directory:
 
-* [wp-graphql](https://github.com/wp-graphql/wp-graphql) Exposes graphql for WordPress ( **Tested with v-0.8.0** of this plugin )
-* [wp-graphiql](https://github.com/wp-graphql/wp-graphiql) Provides GraphiQL IDE (playground) to the WP-Admin.
-* [wp-graphql-woocommerce](https://github.com/wp-graphql/wp-graphql-woocommerce) Adds Woocommerce functionality to a WPGraphQL schema ( **Tested with v-0.5.0** of this plugin )
+* [wp-graphql](https://github.com/imranhsayed/woo-next/wordpress/plugins) Exposes graphql for WordPress ( **Tested with v-0.8.0** of this plugin )
+* [wp-graphiql](https://github.com/imranhsayed/woo-next/wordpress/plugins) Provides GraphiQL IDE (playground) to the WP-Admin.
+* [wp-graphql-woocommerce](https://github.com/imranhsayed/woo-next/wordpress/plugins) Adds Woocommerce functionality to a WPGraphQL schema ( **Tested with v-0.5.0** of this plugin )
 
-You can also import default wooCommerce products that come with wooCommerce Plugin for development ( if you don't have any products in your WordPress install ) `WP Dashboard > Tools > Import > WooCommerce products(CSV)`: The WooCommerce default products csv file is available at `wp-content/plugins/woocommerce/sample-data/sample_products.csv`
+* Make sure Woocommerce plugin is also installed in your WordPress site. You can also import default wooCommerce products that come with wooCommerce Plugin for development ( if you don't have any products in your WordPress install ) `WP Dashboard > Tools > Import > WooCommerce products(CSV)`: The WooCommerce default products csv file is available at `wp-content/plugins/woocommerce/sample-data/sample_products.csv`
+
+
 
 ## Configuration :wrench:
 
@@ -66,8 +68,8 @@ You can also import default wooCommerce products that come with wooCommerce Plug
 
 ```ruby
 const clientConfig = {
-	siteUrl: 'xxxxx', // e.g. 'http://xyz.com'
-    graphqlUrl: 'xxxxx' // e.g. 'http://wordpressSiteUrl.com/graphql'
+	siteUrl: 'xxxxx', // e.g. 'https://xyz.com'
+    graphqlUrl: 'xxxxx' // e.g. 'https://wordpressSiteUrl.com/graphql'
 };
 
 export default clientConfig;
@@ -77,8 +79,8 @@ export default clientConfig;
 
 ```ruby
 const wooConfig = {
-	siteUrl: 'xxxxx', // e.g. 'http://xyz.com'
-    graphqlUrl: 'xxxxx' // e.g. 'http://wordpressSiteUrl.com/graphql'
+	siteUrl: 'xxxxx', // e.g. 'https://xyz.com'
+    graphqlUrl: 'xxxxx' // e.g. 'https://wordpressSiteUrl.com/graphql'
 };
 
 module.exports = wooConfig;
