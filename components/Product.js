@@ -5,9 +5,6 @@ import clientConfig from '../client-config';
 const Product = (props) => {
   const { product } = props;
 
-
-  
-
   return (
     // @TODO Need to handle Group products differently.
     undefined !== product && 'GroupProduct' !== product.__typename ? (
