@@ -1,13 +1,13 @@
 {
   "name": "woo-next",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Woocommerce Front end app with Nextjs",
   "scripts": {
     "dev": "next dev",
     "build": "npm run build-fragment && next build",
     "build-fragment": "node schemaQuery.js",
     "start": "next start",
-	"deploy": "npm run build && now"
+    "deploy": "npm run build && now"
   },
   "author": "Imran Sayed",
   "license": "ISC",
@@ -26,7 +26,7 @@
     "graphql": "^14.4.2",
     "graphql-tag": "^2.10.1",
     "isomorphic-unfetch": "^3.0.0",
-    "next": "^9.3.2",
+    "next": "^9.4.4",
     "nodemon": "^1.19.1",
     "react": "^16.8.6",
     "react-apollo": "^3.0.1",
