@@ -1,5 +1,7 @@
 import { v4 } from 'uuid';
 
+import clientConfig from './client-config';
+
 /**
  * Validate and check if the given variable is empty
  *
@@ -251,11 +253,19 @@ export const getFormattedCart = (data) => {
     product.qty = givenProducts[i].quantity;
     product.price = total / product.qty;
     product.totalPrice = givenProducts[i].total;
-    product.image = {
-      sourceUrl: givenProduct.image.sourceUrl,
-      srcSet: givenProduct.image.srcSet,
-      title: givenProduct.image.title,
-    };
+
+    // Ensure we can add products without images to the cart
+    !isEmpty(givenProduct.image)
+      ? (product.image = {
+          sourceUrl: givenProduct.image.sourceUrl,
+          srcSet: givenProduct.image.srcSet,
+          title: givenProduct.image.title,
+        })
+      : (product.image = {
+          sourceUrl: clientConfig.singleImagePlaceholder,
+          srcSet: clientConfig.singleImagePlaceholder,
+          title: givenProduct.name,
+        });
 
     totalProductsCount += givenProducts[i].quantity;
 
