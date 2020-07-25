@@ -64,12 +64,14 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Configuration :wrench:
 
-* 1.Rename `client-config-example.js` to `client-config.js` and update your React Site URL and WordPressSite URL ( Used access it in ES6 file. )
+* 1.Rename `client-config-example.js` to `client-config.js` and update your React Site URL, WordPressSite URL ( Used access it in ES6 file. ), productImagePlaceholder, singleImagePlaceholder
 
 ```ruby
 const clientConfig = {
 	siteUrl: 'xxxxx', // e.g. 'https://xyz.com'
-    graphqlUrl: 'xxxxx' // e.g. 'https://wordpressSiteUrl.com/graphql'
+    graphqlUrl: 'xxxxx' // e.g. 'https://wordpressSiteUrl.com/graphql',
+    productImagePlaceholder: 'https://via.placeholder.com/800', // e.g https://via.placeholder.com/434 - Placeholder image URL for index page
+    singleImagePlaceholder: 'https://via.placeholder.com/200', // e.g https://via.placeholder.com/200 - Placeholder image URL for individual product page
 };
 
 export default clientConfig;
