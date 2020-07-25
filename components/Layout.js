@@ -1,10 +1,17 @@
 import Head from 'next/head';
+import Router from 'next/router';
+import NProgress from 'nprogress';
 import { AppProvider } from "./context/AppContext";
 import Header from "./Header";
 import Footer from "./Footer";
 import '../styles/Style.css';
+import 'nprogress/nprogress.css';
 import client from "./ApolloClient";
 import { ApolloProvider } from '@apollo/client';
+
+Router.events.on('routeChangeStart', () => NProgress.start());
+Router.events.on('routeChangeComplete', () => NProgress.done());
+Router.events.on('routeChangeError', () => NProgress.done());
 
 const Layout = ( props ) => {
 	return (
