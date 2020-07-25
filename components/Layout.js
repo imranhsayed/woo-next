@@ -4,14 +4,12 @@ import Header from "./Header";
 import Footer from "./Footer";
 import '../styles/Style.css';
 import client from "./ApolloClient";
-import { ApolloProvider } from 'react-apollo';
-import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks';
+import { ApolloProvider } from '@apollo/client';
 
 const Layout = ( props ) => {
 	return (
 		<AppProvider>
-			<ApolloProvider client={ client }>
-				<ApolloHooksProvider client={ client }>
+			<ApolloProvider client={ client }>			
 					<div>
 						<Head>
 							<title>Woocommerce React Theme</title>
@@ -22,8 +20,7 @@ const Layout = ( props ) => {
 						<Header/>
 							{ props.children }
 						<Footer/>
-					</div>
-				</ApolloHooksProvider>
+					</div>				
 			</ApolloProvider>
 		</AppProvider>
 	);
