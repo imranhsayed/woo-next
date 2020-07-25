@@ -1,6 +1,6 @@
 {
   "name": "woo-next",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Woocommerce Front end app with Nextjs",
   "scripts": {
     "dev": "next dev",
@@ -26,7 +26,6 @@
     "graphql": "^14.4.2",
     "graphql-tag": "^2.10.1",
     "isomorphic-unfetch": "^3.0.0",
-    "lodash": "^4.17.19",
     "next": "^9.4.4",
     "nodemon": "^1.19.1",
     "react": "^16.8.6",
