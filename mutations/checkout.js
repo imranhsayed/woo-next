@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import gql from "graphql-tag";
 
 const CHECKOUT_MUTATION = gql`
 mutation CHECKOUT_MUTATION( $input: CheckoutInput! ) {

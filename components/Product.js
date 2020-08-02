@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import AddToCartButton from '../components/cart/AddToCartButton';
 import clientConfig from '../client-config';
-import { isEmpty } from '../functions'
+import { isEmpty } from 'lodash';
 
 const Product = ( props ) => {
 
@@ -11,7 +11,7 @@ const Product = ( props ) => {
 		// @TODO Need to handle Group products differently.
 		undefined !== product && 'GroupProduct' !== product.__typename ? (
 			<div className="col-lg-3 col-md-6 col-sm-12">
-				<h3 className="text-center card-header">
+				<h3 className="card-header text-center">
 					{ product.name ? product.name : '' }
 				</h3>
 
@@ -30,8 +30,8 @@ const Product = ( props ) => {
 						) : null }
 					</a>
 				</Link>
-				<div className="text-center card-body">
-					<h6 className="mb-3 card-subtitle">{ product.price }</h6>
+				<div className="card-body text-center">
+					<h6 className="card-subtitle mb-3">{ product.price }</h6>
 					<AddToCartButton product={ product }/>
 				</div>
 			</div>

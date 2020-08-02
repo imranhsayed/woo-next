@@ -66,7 +66,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 * 1.Rename `client-config-example.js` to `client-config.js` and update your React Site URL, WordPressSite URL ( Used access it in ES6 file. ), productImagePlaceholder, singleImagePlaceholder
 
-```javascript
+```ruby
 const clientConfig = {
 	siteUrl: 'xxxxx', // e.g. 'https://xyz.com'
     graphqlUrl: 'xxxxx' // e.g. 'https://wordpressSiteUrl.com/graphql',
@@ -79,7 +79,7 @@ export default clientConfig;
 
 * 2. Rename `wooConfig.example.js` to `wooConfig.example.js` and update your React Site URL and WordPressSite URL ( Used access it in common js file. )
 
-```javascript
+```ruby
 const wooConfig = {
 	siteUrl: 'xxxxx', // e.g. 'https://xyz.com'
     graphqlUrl: 'xxxxx' // e.g. 'https://wordpressSiteUrl.com/graphql'
