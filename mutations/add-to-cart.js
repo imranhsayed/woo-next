@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import gql from "graphql-tag";
 
 const ADD_TO_CART = gql`
   mutation ($input: AddToCartInput!) {

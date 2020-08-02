@@ -16,7 +16,7 @@
 // 	,"Uzbekistan","Venezuela","Vietnam","Virgin Islands (US)","Yemen","Zambia","Zimbabwe"];
 
 const countryList = [
-	{ countryCode: 'IN', countryName: 'India' }
+	{ countryCode: 'ID', countryName: 'India' }
 ];
 
 export default countryList;

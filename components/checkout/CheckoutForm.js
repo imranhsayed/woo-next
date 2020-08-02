@@ -4,9 +4,9 @@ import YourOrder from "./YourOrder";
 import PaymentModes from "./PaymentModes";
 import { AppContext } from "../context/AppContext";
 import validateAndSanitizeCheckoutForm from '../../validator/checkout';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from "@apollo/react-hooks";
 import { getFormattedCart, createCheckoutData } from "../../functions";
-import OrderSuccess from "./OrderSuccess";
+import OrderSuccess from "./OrderSucess";
 import GET_CART from "../../queries/get-cart";
 import CHECKOUT_MUTATION from "../../mutations/checkout";
 
@@ -137,7 +137,7 @@ const CheckoutForm = () => {
 				<form onSubmit={ handleFormSubmit } className="woo-next-checkout-form">
 					<div className="row">
 						{/*Billing Details*/}
-						<div className="p-0 pr-2 col-lg-6 col-md-12">
+						<div className="col-lg-6 col-md-12 p-0 pr-2">
 							<h2 className="mb-4">Billing Details</h2>
 							<Billing input={ input } handleOnChange={ handleOnChange }/>
 						</div>
@@ -149,7 +149,7 @@ const CheckoutForm = () => {
 
 							{/*Payment*/}
 							<PaymentModes input={ input } handleOnChange={ handleOnChange }/>
-							<div className="mt-5 woo-next-place-order-btn-wrap">
+							<div className="woo-next-place-order-btn-wrap mt-5">
 								<button className="btn woo-next-large-black-btn woo-next-place-order-btn btn-secondary" type="submit">
 									Place Order
 								</button>

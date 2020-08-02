@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import gql from "graphql-tag";
 
 const PRODUCT_BY_ID_QUERY = gql` query Product($id: ID!) {
 	product(id: $id, idType: DATABASE_ID) {
