@@ -1,18 +1,12 @@
 import fetch from 'node-fetch';
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { createHttpLink } from 'apollo-link-http';
-import { ApolloLink } from "apollo-link";
+import { ApolloClient, createHttpLink, InMemoryCache, ApolloLink } from '@apollo/client';
 
-import { IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
-import introspectionQueryResultData from '../fragmentTypes';
+// TODO Take a look at re-implementing fragments?
+// TODO @see https://www.apollographql.com/docs/react/data/fragments/#defining-possibletypes-manually
+
+// import introspectionQueryResultData from '../fragmentTypes';
 
 import clientConfig from './../client-config';
-
-// Fragment matcher.
-const fragmentMatcher = new IntrospectionFragmentMatcher({
-	introspectionQueryResultData
-});
 
 /**
  * Middleware operation
@@ -77,7 +71,9 @@ const client = new ApolloClient({
 		uri: clientConfig.graphqlUrl,
 		fetch: fetch
 	}) ) ),
-	cache: new InMemoryCache( { fragmentMatcher } ),
+	// TODO Take a look at re-implementing fragments?
+	//cache: new InMemoryCache( { introspectionQueryResultData  } ),
+	cache: new InMemoryCache(),
 });
 
 export default client;

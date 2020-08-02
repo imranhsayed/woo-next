@@ -4,7 +4,7 @@ import client from '../components/ApolloClient';
 import AddToCartButton from '../components/cart/AddToCartButton';
 import PRODUCT_BY_ID_QUERY from '../queries/product-by-id';
 import clientConfig from '../client-config';
-import { isEmpty } from 'lodash';
+import { isEmpty } from '../functions'
 
 const Product = withRouter( ( props ) => {
 	const { product } = props;
@@ -13,7 +13,7 @@ const Product = withRouter( ( props ) => {
 		<Layout>
 			{ product ? (
 				<div className="woo-next-single">
-					<div className="woo-next-single__product card bg-light mb-3 p-5">
+					<div className="p-5 mb-3 woo-next-single__product card bg-light">
 						<div className="card-header">{ product.name }</div>
 						<div className="card-body">
 							<h4 className="card-title">{ product.name }</h4>
