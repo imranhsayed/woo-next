@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
-const PRODUCT_BY_ID_QUERY = gql` query Product($id: ID!) {
-	product(id: $id, idType: DATABASE_ID) {
+const PRODUCT_BY_SLUG_QUERY = gql` query Product($id: ID!) {
+	product(id: $id, idType: SLUG) {
 	  id
 	  productId
 	  averageRating
@@ -43,4 +43,4 @@ const PRODUCT_BY_ID_QUERY = gql` query Product($id: ID!) {
   }
 `;
 
-export default PRODUCT_BY_ID_QUERY;
+export default PRODUCT_BY_SLUG_QUERY;
