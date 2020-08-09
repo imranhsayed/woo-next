@@ -2,6 +2,7 @@
 [![Project Status: Active.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 ![Stars](https://img.shields.io/github/stars/imranhsayed/woo-next?label=%E2%AD%90%20Stars)
 ![Forks](https://img.shields.io/github/forks/imranhsayed/woo-next?color=%23ff69b4)
+![Contributors](https://img.shields.io/github/contributors/imranhsayed/woo-next?color=blue)
 ![Follow](https://img.shields.io/github/followers/imranhsayed?label=Please%20follow%20%20to%20support%20my%20work%20%F0%9F%99%8F&style=social)
 
 > * This is a React WooCommerce theme, built with Next JS, Webpack, Babel, Node, GraphQl
