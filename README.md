@@ -98,6 +98,18 @@ The master branch has the GraphQL implementation.
 
 * `dev` Runs server in development mode
 
+## Code Contributors ✰
+
+Thanks to all the people who contributed to the code of this project 🤝 
+
+<div>
+    <img src="https://github.com/imranhsayed.png?size=30" alt="Imran Sayed">
+    <img src="https://github.com/w3bdesign.png?size=30" alt="Daniel F">
+    <img src="https://github.com/delunix.png?size=30" alt="Fandi Rahmawan">
+    <img src="https://github.com/yudyananda.png?size=30" alt="yudyananda">
+</div>
+
+
 ## Contributing :busts_in_silhouette:
 
 Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
