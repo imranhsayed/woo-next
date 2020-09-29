@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import AddToCartButton from '../components/cart/AddToCartButton';
-import clientConfig from '../client-config';
 import { isEmpty } from 'lodash';
 
 const Product = ( props ) => {
@@ -22,9 +21,9 @@ const Product = ( props ) => {
 					<a>
 						{ !isEmpty( product.image ) ? (
 							<img src={ product.image.sourceUrl } alt="Product image"/>
-						) : !isEmpty( clientConfig.productImagePlaceholder ) ? (
+						) : !isEmpty( process.env.PRODUCT_IMAGE_PLACEHOLDER ) ? (
 							<img
-								src={ clientConfig.productImagePlaceholder }
+								src={ process.env.PRODUCT_IMAGE_PLACEHOLDER }
 								alt="Placeholder product image"
 							/>
 						) : null }

@@ -3,7 +3,6 @@ import Layout from '../../components/Layout';
 import client from '../../components/ApolloClient';
 import AddToCartButton from '../../components/cart/AddToCartButton';
 import PRODUCT_BY_SLUG_QUERY from '../../queries/product-by-slug';
-import clientConfig from '../../client-config';
 import { isEmpty } from 'lodash';
 
 const Product = (props) => {
@@ -29,9 +28,9 @@ const Product = (props) => {
 									width="200"
 									srcSet={ product.image.srcSet }
 								/>
-							) : !isEmpty( clientConfig.singleImagePlaceholder ) ? (
+							) : !isEmpty( process.env.SINGLE_IMAGE_PLACEHOLDER ) ? (
 								<img
-									src={ clientConfig.singleImagePlaceholder }
+									src={ process.env.SINGLE_IMAGE_PLACEHOLDER }
 									alt="Placeholder product image"
 								/>
 							) : null }

@@ -1,8 +1,8 @@
 const fetch     = require( 'node-fetch' );
 const fs        = require( 'fs' );
-const wooConfig = require( './wooConfig' );
+require('dotenv').config()
 
-fetch( `${ wooConfig.graphqlUrl }`, {
+fetch( process.env.WP_URL + '/graphql', {
 	method: 'POST',
 	headers: { 'Content-Type': 'application/json' },
 	body: JSON.stringify( {

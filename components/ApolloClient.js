@@ -7,8 +7,6 @@ import { ApolloLink } from "apollo-link";
 import { IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import introspectionQueryResultData from '../fragmentTypes';
 
-import clientConfig from './../client-config';
-
 // Fragment matcher.
 const fragmentMatcher = new IntrospectionFragmentMatcher({
 	introspectionQueryResultData
@@ -74,7 +72,7 @@ export const afterware = new ApolloLink( ( operation, forward ) => {
 // Apollo GraphQL client.
 const client = new ApolloClient({
 	link: middleware.concat( afterware.concat( createHttpLink({
-		uri: clientConfig.graphqlUrl,
+		uri: `${process.env.WP_URL}/graphql` ,
 		fetch: fetch
 	}) ) ),
 	cache: new InMemoryCache( { fragmentMatcher } ),

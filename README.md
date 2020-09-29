@@ -75,28 +75,17 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Configuration :wrench:
 
-* 1.Rename `client-config-example.js` to `client-config.js` and update your React Site URL, WordPressSite URL ( Used access it in ES6 file. ), productImagePlaceholder, singleImagePlaceholder
+* 1. Add your WordPressSite URL, productImagePlaceholder, singleImagePlaceholder to the '.env' file
 
-```ruby
-const clientConfig = {
-	siteUrl: 'xxxxx', // e.g. 'https://xyz.com'
-    graphqlUrl: 'xxxxx' // e.g. 'https://wordpressSiteUrl.com/graphql',
-    productImagePlaceholder: 'https://via.placeholder.com/800', // e.g https://via.placeholder.com/434 - Placeholder image URL for index page
-    singleImagePlaceholder: 'https://via.placeholder.com/200', // e.g https://via.placeholder.com/200 - Placeholder image URL for individual product page
-};
-
-export default clientConfig;
 ```
+# e.g. 'http://xyz.com' - Your WordPress site URL.
+WP_URL=xxx
 
-* 2. Rename `wooConfig.example.js` to `wooConfig.example.js` and update your React Site URL and WordPressSite URL ( Used access it in common js file. )
+# e.g https://via.placeholder.com/434 - Placeholder image URL for index page
+PRODUCT_IMAGE_PLACEHOLDER=xxx
 
-```ruby
-const wooConfig = {
-	siteUrl: 'xxxxx', // e.g. 'https://xyz.com'
-    graphqlUrl: 'xxxxx' // e.g. 'https://wordpressSiteUrl.com/graphql'
-};
-
-module.exports = wooConfig;
+# e.g https://via.placeholder.com/200 - Placeholder image URL for individual product page
+SINGLE_IMAGE_PLACEHOLDER=xxx
 ```
 
 ## Branch details
