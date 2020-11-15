@@ -8,8 +8,6 @@ export default function CategorySingle( props ) {
 
     const { categoryName, products } = props;
 
-    console.log( 'props', props );
-
     return (
         <Layout>
             <div className="content-wrap">
