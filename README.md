@@ -40,7 +40,7 @@ branch is upto date with those changes. You can also refer to the PR notes for c
 
 # Features:
 
-1. WooCommerce Store in React( contains: Products Page, Single Product Page, AddToCart, CartPage and Checkout Page )
+1. WooCommerce Store in React( contains: Products Page, Single Product Page, AddToCart, CartPage and Checkout Page ).
 2. SSR
 3. SEO friendly
 4. Automatic Code Splitting
