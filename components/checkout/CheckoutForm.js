@@ -4,9 +4,9 @@ import YourOrder from "./YourOrder";
 import PaymentModes from "./PaymentModes";
 import { AppContext } from "../context/AppContext";
 import validateAndSanitizeCheckoutForm from '../../validator/checkout';
-import { useMutation, useQuery } from "@apollo/react-hooks";
+import { useMutation, useQuery } from '@apollo/client';
 import { getFormattedCart, createCheckoutData } from "../../functions";
-import OrderSuccess from "./OrderSucess";
+import OrderSuccess from "./OrderSuccess";
 import GET_CART from "../../queries/get-cart";
 import CHECKOUT_MUTATION from "../../mutations/checkout";
 

@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { useQuery, useMutation } from "@apollo/react-hooks";
+import { useQuery, useMutation } from '@apollo/client';
 import { AppContext } from "../context/AppContext";
 import { addFirstProduct, getFormattedCart, updateCart } from "../../functions";
 import Link from "next/link";

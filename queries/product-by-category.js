@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 
 const PRODUCT_BY_CATEGORY_ID = gql` query Product_Category($id: ID!) {
 	productCategory(id: $id) {

@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 
 const PRODUCT_BY_SLUG_QUERY = gql` query Product($id: ID!) {
 	product(id: $id, idType: SLUG) {
