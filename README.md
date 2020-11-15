@@ -78,18 +78,17 @@ These instructions will get you a copy of the project up and running on your loc
 
 * _Note_ Below is for GraphQL implementation , for REST API check [feature/rest-api](https://github.com/imranhsayed/woo-next/tree/feature/rest-api) branch
 
-1.Rename `client-config-example.js` to `client-config.js` and update your productImagePlaceholder, singleImagePlaceholder
-
-```ruby
-const clientConfig = {
-    productImagePlaceholder: 'https://via.placeholder.com/800', // e.g https://via.placeholder.com/434 - Placeholder image URL for index page
-    singleImagePlaceholder: 'https://via.placeholder.com/200', // e.g https://via.placeholder.com/200 - Placeholder image URL for individual product page
-};
-
-export default clientConfig;
-```
-
-2. Create a `.env` file taking reference from `.env-example` and  update your WordPressSite URL.
+1. (Required) Create a `.env` file taking reference from `.env-example` and  update your WordPressSite URL.
+2. (optional) You can update your productImagePlaceholder, singleImagePlaceholder in `client-config.js`
+   
+   ```ruby
+   const clientConfig = {
+       productImagePlaceholder: 'https://via.placeholder.com/800', // e.g https://via.placeholder.com/434 - Placeholder image URL for index page
+       singleImagePlaceholder: 'https://via.placeholder.com/200', // e.g https://via.placeholder.com/200 - Placeholder image URL for individual product page
+   };
+   
+   export default clientConfig;
+   ```
 
 ## Branch details
 
