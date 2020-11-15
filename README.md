@@ -46,7 +46,8 @@ branch is upto date with those changes. You can also refer to the PR notes for c
 4. Automatic Code Splitting
 5. Hot Reloading
 6. Prefetching
-7. GraphQL with Apollo Client
+8. Incremental Static (Re)generation ( Next.js 10 support )
+9. GraphQL with Apollo Client
 
 ## Getting Started :rocket:
 
@@ -59,7 +60,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 1. Clone this repo using terminal `git clone git@github.com:imranhsayed/woo-next`
 2. `cd woo-next`
-3. `npm install`
+3. `yarn install`
 
 ## Add GraphQl support for WordPress
 
@@ -73,14 +74,14 @@ These instructions will get you a copy of the project up and running on your loc
 
 
 
-## Configuration :wrench:
+## Configuration(for GraphQL implementation) :wrench:
 
-* 1.Rename `client-config-example.js` to `client-config.js` and update your React Site URL, WordPressSite URL ( Used access it in ES6 file. ), productImagePlaceholder, singleImagePlaceholder
+* _Note_ Below is for GraphQL implementation , for REST API check [feature/rest-api](https://github.com/imranhsayed/woo-next/tree/feature/rest-api) branch
+
+1.Rename `client-config-example.js` to `client-config.js` and update your productImagePlaceholder, singleImagePlaceholder
 
 ```ruby
 const clientConfig = {
-	siteUrl: 'xxxxx', // e.g. 'https://xyz.com'
-    graphqlUrl: 'xxxxx' // e.g. 'https://wordpressSiteUrl.com/graphql',
     productImagePlaceholder: 'https://via.placeholder.com/800', // e.g https://via.placeholder.com/434 - Placeholder image URL for index page
     singleImagePlaceholder: 'https://via.placeholder.com/200', // e.g https://via.placeholder.com/200 - Placeholder image URL for individual product page
 };
@@ -88,22 +89,13 @@ const clientConfig = {
 export default clientConfig;
 ```
 
-* 2. Rename `wooConfig.example.js` to `wooConfig.example.js` and update your React Site URL and WordPressSite URL ( Used access it in common js file. )
-
-```ruby
-const wooConfig = {
-	siteUrl: 'xxxxx', // e.g. 'https://xyz.com'
-    graphqlUrl: 'xxxxx' // e.g. 'https://wordpressSiteUrl.com/graphql'
-};
-
-module.exports = wooConfig;
-```
+2. Create a `.env` file taking reference from `.env-example` and  update your WordPressSite URL.
 
 ## Branch details
 
 1. [feature/rest-api](https://github.com/imranhsayed/woo-next/tree/feature/rest-api) Contains REST API Implementation.
 
-The master branch has the GraphQL implementation.  
+2. The `master` branch has the GraphQL implementation.  
 
 ## Common Commands :computer:
 
