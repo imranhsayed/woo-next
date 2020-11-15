@@ -15,10 +15,7 @@ const Product = ( props ) => {
 					{ product.name ? product.name : '' }
 				</h3>
 
-				<Link
-					as={ `/product/${ product.slug }`}
-					href={`/product/[slug]`}
-				>
+				<Link href={ `/product/${ product.slug }`} >
 					<a>
 						{ !isEmpty( product.image ) ? (
 							<img src={ product.image.sourceUrl } alt="Product image"/>

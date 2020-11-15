@@ -1,43 +1,63 @@
 import Layout from "../../components/Layout";
-import { withRouter } from 'next/router';
 import client from "../../components/ApolloClient";
 import Product from "../../components/Product";
-import PRODUCT_BY_CATEGORY_ID from "../../queries/product-by-category";
+import {PRODUCT_BY_CATEGORY_SLUG, PRODUCT_CATEGORIES_SLUGS} from "../../queries/product-by-category";
+import {isEmpty} from "lodash";
 
-const Category = withRouter( props => {
+export default function CategorySingle( props ) {
 
     const { categoryName, products } = props;
+
+    console.log( 'props', props );
 
     return (
         <Layout>
             <div className="content-wrap">
                 { categoryName ? <h3 className="product-container pl-5">{ categoryName }</h3> : '' }
                 <div className="product-container row">
-                    { undefined !== products && products.length ? (
-                        products.map( product => <Product key={ product.id } product={ product } /> )
+                    { undefined !== products && products?.length ? (
+                        products.map( product => <Product key={ product?.id } product={ product } /> )
                     ) : ''}
                 </div>
             </div>
         </Layout>
     )
-});
+};
 
-Category.getInitialProps = async function( context ) {
+export async function getStaticProps(context) {
 
-    let { query: { slug } } = context;
+    const {params: { slug }} = context
 
-    const id = slug ? slug.split( '-' ).pop() : context.query.id;
-
-    const res = await client.query(({
-        query: PRODUCT_BY_CATEGORY_ID,
-        variables: { id }
+    const {data} = await client.query(({
+        query: PRODUCT_BY_CATEGORY_SLUG,
+        variables: { slug }
     }));
 
     return {
-        categoryName: res.data.productCategory.name,
-        products: res.data.productCategory.products.nodes
+        props: {
+            categoryName: data?.productCategory?.name || '',
+            products: data?.productCategory?.products?.nodes || []
+        },
+        revalidate: 1
     }
 
-};
+}
 
-export default Category;
+export async function getStaticPaths () {
+    const { data } = await client.query({
+        query: PRODUCT_CATEGORIES_SLUGS
+    })
+
+    const pathsData = []
+
+    data?.productCategories?.nodes && data?.productCategories?.nodes.map((productCategory) => {
+        if (!isEmpty(productCategory?.slug)) {
+            pathsData.push({ params: { slug: productCategory?.slug } })
+        }
+    })
+
+    return {
+        paths: pathsData,
+        fallback: false
+    }
+}

@@ -1,7 +1,7 @@
-import { gql } from "@apollo/client";
+import {gql} from "@apollo/client";
 
-const PRODUCT_BY_CATEGORY_ID = gql` query Product_Category($id: ID!) {
-	productCategory(id: $id, idType: SLUG) {
+export const PRODUCT_BY_CATEGORY_SLUG = gql` query PRODUCT_BY_CATEGORY_SLUG($slug: ID!) {
+	productCategory(id: $slug, idType: SLUG) {
 	  id
 	  name
 	  products(first: 50) {
@@ -49,4 +49,11 @@ const PRODUCT_BY_CATEGORY_ID = gql` query Product_Category($id: ID!) {
   }
   `;
 
-export default PRODUCT_BY_CATEGORY_ID;
+export const PRODUCT_CATEGORIES_SLUGS = gql` query PRODUCT_CATEGORIES_SLUGS {
+    productCategories {
+    nodes {
+      id
+      slug
+    }
+  }
+}`;

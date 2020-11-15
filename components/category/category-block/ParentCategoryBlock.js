@@ -6,7 +6,7 @@ const ParentCategoryBlock = ( props ) => {
 
 	return (
 		<div className="product-column col-lg-3 col-md-6 col-sm-12" >
-			<Link as={`/category/${category.slug}-${category.id}`} href={`/category?slug=${category.slug}-${category.id}`}>
+			<Link href={`/category/${category.slug}`}>
 				<a>
 					<img
 						src={ null !== category.image ? category.image.sourceUrl : '' }
