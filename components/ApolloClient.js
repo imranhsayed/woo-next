@@ -2,8 +2,6 @@ import fetch from 'node-fetch';
 
 import { ApolloClient, ApolloLink, InMemoryCache, createHttpLink } from "@apollo/client";
 
-import clientConfig from './../client-config';
-
 /**
  * Middleware operation
  * If we have a session token in localStorage, add it to the GraphQL request as a Session header.

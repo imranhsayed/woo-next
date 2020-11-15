@@ -55,7 +55,6 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites :page_facing_up:
 
-
 ### Installing :wrench:
 
 1. Clone this repo using terminal `git clone git@github.com:imranhsayed/woo-next`
