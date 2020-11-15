@@ -23,9 +23,6 @@ const Nav = () => {
 							<a className="nav-link">Categories</a>
 						</Link>
 					</li>
-					<li className="nav-item">
-						<a className="nav-link" href="#">My Account</a>
-					</li>
 				</ul>
 			</div>
 

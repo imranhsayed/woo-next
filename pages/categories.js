@@ -3,7 +3,7 @@ import client from '../components/ApolloClient';
 import ParentCategoriesBlock from "../components/category/category-block/ParentCategoriesBlock";
 import GET_CATEGORIES_QUERY from "../queries/get-categories";
 
-const Categories = ( props ) => {
+export default function Categories ( props ) {
 
 	const { productCategories } = props;
 
@@ -18,16 +18,17 @@ const Categories = ( props ) => {
 	)
 };
 
-Categories.getInitialProps = async () => {
+export async function getStaticProps() {
 
-	const result = await client.query({
+	const {data} = await client.query({
 		query: GET_CATEGORIES_QUERY,
 	});
 
 	return {
-		productCategories: result.data.productCategories.nodes,
+		props: {
+			productCategories: data?.productCategories?.nodes || []
+		},
+		revalidate: 1
 	}
 
 };
-
-export default Categories;

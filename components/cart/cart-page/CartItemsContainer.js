@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState } from 'react';
 import { AppContext } from "../../context/AppContext";
-import { getFormattedCart, getUpdatedItems, removeItemFromCart } from '../../../functions';
+import { getFormattedCart, getUpdatedItems } from '../../../functions';
 import CartItem from "./CartItem";
 import { v4 } from 'uuid';
-import { useMutation, useQuery } from "@apollo/react-hooks";
+import { useMutation, useQuery } from '@apollo/client';
 import UPDATE_CART from "../../../mutations/update-cart";
 import GET_CART from "../../../queries/get-cart";
 import CLEAR_CART_MUTATION from "../../../mutations/clear-cart";

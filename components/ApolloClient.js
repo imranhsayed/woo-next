@@ -1,18 +1,6 @@
 import fetch from 'node-fetch';
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { createHttpLink } from 'apollo-link-http';
-import { ApolloLink } from "apollo-link";
 
-import { IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
-import introspectionQueryResultData from '../fragmentTypes';
-
-import clientConfig from './../client-config';
-
-// Fragment matcher.
-const fragmentMatcher = new IntrospectionFragmentMatcher({
-	introspectionQueryResultData
-});
+import { ApolloClient, ApolloLink, InMemoryCache, createHttpLink } from "@apollo/client";
 
 /**
  * Middleware operation
@@ -74,10 +62,10 @@ export const afterware = new ApolloLink( ( operation, forward ) => {
 // Apollo GraphQL client.
 const client = new ApolloClient({
 	link: middleware.concat( afterware.concat( createHttpLink({
-		uri: clientConfig.graphqlUrl,
+		uri: `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/graphql`,
 		fetch: fetch
 	}) ) ),
-	cache: new InMemoryCache( { fragmentMatcher } ),
+	cache: new InMemoryCache(),
 });
 
 export default client;

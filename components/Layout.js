@@ -2,16 +2,19 @@ import Head from 'next/head';
 import { AppProvider } from "./context/AppContext";
 import Header from "./Header";
 import Footer from "./Footer";
-import '../styles/Style.css';
 import client from "./ApolloClient";
-import { ApolloProvider } from 'react-apollo';
-import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks';
+import Router from 'next/router';
+import NProgress from 'nprogress';
+import { ApolloProvider } from '@apollo/client';
+
+Router.events.on('routeChangeStart', () => NProgress.start());
+Router.events.on('routeChangeComplete', () => NProgress.done());
+Router.events.on('routeChangeError', () => NProgress.done());
 
 const Layout = ( props ) => {
 	return (
 		<AppProvider>
 			<ApolloProvider client={ client }>
-				<ApolloHooksProvider client={ client }>
 					<div>
 						<Head>
 							<title>Woocommerce React Theme</title>
@@ -23,7 +26,6 @@ const Layout = ( props ) => {
 							{ props.children }
 						<Footer/>
 					</div>
-				</ApolloHooksProvider>
 			</ApolloProvider>
 		</AppProvider>
 	);
