@@ -352,3 +352,48 @@ td.woo-next-cart-qty {
 .table thead th {
 	border-bottom: none;
 }
+
+// Categories
+.product-title-container {
+	position: absolute;
+	top: 0;
+	left: 15px;
+	height: 100%;
+	width: calc(100% - 30px);
+	background: rgb(0 0 0 / 20%);
+	background-image: linear-gradient(to top, rgba(255, 0, 0, 0), rgb(0 0 0 / 30%));
+	color: #ffffff;
+}
+
+.product-title-container-inner {
+	height: 100%;
+	margin: 0;
+	text-align: left;
+	padding: 30px;
+}
+
+.product-column img, .product-title-container {
+	border-radius: 6px;
+}
+
+.product-column {
+	margin-bottom: 30px;
+	height: 100%;
+}
+
+.product-shop-now-container {
+	margin-top: 10px
+}
+
+.shop-now {
+	position: relative;
+	&:after {
+		content: "";
+		width: 100%;
+		height: 1px;
+		position: absolute;
+		background: #fff;
+		bottom: -2px;
+		left: 0;
+	}
+}
