@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
-const PRODUCT_BY_SLUG_QUERY = gql` query Product($id: ID!) {
-	product(id: $id, idType: SLUG) {
+export const PRODUCT_BY_SLUG_QUERY = gql` query Product($slug: ID!) {
+	product(id: $slug, idType: SLUG) {
 	  id
 	  productId
 	  averageRating
@@ -43,4 +43,12 @@ const PRODUCT_BY_SLUG_QUERY = gql` query Product($id: ID!) {
   }
 `;
 
-export default PRODUCT_BY_SLUG_QUERY;
+export const PRODUCT_SLUGS = gql` query Products {
+  products(first: 5000) {
+    nodes {
+      id
+      slug
+    }
+  }
+}
+`;
