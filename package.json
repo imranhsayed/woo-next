@@ -19,5 +19,13 @@
     "sass": "^1.29.0",
     "uuid": "^8.3.1",
     "validator": "^13.1.17"
+  },
+  "devDependencies": {
+    "install": "^0.13.0",
+    "postcss-flexbugs-fixes": "^5.0.1",
+    "postcss-import": "^13.0.0",
+    "postcss-preset-env": "^6.7.0",
+    "precss": "^4.0.0",
+    "tailwindcss": "^1.9.6"
   }
 }
