@@ -11,17 +11,19 @@ export default function Home (props) {
 	return (
 			<Layout>
 				{/*Categories*/ }
-				<div className="mt-5 text-center">
+				<div className="product-categories-container container mx-auto my-32">
 					<h2>Categories</h2>
 					<ParentCategoriesBlock productCategories={ productCategories }/>
 				</div>
 				{/*Products*/ }
 
-				<h2 className="mt-5 text-center">Products</h2>
-				<div className="product-container row">
-					{ products.length ? (
-						products.map( product => <Product key={ product.id } product={ product }/> )
-					) : '' }
+				<div className="products container mx-auto my-32">
+					<h2 className="products-main-title">Products</h2>
+					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
+						{ products.length ? (
+							products.map( product => <Product key={ product.id } product={ product }/> )
+						) : '' }
+					</div>
 				</div>
 			</Layout>
 	)

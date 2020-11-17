@@ -6,7 +6,7 @@ const ParentCategoriesBlock = ( props ) => {
 
 	return (
 
-		<div className="product-container row d-flex justify-content-center">
+		<div className="product-categories grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4">
 			{ productCategories.length ? (
 				productCategories.map( productCategory => <ProductCategoryBlock key={ productCategory.id }  category={ productCategory }/> )
 			) : '' }

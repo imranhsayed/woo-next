@@ -10,13 +10,12 @@ const Product = ( props ) => {
 	return (
 		// @TODO Need to handle Group products differently.
 		undefined !== product && 'GroupProduct' !== product.__typename ? (
-			<div className="product-column col-lg-3 col-md-6 col-sm-12">
-				<h3 className="card-header text-center">
-					{ product.name ? product.name : '' }
-				</h3>
+			<div className="product">
+				
 
 				<Link href={ `/product/${ product.slug }`} >
 					<a>
+					
 						{ !isEmpty( product.image ) ? (
 							<img src={ product.image.sourceUrl } alt="Product image"/>
 						) : !isEmpty( clientConfig.productImagePlaceholder ) ? (
@@ -27,8 +26,11 @@ const Product = ( props ) => {
 						) : null }
 					</a>
 				</Link>
-				<div className="card-body text-center">
-					<h6 className="card-subtitle mb-3">{ product.price }</h6>
+				<div className="product-info">
+					<h3 className="product-title">
+						{ product.name ? product.name : '' }
+					</h3>
+					<h6 className="product-price">{ product.price }</h6>
 					<AddToCartButton product={ product }/>
 				</div>
 			</div>

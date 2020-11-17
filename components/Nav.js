@@ -7,7 +7,7 @@ const Nav = () => {
 	const [ show, setDisplay ] = useState( false );
 
 	return (
-		<nav className="woo-next-menu-container navbar-dark bg-primary">
+		<nav className="woo-next-menu-container container mx-auto">
 			{/*Branding*/}
 			<div className="woo-next-branding">
 				<Link href="/">
