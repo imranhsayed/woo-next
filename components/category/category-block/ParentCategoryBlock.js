@@ -11,13 +11,9 @@ const ParentCategoryBlock = ( props ) => {
 					<img
 						src={ null !== category.image ? category.image.sourceUrl : '' }
 						alt="ParentCategoryBlock image"/>
-					<div className="product-title-container">
-						<div className="product-title-container-inner">
-							<h3 className="product-title">{category.name}</h3>
-							<div className="product-shop-now-container">
-								<span className="shop-now">Shop Now</span>
-							</div>
-						</div>
+					<div className="product-title-container p-3">
+						<h3 className="product-title text-lg font-medium">{category.name}</h3>
+						<span className="shop-now text-sm">+ Explore</span>
 					</div>
 				</a>
 
