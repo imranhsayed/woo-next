@@ -48,6 +48,7 @@ branch is upto date with those changes. You can also refer to the PR notes for c
 6. Prefetching
 8. Incremental Static (Re)generation ( Next.js 10 support )
 9. GraphQL with Apollo Client
+10. Tailwindcss
 
 ## Getting Started :rocket:
 
