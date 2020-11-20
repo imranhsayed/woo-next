@@ -9,7 +9,7 @@
 
 📹 [Full Course Video Tutorial](https://codeytek.com/course/woocommerce-with-react-course/)
 
-## Important Note ⭐
+## Important Note ⭐:
 The code for the Video Tutorial is in the branch [youtube-course](https://github.com/imranhsayed/woo-next/tree/youtube-course)
 However, since there is continuous contribution and updates to this project. The 'master'
 branch is upto date with those changes. You can also refer to the PR notes for changes.
