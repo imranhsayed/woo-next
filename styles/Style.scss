@@ -46,3 +46,10 @@
   padding: 10px 20px;
   font-size: 24px;
 }
+
+.product-description {
+  width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
