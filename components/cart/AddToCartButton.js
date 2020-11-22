@@ -115,7 +115,7 @@ const AddToCart = ( props ) => {
 			{ "ExternalProduct" === product.__typename ? (
 					<a href={ product.externalUrl } target="_blank" className="bg-purple-600 text-white px-5 py-3 rounded-sm">Buy</a>
 				) :
-				<button onClick={ handleAddToCartClick } className="bg-purple-600 text-white px-5 py-3 rounded-sm">Add to cart</button>
+				<button onClick={ handleAddToCartClick } className="bg-purple-600 text-white px-5 py-3 rounded-sm mr-3">Add to cart</button>
 			}
 			{ showViewCart ? (
 				<Link href="/cart"><button className="bg-purple-600 text-white px-5 py-3 rounded-sm">View Cart</button></Link>

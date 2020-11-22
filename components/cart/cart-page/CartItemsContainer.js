@@ -105,10 +105,20 @@ const CartItemsContainer = () => {
 	}
 
 	return (
-		<div className="categories product-categories-container container mx-auto my-32 px-4 xl:px-0">
+		<div className="cart product-cart-container container mx-auto my-32 px-4 xl:px-0">
 			{ cart ? (
 				<div className="woo-next-cart-wrapper container">
-					<h1 className="text-2xl mb-5 uppercase">Cart</h1>
+					<div className="cart-header grid grid-cols-2 gap-4">
+						<h1 className="text-2xl mb-5 uppercase">Cart</h1>
+						{/*Clear entire cart*/}
+						<div className="clear-cart text-right">
+							<button className="px-4 py-1 rounded-sm w-auto" onClick={ ( event ) => handleClearCart( event ) } disabled={ clearCartProcessing }>
+								<span className="woo-next-cart">Clear Cart</span>
+								<i className="fa fa-arrow-alt-right"/>
+							</button>
+							{ clearCartProcessing ? <p>Clearing...</p> : '' }
+						</div>
+					</div>
 					<div className="grid grid-cols-1 xl:grid-cols-4 gap-0 xl:gap-4 mb-5">
 						<table className="table-auto border-collapse border col-span-3 mb-5">
 							<thead className="text-left">
@@ -162,23 +172,15 @@ const CartItemsContainer = () => {
 							</div>
 						</div>
 					</div>
-					{/*Clear entire cart*/}
-					<div className="clear-cart">
-						<button className="btn btn-secondary bg-purple-600 text-white px-5 py-3 rounded-sm w-auto" onClick={ ( event ) => handleClearCart( event ) } disabled={ clearCartProcessing }>
-							<span className="woo-next-cart">Clear Cart</span>
-							<i className="fa fa-arrow-alt-right"/>
-						</button>
-						{ clearCartProcessing ? <p>Clearing...</p> : '' }
-					</div>
 
 					{/* Display Errors if any */}
 					{ requestError ? <div className="row woo-next-cart-total-container mt-5"> { requestError } </div> : '' }
 				</div>
 			) : (
-				<div className="container mt-5">
-					<h2>No items in the cart</h2>
+				<div className="container mx-auto my-32 px-4 xl:px-0">
+					<h2 className="text-2xl mb-5">No items in the cart</h2>
 					<Link href="/">
-						<button className="btn btn-secondary woo-next-large-black-btn">
+						<button className="bg-purple-600 text-white px-5 py-3 rounded-sm">
 							<span className="woo-next-cart-checkout-txt">Add New Products</span>
 							<i className="fas fa-long-arrow-alt-right"/>
 						</button>
