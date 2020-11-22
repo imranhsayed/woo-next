@@ -7,7 +7,7 @@ const Nav = () => {
 	const [ show, setDisplay ] = useState( false );
 
 	return (
-		<nav className="bg-white p-6">
+		<nav className="bg-white p-4">
 			<div className="flex items-center justify-between flex-wrap container mx-auto">
 				
 				<div className="flex items-center flex-shrink-0 text-black mr-20">

@@ -30,13 +30,13 @@ export default function Home (props) {
 				</div>
 
 				{/*Categories*/ }
-				<div className="product-categories-container container mx-auto my-32">
+				<div className="product-categories-container container mx-auto my-32 px-4 xl:px-0">
 					<h2 className="text-2xl mb-5 uppercase">Categories</h2>
 					<ParentCategoriesBlock productCategories={ productCategories }/>
 				</div>
 				{/*Products*/ }
 
-				<div className="products container mx-auto my-32">
+				<div className="products container mx-auto my-32 px-4 xl:px-0">
 					<h2 className="products-main-title mb-5 text-2xl uppercase">Products</h2>
 					<div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4">
 						{ products.length ? (
