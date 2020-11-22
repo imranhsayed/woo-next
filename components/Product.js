@@ -23,7 +23,7 @@ const Product = ( props ) => {
 		const discountPercent = ( formattedSalesPrice / formattedRegularPrice ) * 100;
 
 		return {
-			discountPercent: formattedSalesPrice !== formattedRegularPrice ? `(${discountPercent.toFixed(2)}%)` : null,
+			discountPercent: formattedSalesPrice !== formattedRegularPrice ? `(${discountPercent.toFixed(2)}%) OFF` : null,
 			strikeThroughClass: formattedSalesPrice < formattedRegularPrice ? 'product-regular-price mr-2 line-through text-sm text-gray-600 font-normal' : ''
 		}
 	}
@@ -50,7 +50,7 @@ const Product = ( props ) => {
 					</a>
 				</Link>
 				<div className="product-info">
-					<h3 className="product-title mt-3 font-medium text-base">
+					<h3 className="product-title mt-3 font-medium text-gray-800">
 						{ product.name ? product.name : '' }
 					</h3>
 					<div className="product-description text-sm text-gray-700" dangerouslySetInnerHTML={{ __html: (product?.description)}}/>

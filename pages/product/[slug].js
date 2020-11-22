@@ -17,16 +17,15 @@ export default function Product(props) {
 	return (
 		<Layout>
 			{ product ? (
-				<div className="woo-next-single">
-					<div className="woo-next-single__product card bg-light mb-3 p-5">
-						<div className="card-header">{ product.name }</div>
-						<div className="card-body">
-							<h4 className="card-title">{ product.name }</h4>
+				<div className="single-product container mx-auto my-32 px-4 xl:px-0">
+					<div className="grid grid-cols-2 gap-4">
+						<div className="product-image">
 							{ !isEmpty( product.image ) ? (
 								<img
 									src={ product.image.sourceUrl }
 									alt="Product Image"
-									width="200"
+									width="100%"
+									height="auto"
 									srcSet={ product.image.srcSet }
 								/>
 							) : !isEmpty( clientConfig.singleImagePlaceholder ) ? (
@@ -35,16 +34,21 @@ export default function Product(props) {
 									alt="Placeholder product image"
 								/>
 							) : null }
+						</div>
+						<div className="product-info">
+							<h4 className="products-main-title text-2xl uppercase">{ product.name }</h4>
 							<div
+								
 								dangerouslySetInnerHTML={ {
 									__html: product.description,
 								} }
-								className="card-text"
+								className="product-description mb-5"
 							/>
-
+			
 							<AddToCartButton product={ product }/>
 						</div>
 					</div>
+					
 				</div>
 			) : (
 				''
