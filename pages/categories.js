@@ -10,8 +10,8 @@ export default function Categories ( props ) {
 	return (
 		<Layout>
 			{/*Categories*/}
-			<div className="mt-5 text-center content-wrap">
-				<h2>Categories</h2>
+			<div className="categories product-categories-container container mx-auto my-32 px-4 xl:px-0">
+				<h2 className="text-2xl mb-5 uppercase">Categories</h2>
 				<ParentCategoriesBlock productCategories={ productCategories }/>
 			</div>
 		</Layout>

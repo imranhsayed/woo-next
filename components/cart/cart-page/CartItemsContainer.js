@@ -105,40 +105,66 @@ const CartItemsContainer = () => {
 	}
 
 	return (
-		<div className="content-wrap-cart">
+		<div className="categories product-categories-container container mx-auto my-32 px-4 xl:px-0">
 			{ cart ? (
 				<div className="woo-next-cart-wrapper container">
-					<h1 className="woo-next-cart-heading mt-5">Cart</h1>
-					<table className="table table-hover">
-						<thead>
-						<tr className="woo-next-cart-head-container">
-							<th className="woo-next-cart-heading-el" scope="col"/>
-							<th className="woo-next-cart-heading-el" scope="col"/>
-							<th className="woo-next-cart-heading-el" scope="col">Product</th>
-							<th className="woo-next-cart-heading-el" scope="col">Price</th>
-							<th className="woo-next-cart-heading-el" scope="col">Quantity</th>
-							<th className="woo-next-cart-heading-el" scope="col">Total</th>
-						</tr>
-						</thead>
-						<tbody>
-						{ cart.products.length && (
-							cart.products.map( item => (
-								<CartItem
-									key={ item.productId }
-									item={ item }
-									updateCartProcessing={ updateCartProcessing }
-									products={ cart.products }
-									handleRemoveProductClick={ handleRemoveProductClick }
-									updateCart={ updateCart }
-								/>
-							) )
-						) }
-						</tbody>
-					</table>
+					<h1 className="text-2xl mb-5 uppercase">Cart</h1>
+					<div className="grid grid-cols-1 xl:grid-cols-4 gap-0 xl:gap-4 mb-5">
+						<table className="table-auto border-collapse border col-span-3 mb-5">
+							<thead className="text-left">
+							<tr className="woo-next-cart-head-container">
+								<th className="woo-next-cart-heading-el" scope="col"/>
+								<th className="woo-next-cart-heading-el" scope="col"/>
+								<th className="woo-next-cart-heading-el" scope="col">Product</th>
+								<th className="woo-next-cart-heading-el" scope="col">Price</th>
+								<th className="woo-next-cart-heading-el" scope="col">Quantity</th>
+								<th className="woo-next-cart-heading-el" scope="col">Total</th>
+							</tr>
+							</thead>
+							<tbody>
+							{ cart.products.length && (
+								cart.products.map( item => (
+									<CartItem
+										key={ item.productId }
+										item={ item }
+										updateCartProcessing={ updateCartProcessing }
+										products={ cart.products }
+										handleRemoveProductClick={ handleRemoveProductClick }
+										updateCart={ updateCart }
+									/>
+								) )
+							) }
+							</tbody>
+						</table>
 
+						{/*Cart Total*/ }
+						<div className="row woo-next-cart-total-container border p-5">
+							<div className="">
+								<h2 className="text-2xl">Cart Total</h2>
+								<table className="table table-hover mb-5">
+									<tbody>
+									<tr className="table-light">
+										<td className="woo-next-cart-element-total">Subtotal</td>
+										<td className="woo-next-cart-element-amt">{ ( 'string' !== typeof cart.totalProductsPrice ) ? cart.totalProductsPrice.toFixed(2) : cart.totalProductsPrice }</td>
+									</tr>
+									{/* <tr className="table-light">
+										<td className="woo-next-cart-element-total">Total</td>
+										<td className="woo-next-cart-element-amt">{ ( 'string' !== typeof cart.totalProductsPrice ) ? cart.totalProductsPrice.toFixed(2) : cart.totalProductsPrice }</td>
+									</tr> */}
+									</tbody>
+								</table>
+								<Link href="/checkout">
+									<button className="bg-purple-600 text-white px-5 py-3 rounded-sm w-auto xl:w-full">
+										<span className="woo-next-cart-checkout-txt">Proceed to Checkout</span>
+										<i className="fas fa-long-arrow-alt-right"/>
+									</button>
+								</Link>
+							</div>
+						</div>
+					</div>
 					{/*Clear entire cart*/}
 					<div className="clear-cart">
-						<button className="btn btn-secondary " onClick={ ( event ) => handleClearCart( event ) } disabled={ clearCartProcessing }>
+						<button className="btn btn-secondary bg-purple-600 text-white px-5 py-3 rounded-sm w-auto" onClick={ ( event ) => handleClearCart( event ) } disabled={ clearCartProcessing }>
 							<span className="woo-next-cart">Clear Cart</span>
 							<i className="fa fa-arrow-alt-right"/>
 						</button>
@@ -147,31 +173,6 @@ const CartItemsContainer = () => {
 
 					{/* Display Errors if any */}
 					{ requestError ? <div className="row woo-next-cart-total-container mt-5"> { requestError } </div> : '' }
-
-					{/*Cart Total*/ }
-					<div className="row woo-next-cart-total-container mt-5">
-						<div className="col-6">
-							<h2>Cart Total</h2>
-							<table className="table table-hover">
-								<tbody>
-								<tr className="table-light">
-									<td className="woo-next-cart-element-total">Subtotal</td>
-									<td className="woo-next-cart-element-amt">{ ( 'string' !== typeof cart.totalProductsPrice ) ? cart.totalProductsPrice.toFixed(2) : cart.totalProductsPrice }</td>
-								</tr>
-								<tr className="table-light">
-									<td className="woo-next-cart-element-total">Total</td>
-									<td className="woo-next-cart-element-amt">{ ( 'string' !== typeof cart.totalProductsPrice ) ? cart.totalProductsPrice.toFixed(2) : cart.totalProductsPrice }</td>
-								</tr>
-								</tbody>
-							</table>
-							<Link href="/checkout">
-								<button className="btn btn-secondary woo-next-large-black-btn">
-									<span className="woo-next-cart-checkout-txt">Proceed to Checkout</span>
-									<i className="fas fa-long-arrow-alt-right"/>
-								</button>
-							</Link>
-						</div>
-					</div>
 				</div>
 			) : (
 				<div className="container mt-5">

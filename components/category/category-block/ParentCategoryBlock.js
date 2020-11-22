@@ -5,7 +5,7 @@ const ParentCategoryBlock = ( props ) => {
 	const { category } = props;
 
 	return (
-		<div className="product">
+		<div className="product mb-5">
 			<Link href={`/category/${category.slug}`}>
 				<a>
 					<img
