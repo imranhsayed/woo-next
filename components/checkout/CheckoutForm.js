@@ -135,22 +135,22 @@ const CheckoutForm = () => {
 		<>
 			{ cart ? (
 				<form onSubmit={ handleFormSubmit } className="woo-next-checkout-form">
-					<div className="row">
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-20">
 						{/*Billing Details*/}
-						<div className="col-lg-6 col-md-12 p-0 pr-2">
-							<h2 className="mb-4">Billing Details</h2>
+						<div className="billing-details">
+							<h2 className="text-xl font-medium mb-4">Billing Details</h2>
 							<Billing input={ input } handleOnChange={ handleOnChange }/>
 						</div>
 						{/* Order & Payments*/}
-						<div className="col-lg-6 col-md-12">
+						<div className="your-orders">
 							{/*	Order*/}
-							<h2 className="mb-4">Your Order</h2>
+							<h2 className="text-xl font-medium mb-4">Your Order</h2>
 							<YourOrder cart={ cart }/>
 
 							{/*Payment*/}
 							<PaymentModes input={ input } handleOnChange={ handleOnChange }/>
 							<div className="woo-next-place-order-btn-wrap mt-5">
-								<button className="btn woo-next-large-black-btn woo-next-place-order-btn btn-secondary" type="submit">
+								<button className="bg-purple-600 text-white px-5 py-3 rounded-sm w-auto xl:w-full" type="submit">
 									Place Order
 								</button>
 							</div>

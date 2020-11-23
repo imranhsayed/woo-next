@@ -59,7 +59,8 @@
   min-height: 400px;
 }
 
-.cart-products {
+.cart-products,
+.checkout-cart {
   th,
   td {
     padding: 10px 0;
@@ -72,4 +73,10 @@
 .woo-next-cart-total-container {
   max-height: 200px;
   height: 100%;
+}
+
+.woo-next-checkout-form {
+  label {
+    display: block;
+  }
 }

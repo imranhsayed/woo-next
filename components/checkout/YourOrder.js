@@ -8,9 +8,9 @@ const YourOrder = ( { cart } ) => {
 			{ cart ? (
 				<Fragment>
 					{/*Product Listing*/}
-					<table className="table table-hover">
+					<table className="checkout-cart table table-hover w-full mb-10">
 						<thead>
-						<tr className="woo-next-cart-head-container">
+						<tr className="woo-next-cart-head-container text-left">
 							<th className="woo-next-cart-heading-el" scope="col"/>
 							<th className="woo-next-cart-heading-el" scope="col">Product</th>
 							<th className="woo-next-cart-heading-el" scope="col">Total</th>
@@ -23,16 +23,16 @@ const YourOrder = ( { cart } ) => {
 							) )
 						) }
 						{/*Total*/}
-						<tr className="">
+						<tr className="bg-gray-200">
 							<td className=""/>
-							<td className="woo-next-checkout-total">Subtotal</td>
-							<td className="woo-next-checkout-total">{ cart.totalProductsPrice }</td>
+							<td className="woo-next-checkout-total font-normal text-xl">Subtotal</td>
+							<td className="woo-next-checkout-total font-bold text-xl">{ cart.totalProductsPrice }</td>
 						</tr>
-						<tr className="">
+						{/* <tr className="">
 							<td className=""/>
 							<td className="woo-next-checkout-total">Total</td>
 							<td className="woo-next-checkout-total">{ cart.totalProductsPrice }</td>
-						</tr>
+						</tr> */}
 						</tbody>
 					</table>
 				</Fragment>
