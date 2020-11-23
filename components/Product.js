@@ -66,6 +66,7 @@ const Product = ( props ) => {
 						</h6>
 					{/* <AddToCartButton product={ product }/> */}
 				</div>
+				
 			</div>
 		) : (
 			''
