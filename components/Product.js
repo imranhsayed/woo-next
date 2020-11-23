@@ -54,7 +54,7 @@ const Product = ( props ) => {
 						{ product.name ? product.name : '' }
 					</h3>
 					<div className="product-description text-sm text-gray-700" dangerouslySetInnerHTML={{ __html: (product?.description)}}/>
-						<h6 className="product-price text-gray-800 font-semibold mr-3">
+						<h6 className="product-price text-gray-800 font-semibold mr-3 mb-5">
 							{/* Regular price */}
 						{ productMeta?.discountPercent ? <span className="product-price mr-2">{product?.regularPrice}</span> : null }
 						
@@ -64,7 +64,7 @@ const Product = ( props ) => {
 						{/* Discount percent */}
 						<span className="product-discount text-red-500 text-sm font-normal">{productMeta?.discountPercent}</span>
 						</h6>
-					{/* <AddToCartButton product={ product }/> */}
+					<AddToCartButton product={ product }/>
 				</div>
 				
 			</div>

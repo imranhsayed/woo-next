@@ -47,7 +47,7 @@
   font-size: 24px;
 }
 
-.product-description {
+.products .product-description {
   width: 250px;
   white-space: nowrap;
   overflow: hidden;
@@ -79,5 +79,43 @@
 .woo-next-checkout-form {
   label {
     display: block;
+  }
+}
+
+.main-title {
+  position: relative;
+  text-align: center;
+  &:before {
+    content: "";
+    position: absolute;
+    bottom: 50%;
+    left: 0;
+    height: 2px;
+    width: 50%;
+    background: #222;
+    z-index: -1;
+  }
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 50%;
+    right: 0;
+    height: 2px;
+    width: 50%;
+    background: #222;
+    z-index: -1;
+  }
+}
+
+.main-title-inner {
+  background: #fff;
+  padding: 0 20px;
+}
+
+.woo-next-cart-qty {
+  input {
+    border: 1px solid #ccc;
+    text-align: center;
+    border-radius: 4px;
   }
 }
