@@ -58,3 +58,18 @@
 .cart {
   min-height: 400px;
 }
+
+.cart-products {
+  th,
+  td {
+    padding: 10px 0;
+  }
+  tr {
+    border-bottom: 1px solid #ccc;
+  }
+}
+
+.woo-next-cart-total-container {
+  max-height: 200px;
+  height: 100%;
+}

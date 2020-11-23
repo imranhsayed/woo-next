@@ -120,7 +120,7 @@ const CartItemsContainer = () => {
 						</div>
 					</div>
 					<div className="grid grid-cols-1 xl:grid-cols-4 gap-0 xl:gap-4 mb-5">
-						<table className="table-auto border-collapse border col-span-3 mb-5">
+						<table className="cart-products table-auto col-span-3 mb-5">
 							<thead className="text-left">
 							<tr className="woo-next-cart-head-container">
 								<th className="woo-next-cart-heading-el" scope="col"/>
@@ -148,14 +148,14 @@ const CartItemsContainer = () => {
 						</table>
 
 						{/*Cart Total*/ }
-						<div className="row woo-next-cart-total-container border p-5">
+						<div className="row woo-next-cart-total-container border p-5 bg-gray-200">
 							<div className="">
-								<h2 className="text-2xl">Cart Total</h2>
+								{/* <h2 className="text-2xl">Cart Total</h2> */}
 								<table className="table table-hover mb-5">
 									<tbody>
-									<tr className="table-light">
-										<td className="woo-next-cart-element-total">Subtotal</td>
-										<td className="woo-next-cart-element-amt">{ ( 'string' !== typeof cart.totalProductsPrice ) ? cart.totalProductsPrice.toFixed(2) : cart.totalProductsPrice }</td>
+									<tr className="table-light flex flex-col">
+										<td className="woo-next-cart-element-total text-2xl font-normal">Subtotal</td>
+										<td className="woo-next-cart-element-amt text-2xl font-bold">{ ( 'string' !== typeof cart.totalProductsPrice ) ? cart.totalProductsPrice.toFixed(2) : cart.totalProductsPrice }</td>
 									</tr>
 									{/* <tr className="table-light">
 										<td className="woo-next-cart-element-total">Total</td>
