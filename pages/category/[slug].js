@@ -3,8 +3,17 @@ import client from "../../components/ApolloClient";
 import Product from "../../components/Product";
 import {PRODUCT_BY_CATEGORY_SLUG, PRODUCT_CATEGORIES_SLUGS} from "../../queries/product-by-category";
 import {isEmpty} from "lodash";
+import {useRouter} from "next/router";
 
 export default function CategorySingle( props ) {
+
+    const router = useRouter()
+
+    // If the page is not yet generated, this will be displayed
+    // initially until getStaticProps() finishes running
+    if (router.isFallback) {
+        return <div>Loading...</div>
+    }
 
     const { categoryName, products } = props;
 
@@ -56,6 +65,6 @@ export async function getStaticPaths () {
 
     return {
         paths: pathsData,
-        fallback: false
+        fallback: true
     }
 }

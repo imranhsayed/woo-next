@@ -5,10 +5,12 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "svg": "svgr -d src/components/icons src/components/icons/svgs"
   },
   "dependencies": {
     "@apollo/client": "^3.2.5",
+    "@svgr/cli": "^5.5.0",
     "graphql": "^15.4.0",
     "lodash": "^4.17.20",
     "next": "10.0.1",

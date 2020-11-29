@@ -3,14 +3,11 @@ import { useRouter } from 'next/router';
 import client from '../../components/ApolloClient';
 import AddToCartButton from '../../components/cart/AddToCartButton';
 import {PRODUCT_BY_SLUG_QUERY, PRODUCT_SLUGS} from '../../queries/product-by-slug';
-import clientConfig from '../../client-config';
 import { isEmpty } from 'lodash';
 import GalleryCarousel from "../../components/single-product/gallery-carousel";
 
 export default function Product(props) {
 	const { product } = props;
-
-	console.log( 'product', product );
 
     const router = useRouter()
 
