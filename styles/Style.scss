@@ -40,6 +40,7 @@
 
 .banner-img {
   position: relative;
+  height: 400px;
 }
 
 .slider-button {
@@ -52,7 +53,7 @@
 }
 
 .products .product-description {
-  width: 250px;
+  max-width: 250px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

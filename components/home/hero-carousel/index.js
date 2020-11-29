@@ -47,8 +47,8 @@ const HeroCarousel = ({heroCarousel}) => {
     };
 
     return (
-        <div className="banner flex justify-between overflow-hidden">
-            <div className="banner-img lg:w-8/12 h-xxxl">
+        <div className="banner flex flex-col sm:flex-row justify-between overflow-hidden">
+            <div className="banner-img sm:w-8/12">
                 {
                     heroCarousel.map( ( item, index ) => {
                         const opacity = ( activeIndex === index || 1 === heroCarousel.length ) ? 'opacity-100' : 'opacity-0';
@@ -62,15 +62,15 @@ const HeroCarousel = ({heroCarousel}) => {
                     })
                 }
                 <div className="slider-button">
-                    <button onClick={nextSlide}>
+                    <button className="focus:outline-none" onClick={nextSlide}>
                         <svg width="25px" className="inline-block mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" /></svg>
                     </button>
-                    <button onClick={nextSlide}>
+                    <button className="focus:outline-none" onClick={nextSlide}>
                         <svg width="25px" className="inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                     </button>
                 </div>
             </div>
-            <div className="banner-content px-10 lg:w-4/12">
+            <div className="banner-content pt-10 sm:pt-0 px-10 sm:w-4/12">
                 <h2 className="banner-content__title text-base md:text-4xl uppercase">{heroCarousel[activeIndex]?.name}</h2>
                 <p className="banner-content__description text-base md:text-2xl text-gray-700">{heroCarousel[activeIndex]?.description}</p>
                 <Link href={`/category/${heroCarousel[activeIndex]?.slug}/`}>
