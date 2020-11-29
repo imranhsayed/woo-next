@@ -1,5 +1,5 @@
 import Layout from '../../components/Layout';
-//import { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import client from '../../components/ApolloClient';
 import AddToCartButton from '../../components/cart/AddToCartButton';
 import {PRODUCT_BY_SLUG_QUERY, PRODUCT_SLUGS} from '../../queries/product-by-slug';
@@ -8,6 +8,16 @@ import { isEmpty } from 'lodash';
 
 export default function Product(props) {
 	const { product } = props;
+	
+	console.log( 'product', product );
+
+    const router = useRouter()
+
+    // If the page is not yet generated, this will be displayed
+    // initially until getStaticProps() finishes running
+    if (router.isFallback) {
+        return <div>Loading...</div>
+    }
 
 	return (
 		<Layout>
@@ -85,6 +95,6 @@ export async function getStaticPaths () {
 
     return {
         paths: pathsData,
-        fallback: false
+        fallback: true
     }
 }

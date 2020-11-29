@@ -7,6 +7,14 @@ export const PRODUCT_BY_SLUG_QUERY = gql` query Product($slug: ID!) {
 	  averageRating
 	  slug
 	  description
+	  galleryImages {
+          nodes {
+            id
+            title
+            altText
+            mediaItemUrl
+          }
+      }
 	  image {
 		id
 		uri
