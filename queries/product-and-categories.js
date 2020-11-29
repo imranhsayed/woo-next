@@ -9,6 +9,7 @@ const PRODUCTS_AND_CATEGORIES_QUERY = gql`query {
       id
       children {
         nodes {
+          id
           name
           slug
           databaseId

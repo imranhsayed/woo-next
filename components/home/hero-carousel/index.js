@@ -48,7 +48,7 @@ const HeroCarousel = ({heroCarousel}) => {
 
     return (
         <div className="banner flex justify-between overflow-hidden">
-            <div className="banner-img w-full h-xxxl">
+            <div className="banner-img lg:w-8/12 h-xxxl">
                 {
                     heroCarousel.map( ( item, index ) => {
                         const opacity = ( activeIndex === index || 1 === heroCarousel.length ) ? 'opacity-100' : 'opacity-0';
