@@ -32,20 +32,26 @@ const Nav = () => {
 							Categories
 						</a>
 					</Link>
-					<Link href="/cart">
+					<Link href="/">
 						<a className="block mt-4 lg:inline-block lg:mt-0 text-black hover:text-black mr-10">
-							Cart
+							Women
 						</a>
 					</Link>
-					<a href="#responsive-header" className="block mt-4 lg:inline-block lg:mt-0 text-black hover:text-black mr-10">
-						Kids
-					</a>
-					<a href="#responsive-header" className="block mt-4 lg:inline-block lg:mt-0 text-black hover:text-black mr-10">
-						Home & Living
-					</a>
-					<a href="#responsive-header" className="block mt-4 lg:inline-block lg:mt-0 text-black hover:text-black mr-10">
-						Offers
-					</a>
+					<Link href="/">
+						<a className="block mt-4 lg:inline-block lg:mt-0 text-black hover:text-black mr-10">
+							Kids
+						</a>
+					</Link>
+					<Link href="/">
+						<a className="block mt-4 lg:inline-block lg:mt-0 text-black hover:text-black mr-10">
+							Home & Living
+						</a>
+					</Link>
+					<Link href="/">
+						<a className="block mt-4 lg:inline-block lg:mt-0 text-black hover:text-black mr-10">
+							Offers
+						</a>
+					</Link>
 					</div>
 
 					<div className="text-sm font-medium">
