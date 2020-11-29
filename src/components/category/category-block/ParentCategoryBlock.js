@@ -3,7 +3,6 @@ import Link from 'next/link';
 const ParentCategoryBlock = ( props ) => {
 
 	const { category } = props;
-	console.log( 'category', category );
 
 	return (
 		<div className="product mb-5">

@@ -8,6 +8,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import UPDATE_CART from "../../../mutations/update-cart";
 import GET_CART from "../../../queries/get-cart";
 import CLEAR_CART_MUTATION from "../../../mutations/clear-cart";
+import {isEmpty} from 'lodash'
 
 
 const CartItemsContainer = () => {
@@ -40,7 +41,7 @@ const CartItemsContainer = () => {
 		},
 		onError: ( error ) => {
 			if ( error ) {
-				const errorMessage = error?.graphQLErrors[ 0 ]?.message ? error.graphQLErrors[ 0 ].message : '';
+				const errorMessage = error?.graphQLErrors?.[ 0 ]?.message ? error.graphQLErrors[ 0 ].message : '';
 				setRequestError( errorMessage );
 			}
 		}
@@ -53,7 +54,8 @@ const CartItemsContainer = () => {
 		},
 		onError: ( error ) => {
 			if ( error ) {
-				setRequestError( error.graphQLErrors[ 0 ].message );
+				const errorMessage = ! isEmpty(error?.graphQLErrors?.[ 0 ]) ? error.graphQLErrors[ 0 ]?.message : '';
+				setRequestError( errorMessage );
 			}
 		}
 	} );
@@ -113,40 +115,41 @@ const CartItemsContainer = () => {
 						<h1 className="text-2xl mb-5 uppercase">Cart</h1>
 						{/*Clear entire cart*/}
 						<div className="clear-cart text-right">
-							<button className="px-4 py-1 rounded-sm w-auto" onClick={ ( event ) => handleClearCart( event ) } disabled={ clearCartProcessing }>
+							<button className="px-4 py-1 bg-gray-500 text-white rounded-sm w-auto" onClick={ ( event ) => handleClearCart( event ) } disabled={ clearCartProcessing }>
 								<span className="woo-next-cart">Clear Cart</span>
 								<i className="fa fa-arrow-alt-right"/>
 							</button>
 							{ clearCartProcessing ? <p>Clearing...</p> : '' }
+							{ updateCartProcessing ? <p>Updating...</p> : null }
 						</div>
 					</div>
 					<div className="grid grid-cols-1 xl:grid-cols-4 gap-0 xl:gap-4 mb-5">
 						<table className="cart-products table-auto col-span-3 mb-5">
-							<thead className="text-left">
-							<tr className="woo-next-cart-head-container">
-								<th className="woo-next-cart-heading-el" scope="col"/>
-								<th className="woo-next-cart-heading-el" scope="col"/>
-								<th className="woo-next-cart-heading-el" scope="col">Product</th>
-								<th className="woo-next-cart-heading-el" scope="col">Price</th>
-								<th className="woo-next-cart-heading-el" scope="col">Quantity</th>
-								<th className="woo-next-cart-heading-el" scope="col">Total</th>
-							</tr>
-							</thead>
-							<tbody>
-							{ cart.products.length && (
-								cart.products.map( item => (
-									<CartItem
-										key={ item.productId }
-										item={ item }
-										updateCartProcessing={ updateCartProcessing }
-										products={ cart.products }
-										handleRemoveProductClick={ handleRemoveProductClick }
-										updateCart={ updateCart }
-									/>
-								) )
-							) }
-							</tbody>
-						</table>
+								<thead className="text-left">
+								<tr className="woo-next-cart-head-container">
+									<th className="woo-next-cart-heading-el" scope="col"/>
+									<th className="woo-next-cart-heading-el" scope="col"/>
+									<th className="woo-next-cart-heading-el" scope="col">Product</th>
+									<th className="woo-next-cart-heading-el" scope="col">Price</th>
+									<th className="woo-next-cart-heading-el" scope="col">Quantity</th>
+									<th className="woo-next-cart-heading-el" scope="col">Total</th>
+								</tr>
+								</thead>
+								<tbody>
+								{ cart.products.length && (
+									cart.products.map( item => (
+										<CartItem
+											key={ item.productId }
+											item={ item }
+											updateCartProcessing={ updateCartProcessing }
+											products={ cart.products }
+											handleRemoveProductClick={ handleRemoveProductClick }
+											updateCart={ updateCart }
+										/>
+									) )
+								) }
+								</tbody>
+							</table>
 
 						{/*Cart Total*/ }
 						<div className="row woo-next-cart-total-container border p-5 bg-gray-200">

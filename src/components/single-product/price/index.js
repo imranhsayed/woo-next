@@ -21,7 +21,7 @@ const Price = ({ regularPrice = 0, salesPrice }) => {
         const formattedSalesPrice = parseInt( salesPrice?.substring(1) );
 
         const discountPercent = ( ( formattedRegularPrice - formattedSalesPrice ) / formattedRegularPrice ) * 100;
-        console.log( 'disc', discountPercent );
+
         return {
             discountPercent: formattedSalesPrice !== formattedRegularPrice ? `(${discountPercent.toFixed(2)}%) OFF` : null,
             strikeThroughClass: formattedSalesPrice < formattedRegularPrice ? 'product-regular-price mr-2 line-through text-sm text-gray-600 font-normal' : ''
@@ -39,7 +39,7 @@ const Price = ({ regularPrice = 0, salesPrice }) => {
             <span className={productMeta?.strikeThroughClass}>{ regularPrice }</span>
 
             {/* Discount percent */}
-            <span className="product-discount text-red-500 text-sm font-normal">{productMeta?.discountPercent}</span>
+            <span className="product-discount text-green-600 font-bold text-sm font-normal">{productMeta?.discountPercent}</span>
         </h6>
     )
 }

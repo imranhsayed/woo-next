@@ -6,7 +6,7 @@ import {Cross, Loading} from "../../icons";
 const CartItem = ( {
 	                   item,
 	                   products,
-	                   updateCartProcessing,
+					   updateCartProcessing,
 	                   handleRemoveProductClick,
 	                   updateCart,
                    } ) => {
@@ -74,18 +74,14 @@ const CartItem = ( {
 			{/* Qty Input */ }
 			<td className="woo-next-cart-element woo-next-cart-qty">
 				{/* @TODO Need to update this with graphQL query */ }
-				{
-					! updateCartProcessing ? (
-						<input
-							type="number"
-							min="1"
-							data-cart-key={ item.cartKey }
-							className={ `woo-next-cart-qty-input form-control ${ updateCartProcessing ? 'woo-next-cart-disabled' : '' } ` }
-							value={ productCount }
-							onChange={ ( event ) => handleQtyChange( event, item.cartKey ) }
-						/>
-					) : <Loading/>
-				}
+				<input
+					type="number"
+					min="1"
+					data-cart-key={ item.cartKey }
+					className={ `woo-next-cart-qty-input form-control ${ updateCartProcessing ? 'opacity-25 cursor-not-allowed' : '' } ` }
+					value={ productCount }
+					onChange={ ( event ) => handleQtyChange( event, item.cartKey ) }
+				/>
 			</td>
 			<td className="woo-next-cart-element">
 				{ ( 'string' !== typeof item.totalPrice ) ? item.totalPrice.toFixed( 2 ) : item.totalPrice }
