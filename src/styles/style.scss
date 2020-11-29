@@ -27,6 +27,7 @@
   flex-direction: column;
   &__title {
     line-height: 1.2;
+    max-width: 254px;
   }
   &__description {
     margin-top: 10px;
