@@ -18,25 +18,18 @@ branch is upto date with those changes. You can also refer to the PR notes for c
 
 ![](demos/home-demo.gif)
 
-## Demo Tablet and Mobile View :video_camera:
-
-![](tablet-mobile.gif)
-
-## Categories
-![](Categories.png)
-
 ## Live Demo:
 
 [Live Demo Site](https://woo-next.imranhsayed.now.sh/)
 
 ## Checkout Page Demo
-![](Checkout-page.gif)
+![](demos/Checkout-page.gif)
 
 ## Payment Demo ( Paypal example )
-![](paypal-payment-demo.gif)
+![](demos/paypal-payment-demo.gif)
 
 ## Order Received Demo
-![](order-received-demo.gif)
+![](demos/order-received-demo.gif)
 
 # Features:
 

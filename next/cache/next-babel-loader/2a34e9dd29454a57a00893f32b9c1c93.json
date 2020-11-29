@@ -1,1 +1,0 @@
-{"ast":null,"code":"const clientConfig = {\n  siteUrl: 'http://localhost:3000',\n  graphqlUrl: 'https://codeytek.com/woo/graphql'\n};\nexport default clientConfig;","map":null,"metadata":{},"sourceType":"module"}
