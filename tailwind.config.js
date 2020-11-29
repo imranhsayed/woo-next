@@ -5,9 +5,11 @@ module.exports = {
     purgeLayersByDefault: true,
   },
   purge: [
-    './components/**/*.js',
+    './src/components/**/*.js',
     './pages/**/*.js'],
-  theme: {},
+  theme: {
+    extend: {},
+  },
   variants: {},
   plugins: [
     require( 'tailwindcss' ),
