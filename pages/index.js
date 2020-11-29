@@ -8,7 +8,6 @@ import HeroCarousel from "../src/components/home/hero-carousel";
 export default function Home (props) {
 
 	const { products, productCategories, heroCarousel } = props;
-	console.log( 'heroCarousel', heroCarousel );
 
 	return (
 			<Layout>

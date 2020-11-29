@@ -5,6 +5,7 @@ import AddToCartButton from '../../src/components/cart/AddToCartButton';
 import {PRODUCT_BY_SLUG_QUERY, PRODUCT_SLUGS} from '../../src/queries/product-by-slug';
 import { isEmpty } from 'lodash';
 import GalleryCarousel from "../../src/components/single-product/gallery-carousel";
+import Price from "../../src/components/single-product/price";
 
 export default function Product(props) {
 	const { product } = props;
@@ -45,7 +46,7 @@ export default function Product(props) {
 								} }
 								className="product-description mb-5"
 							/>
-
+                            <Price salesPrice={product?.price} regularPrice={product?.regularPrice}/>
 							<AddToCartButton product={ product }/>
 						</div>
 					</div>
