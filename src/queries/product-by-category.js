@@ -21,15 +21,18 @@ export const PRODUCT_BY_CATEGORY_SLUG = gql` query PRODUCT_BY_CATEGORY_SLUG($slu
 		  name
 		  ... on SimpleProduct {
 			price
+			regularPrice
 			id
 		  }
 		  ... on VariableProduct {
 			price
+			regularPrice
 			id
 		  }
 		  ... on ExternalProduct {
 			price
 			id
+			regularPrice
 			externalUrl
 		  }
 		  ... on GroupProduct {
@@ -37,6 +40,7 @@ export const PRODUCT_BY_CATEGORY_SLUG = gql` query PRODUCT_BY_CATEGORY_SLUG($slu
 			  nodes {
 				... on SimpleProduct {
 				  id
+				  regularPrice
 				  price
 				}
 			  }

@@ -1,6 +1,6 @@
 import { isEmpty, isArray } from 'lodash';
 import Link from "next/link";
-import {useState, useRef} from 'react';
+import {useState, useEffect, useRef} from 'react';
 
 const HeroCarousel = ({heroCarousel}) => {
 
@@ -8,6 +8,8 @@ const HeroCarousel = ({heroCarousel}) => {
     	return null;
     }
 
+    const autoPlay = true;
+    const slideDuration = 2; // in seconds
     const activeIndexRef = useRef( { activeIndex: 0 } );
     const slideRef = useRef( 0 );
     const [ slide, setSlide ] = useState( 0 );
@@ -45,6 +47,13 @@ const HeroCarousel = ({heroCarousel}) => {
         setSlide( slideRef.current );
 
     };
+
+    useEffect(() => {
+        if ( autoPlay ) {
+            const interval = setInterval(() => nextSlide(), slideDuration * 1000 );
+            return () => clearInterval( interval );
+        }
+    }, [])
 
     return (
         <div className="banner flex flex-col sm:flex-row justify-between overflow-hidden">
