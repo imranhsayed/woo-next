@@ -5,10 +5,11 @@ import AddToCartButton from '../../components/cart/AddToCartButton';
 import {PRODUCT_BY_SLUG_QUERY, PRODUCT_SLUGS} from '../../queries/product-by-slug';
 import clientConfig from '../../client-config';
 import { isEmpty } from 'lodash';
+import GalleryCarousel from "../../components/single-product/gallery-carousel";
 
 export default function Product(props) {
 	const { product } = props;
-	
+
 	console.log( 'product', product );
 
     const router = useRouter()
@@ -23,21 +24,19 @@ export default function Product(props) {
 		<Layout>
 			{ product ? (
 				<div className="single-product container mx-auto my-32 px-4 xl:px-0">
-					<div className="grid grid-cols-2 gap-4">
-						<div className="product-image">
-							{ !isEmpty( product.image ) ? (
-								<img
-									src={ product.image.sourceUrl }
-									alt="Product Image"
-									width="100%"
-									height="auto"
-									srcSet={ product.image.srcSet }
-								/>
-							) : !isEmpty( clientConfig.singleImagePlaceholder ) ? (
-								<img
-									src={ clientConfig.singleImagePlaceholder }
-									alt="Placeholder product image"
-								/>
+					<div className="grid md:grid-cols-2 gap-4">
+						<div className="product-images">
+
+							{ !isEmpty( product?.galleryImages?.nodes ) ? (
+                                <GalleryCarousel gallery={product?.galleryImages?.nodes}/>
+							) : !isEmpty( product.image ) ? (
+                                <img
+                                    src={ product?.image?.sourceUrl }
+                                    alt="Product Image"
+                                    width="100%"
+                                    height="auto"
+                                    srcSet={ product?.image?.srcSet }
+                                />
 							) : null }
 						</div>
 						<div className="product-info">
