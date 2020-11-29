@@ -16,7 +16,7 @@ branch is upto date with those changes. You can also refer to the PR notes for c
 
 ## Demo Desktop :video_camera:
 
-![](desktop-example.gif)
+![](demos/home-demo.gif)
 
 ## Demo Tablet and Mobile View :video_camera:
 
