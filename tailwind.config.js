@@ -7,9 +7,7 @@ module.exports = {
   purge: [
     './components/**/*.js',
     './pages/**/*.js'],
-  theme: {
-    extend: {},
-  },
+  theme: {},
   variants: {},
   plugins: [
     require( 'tailwindcss' ),

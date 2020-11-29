@@ -1,7 +1,7 @@
-import Layout from "../components/Layout";
-import client from '../components/ApolloClient';
-import ParentCategoriesBlock from "../components/category/category-block/ParentCategoriesBlock";
-import GET_CATEGORIES_QUERY from "../queries/get-categories";
+import Layout from "../src/components/Layout";
+import client from '../src/components/ApolloClient';
+import ParentCategoriesBlock from "../src/components/category/category-block/ParentCategoriesBlock";
+import GET_CATEGORIES_QUERY from "../src/queries/get-categories";
 
 export default function Categories ( props ) {
 
@@ -10,8 +10,8 @@ export default function Categories ( props ) {
 	return (
 		<Layout>
 			{/*Categories*/}
-			<div className="mt-5 text-center content-wrap">
-				<h2>Categories</h2>
+			<div className="categories product-categories-container container mx-auto my-32 px-4 xl:px-0">
+				<h2 className="text-2xl mb-5 uppercase">Categories</h2>
 				<ParentCategoriesBlock productCategories={ productCategories }/>
 			</div>
 		</Layout>

@@ -1,18 +1,27 @@
-import Layout from "../../components/Layout";
-import client from "../../components/ApolloClient";
-import Product from "../../components/Product";
-import {PRODUCT_BY_CATEGORY_SLUG, PRODUCT_CATEGORIES_SLUGS} from "../../queries/product-by-category";
+import Layout from "../../src/components/Layout";
+import client from "../../src/components/ApolloClient";
+import Product from "../../src/components/Product";
+import {PRODUCT_BY_CATEGORY_SLUG, PRODUCT_CATEGORIES_SLUGS} from "../../src/queries/product-by-category";
 import {isEmpty} from "lodash";
+import {useRouter} from "next/router";
 
 export default function CategorySingle( props ) {
+
+    const router = useRouter()
+
+    // If the page is not yet generated, this will be displayed
+    // initially until getStaticProps() finishes running
+    if (router.isFallback) {
+        return <div>Loading...</div>
+    }
 
     const { categoryName, products } = props;
 
     return (
         <Layout>
-            <div className="content-wrap">
-                { categoryName ? <h3 className="product-container pl-5">{ categoryName }</h3> : '' }
-                <div className="product-container row">
+            <div className="product-categories-container container mx-auto my-32 px-4 xl:px-0">
+                { categoryName ? <h3 className="text-2xl mb-5 uppercase">{ categoryName }</h3> : '' }
+                <div className="product-categories grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4">
                     { undefined !== products && products?.length ? (
                         products.map( product => <Product key={ product?.id } product={ product } /> )
                     ) : ''}
@@ -56,6 +65,6 @@ export async function getStaticPaths () {
 
     return {
         paths: pathsData,
-        fallback: false
+        fallback: true
     }
 }

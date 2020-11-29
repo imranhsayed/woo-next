@@ -1,5 +1,6 @@
-import Layout from "../components/Layout";
-import CartItemsContainer from "../components/cart/cart-page/CartItemsContainer";
+
+import Layout from "../src/components/Layout";
+import CartItemsContainer from "../src/components/cart/cart-page/CartItemsContainer";
 
 const Cart = () => {
 	return (
