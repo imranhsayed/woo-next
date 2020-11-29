@@ -4,14 +4,13 @@ import clientConfig from '../client-config';
 import { isEmpty } from 'lodash';
 
 const Product = ( props ) => {
-	console.warn(props)
 	const { product } = props;
 
 	/**
 	 * Get discount percent.
-	 * 
-	 * @param {String} regularPrice 
-	 * @param {String} salesPrice 
+	 *
+	 * @param {String} regularPrice
+	 * @param {String} salesPrice
 	 */
 	const discountPercent = ( regularPrice, salesPrice ) => {
 		if( isEmpty( regularPrice ) || isEmpty(salesPrice) ) {
@@ -34,11 +33,11 @@ const Product = ( props ) => {
 		// @TODO Need to handle Group products differently.
 		undefined !== product && 'GroupProduct' !== product.__typename ? (
 			<div className="product mb-5">
-				
+
 
 				<Link href={ `/product/${ product.slug }`} >
 					<a>
-					
+
 						{ !isEmpty( product.image ) ? (
 							<img src={ product.image.sourceUrl } alt="Product image"/>
 						) : !isEmpty( clientConfig.productImagePlaceholder ) ? (
@@ -57,16 +56,16 @@ const Product = ( props ) => {
 						<h6 className="product-price text-gray-800 font-semibold mr-3 mb-5">
 							{/* Regular price */}
 						{ productMeta?.discountPercent ? <span className="product-price mr-2">{product?.regularPrice}</span> : null }
-						
+
 						{/* Discounted price */}
 						<span className={productMeta?.strikeThroughClass}>{ product.price }</span>
-						
+
 						{/* Discount percent */}
 						<span className="product-discount text-red-500 text-sm font-normal">{productMeta?.discountPercent}</span>
 						</h6>
 					<AddToCartButton product={ product }/>
 				</div>
-				
+
 			</div>
 		) : (
 			''

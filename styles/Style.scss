@@ -17,6 +17,10 @@
   }
 }
 
+.banner-img-container {
+  transition: opacity 500ms linear 0s;
+}
+
 .banner-content {
   display: flex;
   justify-content: center;

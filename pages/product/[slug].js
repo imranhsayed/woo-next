@@ -9,11 +9,6 @@ import { isEmpty } from 'lodash';
 export default function Product(props) {
 	const { product } = props;
 
-	//const router = useRouter()
-    //const { slug } = router.query
-	// console.log(slug)  /* check the slug */
-
-
 	return (
 		<Layout>
 			{ product ? (
@@ -38,17 +33,17 @@ export default function Product(props) {
 						<div className="product-info">
 							<h4 className="products-main-title text-2xl uppercase">{ product.name }</h4>
 							<div
-								
+
 								dangerouslySetInnerHTML={ {
 									__html: product.description,
 								} }
 								className="product-description mb-5"
 							/>
-			
+
 							<AddToCartButton product={ product }/>
 						</div>
 					</div>
-					
+
 				</div>
 			) : (
 				''

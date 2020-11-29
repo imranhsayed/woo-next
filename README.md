@@ -72,6 +72,10 @@ These instructions will get you a copy of the project up and running on your loc
 
 * Make sure Woocommerce plugin is also installed in your WordPress site. You can also import default wooCommerce products that come with wooCommerce Plugin for development ( if you don't have any products in your WordPress install ) `WP Dashboard > Tools > Import > WooCommerce products(CSV)`: The WooCommerce default products csv file is available at `wp-content/plugins/woocommerce/sample-data/sample_products.csv`
 
+## Hero Carousel.
+To use Hero carousel, create a category called 'offers' from WordPress Dashboard > Products > Categories.
+Now create and assign as many child categories to this parent 'offers' category with name, description and image.
+These Child categories data will automatically be used to create hero carousel on the frontend. 
 
 
 ## Configuration(for GraphQL implementation) :wrench:
