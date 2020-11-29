@@ -40,7 +40,8 @@ const CartItemsContainer = () => {
 		},
 		onError: ( error ) => {
 			if ( error ) {
-				setRequestError( error.graphQLErrors[ 0 ].message );
+				const errorMessage = error?.graphQLErrors[ 0 ]?.message ? error.graphQLErrors[ 0 ].message : '';
+				setRequestError( errorMessage );
 			}
 		}
 	} );

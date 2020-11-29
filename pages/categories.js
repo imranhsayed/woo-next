@@ -1,7 +1,7 @@
-import Layout from "../components/Layout";
-import client from '../components/ApolloClient';
-import ParentCategoriesBlock from "../components/category/category-block/ParentCategoriesBlock";
-import GET_CATEGORIES_QUERY from "../queries/get-categories";
+import Layout from "../src/components/Layout";
+import client from '../src/components/ApolloClient';
+import ParentCategoriesBlock from "../src/components/category/category-block/ParentCategoriesBlock";
+import GET_CATEGORIES_QUERY from "../src/queries/get-categories";
 
 export default function Categories ( props ) {
 

@@ -1,6 +1,6 @@
 import validator from 'validator';
 import isEmpty from './isEmpty';
-import config from '../client-config';
+import config from '../../client-config';
 
 
 const validateAndSanitizeCheckoutForm = ( data ) => {

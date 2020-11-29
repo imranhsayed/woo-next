@@ -1,10 +1,10 @@
-import Layout from '../../components/Layout';
+import Layout from '../../src/components/Layout';
 import { useRouter } from 'next/router';
-import client from '../../components/ApolloClient';
-import AddToCartButton from '../../components/cart/AddToCartButton';
-import {PRODUCT_BY_SLUG_QUERY, PRODUCT_SLUGS} from '../../queries/product-by-slug';
+import client from '../../src/components/ApolloClient';
+import AddToCartButton from '../../src/components/cart/AddToCartButton';
+import {PRODUCT_BY_SLUG_QUERY, PRODUCT_SLUGS} from '../../src/queries/product-by-slug';
 import { isEmpty } from 'lodash';
-import GalleryCarousel from "../../components/single-product/gallery-carousel";
+import GalleryCarousel from "../../src/components/single-product/gallery-carousel";
 
 export default function Product(props) {
 	const { product } = props;

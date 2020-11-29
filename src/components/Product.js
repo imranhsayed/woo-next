@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import AddToCartButton from '../components/cart/AddToCartButton';
-import clientConfig from '../client-config';
+import clientConfig from '../../client-config';
 import { isEmpty } from 'lodash';
 
 const Product = ( props ) => {

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { v4 } from "uuid";
 import { getUpdatedItems } from "../../../functions";
+import {Cross, Loading} from "../../icons";
 
 const CartItem = ( {
 	                   item,
@@ -59,9 +60,9 @@ const CartItem = ( {
 		<tr className="woo-next-cart-item" key={ item.productId }>
 			<th className="woo-next-cart-element woo-next-cart-el-close">
 				{/* Remove item */}
-				<span className="woo-next-cart-close-icon"
+				<span className="woo-next-cart-close-icon cursor-pointer"
 				      onClick={ ( event ) => handleRemoveProductClick( event, item.cartKey, products ) }>
-					<i className="fa fa-times-circle"/>
+					<Cross/>
 				</span>
 			</th>
 			<td className="woo-next-cart-element">
@@ -73,18 +74,22 @@ const CartItem = ( {
 			{/* Qty Input */ }
 			<td className="woo-next-cart-element woo-next-cart-qty">
 				{/* @TODO Need to update this with graphQL query */ }
-				<input
-					type="number"
-					min="1"
-					data-cart-key={ item.cartKey }
-					className={ `woo-next-cart-qty-input form-control ${ updateCartProcessing ? 'woo-next-cart-disabled' : '' } ` }
-					value={ productCount }
-					onChange={ ( event ) => handleQtyChange( event, item.cartKey ) }
-				/>
-				{ updateCartProcessing ?
-					<img className="woo-next-cart-item-spinner" src="/cart-spinner.gif" alt="spinner"/> : '' }
+				{
+					! updateCartProcessing ? (
+						<input
+							type="number"
+							min="1"
+							data-cart-key={ item.cartKey }
+							className={ `woo-next-cart-qty-input form-control ${ updateCartProcessing ? 'woo-next-cart-disabled' : '' } ` }
+							value={ productCount }
+							onChange={ ( event ) => handleQtyChange( event, item.cartKey ) }
+						/>
+					) : <Loading/>
+				}
 			</td>
-			<td className="woo-next-cart-element">{ ( 'string' !== typeof item.totalPrice ) ? item.totalPrice.toFixed( 2 ) : item.totalPrice }</td>
+			<td className="woo-next-cart-element">
+				{ ( 'string' !== typeof item.totalPrice ) ? item.totalPrice.toFixed( 2 ) : item.totalPrice }
+			</td>
 		</tr>
 	)
 };

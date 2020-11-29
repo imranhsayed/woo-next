@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { useQuery, useMutation } from '@apollo/client';
 import { AppContext } from "../context/AppContext";
-import { addFirstProduct, getFormattedCart, updateCart } from "../../functions";
+import { getFormattedCart } from "../../functions";
 import Link from "next/link";
 import { v4 } from 'uuid';
 import GET_CART from "../../queries/get-cart";
