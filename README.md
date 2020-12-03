@@ -106,6 +106,8 @@ Thanks to all the people who contributed to the code of this project 🤝
     <img src="https://github.com/w3bdesign.png?size=30" alt="Daniel F">
     <img src="https://github.com/delunix.png?size=30" alt="Fandi Rahmawan">
     <img src="https://github.com/yudyananda.png?size=30" alt="yudyananda">
+    <img src="https://github.com/mahvash-fatima.png?size=30" alt="mahvash-fatima">
+    <img src="https://github.com/muhaimincs.png?size=30" alt="muhaimincs">
 </div>
 
 
