@@ -1,5 +1,4 @@
 import { useState, useContext, useEffect } from 'react';
-import Billing from "./Billing";
 import YourOrder from "./YourOrder";
 import PaymentModes from "./PaymentModes";
 import { AppContext } from "../context/AppContext";
@@ -9,50 +8,62 @@ import { getFormattedCart, createCheckoutData } from "../../functions";
 import OrderSuccess from "./OrderSuccess";
 import GET_CART from "../../queries/get-cart";
 import CHECKOUT_MUTATION from "../../mutations/checkout";
+import Address from "./Address";
 
-const CheckoutForm = () => {
+// Use this for testing purposes, so you dont have to fill the checkout form over an over again.
+// const defaultCustomerInfo = {
+// 	firstName: 'Imran',
+// 	lastName: 'Sayed',
+// 	address1: '123 Abc farm',
+// 	address2: 'Hill Road',
+// 	city: 'Mumbai',
+// 	country: 'India',
+// 	state: 'Maharastra',
+// 	postcode: '221029',
+// 	email: 'codeytek.academy@gmail.com',
+// 	phone: '9883778278',
+// 	company: 'The Company',
+// 	errors: null
+// }
+
+const defaultCustomerInfo = {
+	firstName: '',
+	lastName: '',
+	address1: '',
+	address2: '',
+	city: '',
+	country: '',
+	state: '',
+	postcode: '',
+	email: '',
+	phone: '',
+	company: '',
+	errors: null
+}
+
+const CheckoutForm = (props) => {
+
+	const {countriesData} = props || {}
+	const parsedCountriesData = countriesData ? JSON.parse(countriesData) : {}
+	const { countries } = parsedCountriesData || {};
 
 	const initialState = {
-		firstName: '',
-		lastName: '',
-		company: '',
-		country: '',
-		address1: '',
-		address2: '',
-		city: '',
-		state: '',
-		postcode: '',
-		phone: '',
-		email: '',
+		billing: {
+			...defaultCustomerInfo,
+		},
+		shipping: {
+			...defaultCustomerInfo
+		},
 		createAccount: false,
 		orderNotes: '',
 		paymentMethod: '',
-		errors: null
 	};
-
-	// Use this for testing purposes, so you dont have to fill the checkout form over an over again.
-	// const initialState = {
-	// 	firstName: 'Imran',
-	// 	lastName: 'Sayed',
-	// 	address1: '109 Hills Road Valley',
-	// 	address2: 'Station Road',
-	// 	city: 'Pune',
-	// 	state: 'Maharastra',
-	// 	country: 'ID',
-	// 	postcode: '400298',
-	// 	phone: '9959338989',
-	// 	email: 'imran@gmail.com',
-	// 	company: 'Tech',
-	// 	createAccount: false,
-	// 	orderNotes: '',
-	// 	paymentMethod: 'cod',
-	// 	errors: null
-	// };
 
 	const [ cart, setCart ] = useContext( AppContext );
 	const [ input, setInput ] = useState( initialState );
 	const [ orderData, setOrderData ] = useState( null );
 	const [ requestError, setRequestError ] = useState( null );
+	const [states, setStatesData] = useState([]);
 
 	// Get Cart Data.
 	const { loading, error, data, refetch } = useQuery( GET_CART, {
@@ -108,19 +119,35 @@ const CheckoutForm = () => {
 	 * Handle onchange input.
 	 *
 	 * @param {Object} event Event Object.
+	 * @param {bool} isShipping is Shipping If this is false it means it is billing.
 	 *
 	 * @return {void}
 	 */
-	const handleOnChange = ( event ) => {
+	const handleOnChange = ( event, isShipping ) => {
 
-		if ( 'createAccount' === event.target.name ) {
-			const newState = { ...input, [event.target.name]: ! input.createAccount };
+		const {target}= event || {};
+
+		if ( 'createAccount' === target.name ) {
+			const newState = { ...input, [target.name]: ! input.createAccount };
 			setInput( newState );
 		} else {
-			const newState = { ...input, [event.target.name]: event.target.value };
-			setInput( newState );
+			if ( isShipping ) {
+				handleShippingChange( target )
+			} else {
+				handleBillingChange( target )
+			}
 		}
 	};
+
+	const handleShippingChange = (target) => {
+		const newState = { ...input, shipping: { ...input?.shipping, [target.name]: target.value } };
+		setInput( newState );
+	}
+
+	const handleBillingChange = (target) => {
+		const newState = { ...input, billing: { ...input?.billing, [target.name]: target.value } };
+		setInput( newState );
+	}
 
 	useEffect( () => {
 
@@ -131,15 +158,24 @@ const CheckoutForm = () => {
 
 	}, [ orderData ] );
 
+	console.log( 'input', input );
+
 	return (
 		<>
 			{ cart ? (
 				<form onSubmit={ handleFormSubmit } className="woo-next-checkout-form">
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-20">
-						{/*Billing Details*/}
-						<div className="billing-details">
-							<h2 className="text-xl font-medium mb-4">Billing Details</h2>
-							<Billing input={ input } handleOnChange={ handleOnChange }/>
+						<div>
+							{/*Shipping Details*/}
+							<div className="billing-details">
+								<h2 className="text-xl font-medium mb-4">Shipping Details</h2>
+								<Address countries={countries} input={ input } handleOnChange={ (event) => handleOnChange(event, true) }/>
+							</div>
+							{/*Billing Details*/}
+							<div className="billing-details">
+								<h2 className="text-xl font-medium mb-4">Billing Details</h2>
+								<Address countries={countries} input={ input } handleOnChange={ (event) => handleOnChange(event, false) }/>
+							</div>
 						</div>
 						{/* Order & Payments*/}
 						<div className="your-orders">

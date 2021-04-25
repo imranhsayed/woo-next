@@ -247,36 +247,43 @@ export const createCheckoutData = ( order ) => {
 		clientMutationId: v4(),
 
 		billing: {
-			firstName: order.firstName,
-			lastName: order.lastName,
-			address1: order.address1,
-			address2: order.address2,
-			city: order.city,
-			country: order.country,
-			state: order.state,
-			postcode: order.postcode,
-			email: order.email,
-			phone: order.phone,
-			company: order.company,
+			firstName: order?.billing?.firstName,
+			lastName: order?.billing?.lastName,
+			address1: order?.billing?.address1,
+			address2: order?.billing?.address2,
+			city: order?.billing?.city,
+			country: order?.billing?.country,
+			state: order?.billing?.state,
+			postcode: order?.billing?.postcode,
+			email: order?.billing?.email,
+			phone: order?.billing?.phone,
+			company: order?.billing?.company,
 		},
 		shipping: {
-			firstName: order.firstName,
-			lastName: order.lastName,
-			address1: order.address1,
-			address2: order.address2,
-			city: order.city,
-			country: order.country,
-			state: order.state,
-			postcode: order.postcode,
-			email: order.email,
-			phone: order.phone,
-			company: order.company,
+			firstName: order?.shipping?.firstName,
+			lastName: order?.shipping?.lastName,
+			address1: order?.shipping?.address1,
+			address2: order?.shipping?.address2,
+			city: order?.shipping?.city,
+			country: order?.shipping?.country,
+			state: order?.shipping?.state,
+			postcode: order?.shipping?.postcode,
+			email: order?.shipping?.email,
+			phone: order?.shipping?.phone,
+			company: order?.shipping?.company,
 		},
 		shipToDifferentAddress: false,
 		paymentMethod: order.paymentMethod,
 		isPaid: false,
 		transactionId: "hjkhjkhsdsdiui"
 	};
+
+	if (order.createAccount) {
+		checkoutData.account = {
+			username: order.username,
+			password: order.password,
+		};
+	}
 
 	return checkoutData;
 };

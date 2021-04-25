@@ -1,8 +1,9 @@
 import React from 'react';
-import countryList from './country-list';
 import Error from "./Error";
+import PropTypes from 'prop-types';
+import CountrySelection from "./CountrySelection";
 
-const Billing = ( { input, handleOnChange } ) => {
+const Address = ({ input, countries, handleOnChange } ) => {
 	return (
 		<React.Fragment>
 			{/*Name*/}
@@ -35,21 +36,7 @@ const Billing = ( { input, handleOnChange } ) => {
 				<Error errors={ input.errors } fieldName={ 'company' }/>
 			</div>
 			{/* Country */}
-			<div className="form-group mb-3">
-				<label className="text-xs" htmlFor="country-select">
-					Country
-					<abbr className="required" title="required">*</abbr>
-				</label>
-				<select onChange={ handleOnChange } value={ input.country } name="country" className="form-control woo-next-checkout-input p-1 w-full border-solid border border-gray-500 rounded" id="country-select">
-					<option value="">Select a country...</option>
-					{ countryList.length && (
-						countryList.map( ( country, index ) => (
-							<option key={ `${country}-${index}` } value={ country.countryCode }>{ country.countryName }</option>
-						) )
-					) }
-				</select>
-				<Error errors={ input.errors } fieldName={ 'country' }/>
-			</div>
+			<CountrySelection input={input} handleOnChange={handleOnChange} countries={countries}/>
 			{/* Street Address */}
 			<div className="form-group mb-3">
 				<label className="text-xs" htmlFor="street-address">
@@ -129,4 +116,16 @@ const Billing = ( { input, handleOnChange } ) => {
 	);
 };
 
-export default Billing;
+Address.propTypes = {
+	input: PropTypes.object,
+	countries: PropTypes.object,
+	handleOnChange: PropTypes.func
+}
+
+Address.defaultProps = {
+	input: {},
+	countries: {},
+	handleOnChange: () => {}
+}
+
+export default Address;
