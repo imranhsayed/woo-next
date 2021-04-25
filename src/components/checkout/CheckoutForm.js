@@ -3,12 +3,13 @@ import YourOrder from "./YourOrder";
 import PaymentModes from "./PaymentModes";
 import { AppContext } from "../context/AppContext";
 import validateAndSanitizeCheckoutForm from '../../validator/checkout';
-import { useMutation, useQuery } from '@apollo/client';
+import {useLazyQuery, useMutation, useQuery} from '@apollo/client';
 import { getFormattedCart, createCheckoutData } from "../../functions";
 import OrderSuccess from "./OrderSuccess";
 import GET_CART from "../../queries/get-cart";
 import CHECKOUT_MUTATION from "../../mutations/checkout";
 import Address from "./Address";
+import GET_STATES from "../../queries/get-states";
 
 // Use this for testing purposes, so you dont have to fill the checkout form over an over again.
 // const defaultCustomerInfo = {
@@ -41,11 +42,11 @@ const defaultCustomerInfo = {
 	errors: null
 }
 
-const CheckoutForm = (props) => {
+const CheckoutForm = ({countriesData}) => {
 
-	const {countriesData} = props || {}
-	const parsedCountriesData = countriesData ? JSON.parse(countriesData) : {}
-	const { countries } = parsedCountriesData || {};
+	const {billingCountries, shippingCountries} = countriesData || {}
+	const parsedBillingCountries = billingCountries ? JSON.parse(billingCountries) : {}
+	const parsedShippingCountries = shippingCountries ? JSON.parse(shippingCountries) : {}
 
 	const initialState = {
 		billing: {
@@ -63,7 +64,15 @@ const CheckoutForm = (props) => {
 	const [ input, setInput ] = useState( initialState );
 	const [ orderData, setOrderData ] = useState( null );
 	const [ requestError, setRequestError ] = useState( null );
-	const [states, setStatesData] = useState([]);
+	// const [billingStates, setBillingStates] = useState([]);
+	// const [shippingStates, setShippingStates] = useState([]);
+
+	const [getStates, { data: billingStates, loading: billingStatesLoading, error: billingStatesError }] = useLazyQuery( GET_STATES,{
+		notifyOnNetworkStatusChange: true,
+		onCompleted: (data) => {
+			console.warn( 'go states', data );
+		}
+	} );
 
 	// Get Cart Data.
 	const { loading, error, data, refetch } = useQuery( GET_CART, {
@@ -152,6 +161,13 @@ const CheckoutForm = (props) => {
 	const handleShippingChange = (target) => {
 		const newState = { ...input, shipping: { ...input?.shipping, [target.name]: target.value } };
 		setInput( newState );
+
+		if ( 'country' === target.name ) {
+			const countryCode = target[target.selectedIndex].getAttribute('data-countrycode')
+			getStates({
+				variables: { countryCode: countryCode || '' }
+			})
+		}
 	}
 
 	const handleBillingChange = (target) => {
@@ -168,7 +184,7 @@ const CheckoutForm = (props) => {
 
 	}, [ orderData ] );
 
-	// console.log( 'input', input );
+	console.log( 'billingStates', billingStates );
 
 	return (
 		<>
@@ -179,12 +195,12 @@ const CheckoutForm = (props) => {
 							{/*Shipping Details*/}
 							<div className="billing-details">
 								<h2 className="text-xl font-medium mb-4">Shipping Details</h2>
-								<Address countries={countries} input={ input?.shipping } handleOnChange={ (event) => handleOnChange(event, true) }/>
+								<Address states={billingStates} countries={parsedShippingCountries} input={ input?.shipping } handleOnChange={ (event) => handleOnChange(event, true) }/>
 							</div>
 							{/*Billing Details*/}
 							<div className="billing-details">
 								<h2 className="text-xl font-medium mb-4">Billing Details</h2>
-								<Address countries={countries} input={ input?.billing } handleOnChange={ (event) => handleOnChange(event, false) }/>
+								<Address states={billingStates} countries={parsedBillingCountries} input={ input?.billing } handleOnChange={ (event) => handleOnChange(event, false) }/>
 							</div>
 						</div>
 						{/* Order & Payments*/}

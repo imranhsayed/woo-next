@@ -2,8 +2,14 @@ import React from 'react';
 import Error from "./Error";
 import PropTypes from 'prop-types';
 import CountrySelection from "./CountrySelection";
+import StateSelection from "./StatesSelection";
 
-const Address = ({ input, countries, handleOnChange } ) => {
+const Address = ({ input, countries, states, handleOnChange } ) => {
+
+	const {wooStates} = states || {};
+	const statesData = wooStates?.states ? JSON.parse( wooStates?.states ) : {}
+	console.log( 'statesData', statesData );
+
 	return (
 		<React.Fragment>
 			{/*Name*/}
@@ -57,15 +63,8 @@ const Address = ({ input, countries, handleOnChange } ) => {
 				<input onChange={ handleOnChange } value={ input.city } type="text" name="city" className="form-control woo-next-checkout-input p-1 w-full border-solid border border-gray-500 rounded" id="city"/>
 				<Error errors={ input.errors } fieldName={ 'city' }/>
 			</div>
-			{/* County */}
-			<div className="form-group mb-3">
-				<label className="text-xs" htmlFor="state">
-					State/County
-					<abbr className="required" title="required">*</abbr>
-				</label>
-				<input onChange={ handleOnChange } value={ input.state } type="text" name="state" className="form-control woo-next-checkout-input p-1 w-full border-solid border border-gray-500 rounded" id="state"/>
-				<Error errors={ input.errors } fieldName={ 'state' }/>
-			</div>
+			{/* State */}
+			<StateSelection input={input} handleOnChange={handleOnChange} states={statesData}/>
 			{/* Post Code */}
 			<div className="form-group mb-3">
 				<label className="text-xs" htmlFor="post-code">
