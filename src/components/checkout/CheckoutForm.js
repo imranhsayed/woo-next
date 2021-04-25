@@ -105,11 +105,21 @@ const CheckoutForm = (props) => {
 	 */
 	const handleFormSubmit = ( event ) => {
 		event.preventDefault();
-		const result = validateAndSanitizeCheckoutForm( input );
-		if ( ! result.isValid ) {
-			setInput( { ...input,  errors: result.errors } );
+
+		// Validate Billing and Shipping Details
+		const billingValidationResult = validateAndSanitizeCheckoutForm( input?.billing );
+		const shippingValidationResult = validateAndSanitizeCheckoutForm( input?.shipping );
+
+		if ( ! shippingValidationResult.isValid || !billingValidationResult.isValid ) {
+			setInput({
+				...input,
+				billing: {...input.billing, errors: billingValidationResult.errors},
+				shipping: {...input.shipping, errors: shippingValidationResult.errors}
+			});
+
 			return;
 		}
+
 		const checkOutData = createCheckoutData( input );
 		setOrderData( checkOutData );
 		setRequestError( null );
@@ -158,7 +168,7 @@ const CheckoutForm = (props) => {
 
 	}, [ orderData ] );
 
-	console.log( 'input', input );
+	// console.log( 'input', input );
 
 	return (
 		<>
@@ -169,12 +179,12 @@ const CheckoutForm = (props) => {
 							{/*Shipping Details*/}
 							<div className="billing-details">
 								<h2 className="text-xl font-medium mb-4">Shipping Details</h2>
-								<Address countries={countries} input={ input } handleOnChange={ (event) => handleOnChange(event, true) }/>
+								<Address countries={countries} input={ input?.shipping } handleOnChange={ (event) => handleOnChange(event, true) }/>
 							</div>
 							{/*Billing Details*/}
 							<div className="billing-details">
 								<h2 className="text-xl font-medium mb-4">Billing Details</h2>
-								<Address countries={countries} input={ input } handleOnChange={ (event) => handleOnChange(event, false) }/>
+								<Address countries={countries} input={ input?.billing } handleOnChange={ (event) => handleOnChange(event, false) }/>
 							</div>
 						</div>
 						{/* Order & Payments*/}

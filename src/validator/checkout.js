@@ -65,7 +65,7 @@ const validateAndSanitizeCheckoutForm = ( data ) => {
 		}
 
 		if ( required && validator.isEmpty( data[ fieldName ] ) ) {
-			errors[ fieldName ] = `${errorContent} is required`;
+			errors[ fieldName ] = `${errorContent} is requireds`;
 		}
 
 
@@ -94,7 +94,6 @@ const validateAndSanitizeCheckoutForm = ( data ) => {
 	sanitizedData.createAccount = data.createAccount;
 	addErrorAndSanitizedData( 'orderNotes', '', 0, 254, 'string', false );
 	addErrorAndSanitizedData( 'paymentMethod', 'Payment mode field', 2, 50, 'string', true );
-
 
 	return {
 		sanitizedData,
