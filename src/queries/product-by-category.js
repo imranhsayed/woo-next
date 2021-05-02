@@ -7,7 +7,7 @@ export const PRODUCT_BY_CATEGORY_SLUG = gql` query PRODUCT_BY_CATEGORY_SLUG($slu
 	  products(first: 50) {
 		nodes {
 		  id
-		  productId
+		  productId: databaseId
 		  averageRating
 		  slug
 		  description

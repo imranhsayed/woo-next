@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 export const PRODUCT_BY_SLUG_QUERY = gql` query Product($slug: ID!) {
 	product(id: $slug, idType: SLUG) {
 	  id
-	  productId
+	  productId: databaseId
 	  averageRating
 	  slug
 	  description

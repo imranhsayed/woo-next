@@ -7,7 +7,7 @@ const ADD_TO_CART = gql`
         key
         product {
           id
-          productId
+          productId: databaseId
           name
           description
           type
