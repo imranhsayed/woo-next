@@ -44,9 +44,7 @@ const PRODUCTS_AND_CATEGORIES_QUERY = gql`query {
       description
       image {
         id
-        uri
-        title
-        srcSet
+        altText
         sourceUrl
       }
       name

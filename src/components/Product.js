@@ -3,6 +3,8 @@ import AddToCartButton from '../components/cart/AddToCartButton';
 import clientConfig from '../../client-config';
 import { isEmpty } from 'lodash';
 import Price from "./single-product/price";
+import Image from "../image";
+import {DEFAULT_CATEGORY_IMG_URL, DEFAULT_PRODUCT_HOME_IMG_URL} from "../constants/urls";
 
 const Product = ( props ) => {
 	const { product } = props;
@@ -13,17 +15,17 @@ const Product = ( props ) => {
 			<div className="product mb-5">
 
 
-				<Link href={ `/product/${ product.slug }`} >
+				<Link href={ `/product/${ product?.slug }`} >
 					<a>
-
-						{ !isEmpty( product.image ) ? (
-							<img src={ product.image.sourceUrl } alt="Product image"/>
-						) : !isEmpty( clientConfig.productImagePlaceholder ) ? (
-							<img
-								src={ clientConfig.productImagePlaceholder }
-								alt="Placeholder product image"
-							/>
-						) : null }
+						<Image
+							className="object-cover bg-gray-100"
+							width="308"
+							height="308"
+							loading="lazy"
+							sourceUrl={ product?.image?.sourceUrl ?? '' }
+							defaultImgUrl={DEFAULT_PRODUCT_HOME_IMG_URL}
+							altText={product?.image?.altText ?? product?.slug}
+						/>
 					</a>
 				</Link>
 				<div className="product-info">

@@ -12,24 +12,18 @@ const ParentCategoryBlock = ( props ) => {
 				<a>
 					<Image
 						className="object-cover h-40 md:h-64"
-						width="400"
-						height="225"
 						layout="fill"
 						containerClassNames="w-96 h-56"
-						sourceUrl={ category?.image?.sourceUrl ? category.image.sourceUrl : '' }
+						sourceUrl={ category?.image?.sourceUrl ?? '' }
 						defaultImgUrl={DEFAULT_CATEGORY_IMG_URL}
-						altText={category?.image?.altText ?? category.slug}/>
+						altText={category?.image?.altText ?? category.slug}
+					/>
 					<div className="product-title-container p-3">
 						<h3 className="product-title text-lg font-medium">{category?.name}</h3>
 						<span className="shop-now text-sm">+ Explore</span>
 					</div>
 				</a>
 			</Link>
-
-			{/*<div className="card-body text-center">*/}
-			{/*	<h6 className="card-subtitle mb-3">Hello</h6>*/}
-			{/*</div>*/}
-
 		</div>
 	);
 }
