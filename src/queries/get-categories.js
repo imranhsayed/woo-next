@@ -12,7 +12,7 @@ const GET_CATEGORIES_QUERY = gql`query {
 			slug
 			image {
 				sourceUrl
-				srcSet
+				altText
 			}
 		}
 	}
