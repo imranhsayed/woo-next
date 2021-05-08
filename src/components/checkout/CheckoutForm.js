@@ -95,9 +95,6 @@ const CheckoutForm = ({countriesData}) => {
         variables: {
             input: orderData
         },
-        onCompleted: async () => {
-            await refetch();
-        },
         onError: (error) => {
             if (error) {
                 setRequestError(error?.graphQLErrors?.[0]?.message ?? '');
@@ -130,10 +127,8 @@ const CheckoutForm = ({countriesData}) => {
         }
 
         const checkOutData = createCheckoutData(input);
-        console.log( 'checkOutData', checkOutData);
-        return null;
-        setOrderData(checkOutData);
         setRequestError(null);
+        setOrderData(checkOutData);
     };
 
     /*
