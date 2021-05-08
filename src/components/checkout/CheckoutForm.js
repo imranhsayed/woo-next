@@ -1,16 +1,16 @@
 import { useState, useContext, useEffect } from 'react';
+import {useMutation, useQuery} from '@apollo/client';
+
 import YourOrder from "./YourOrder";
 import PaymentModes from "./PaymentModes";
 import { AppContext } from "../context/AppContext";
 import validateAndSanitizeCheckoutForm from '../../validator/checkout';
-import {useLazyQuery, useMutation, useQuery} from '@apollo/client';
 import { getFormattedCart, createCheckoutData } from "../../functions";
 import OrderSuccess from "./OrderSuccess";
 import GET_CART from "../../queries/get-cart";
 import CHECKOUT_MUTATION from "../../mutations/checkout";
 import Address from "./Address";
-import GET_STATES from "../../queries/get-states";
-import {getStates, setStatesForCountry} from "../../utils/checkout";
+import {setStatesForCountry} from "../../utils/checkout";
 
 // Use this for testing purposes, so you dont have to fill the checkout form over an over again.
 // const defaultCustomerInfo = {
@@ -34,7 +34,7 @@ const defaultCustomerInfo = {
 	address1: '',
 	address2: '',
 	city: '',
-	country: '',
+	country: 'IN',
 	state: '',
 	postcode: '',
 	email: '',
@@ -59,12 +59,14 @@ const CheckoutForm = ({countriesData}) => {
 		paymentMethod: '',
 	};
 
-	const [ cart, setCart ] = useContext( AppContext );
-	const [ input, setInput ] = useState( initialState );
-	const [ orderData, setOrderData ] = useState( null );
-	const [ requestError, setRequestError ] = useState( null );
-	const [theBillingStates, setTheBillingStates] = useState([]);
+	const [cart, setCart] = useContext(AppContext);
+	const [input, setInput] = useState(initialState);
+	const [orderData, setOrderData] = useState(null);
+	const [requestError, setRequestError] = useState(null);
 	const [theShippingStates, setTheShippingStates] = useState([]);
+	const [isFetchingShippingStates, setIsFetchingShippingStates] = useState(false);
+	const [theBillingStates, setTheBillingStates] = useState([]);
+	const [isFetchingBillingStates, setIsFetchingBillingStates] = useState(false);
 
 	// Get Cart Data.
 	const { loading, error, data, refetch } = useQuery( GET_CART, {
@@ -143,7 +145,6 @@ const CheckoutForm = ({countriesData}) => {
 			setInput( newState );
 		} else {
 			if ( isShipping ) {
-				console.log( 'isShipping', isShipping );
 				await handleShippingChange( target )
 			} else {
 				await handleBillingChange( target )
@@ -154,26 +155,23 @@ const CheckoutForm = ({countriesData}) => {
 	const handleShippingChange = async (target) => {
 		const newState = { ...input, shipping: { ...input?.shipping, [target.name]: target.value } };
 		setInput( newState );
-		await setStatesForCountry( target, setTheShippingStates );
+		await setStatesForCountry( target, setTheShippingStates, setIsFetchingShippingStates );
 	}
 
 	const handleBillingChange = async (target) => {
 		const newState = { ...input, billing: { ...input?.billing, [target.name]: target.value } };
 		setInput( newState );
-		await setStatesForCountry( target, setTheBillingStates );
+		await setStatesForCountry( target, setTheBillingStates, setIsFetchingBillingStates );
 	}
 
-	useEffect( () => {
+	useEffect( async () => {
 
 		if ( null !== orderData ) {
 			// Call the checkout mutation when the value for orderData changes/updates.
-			checkout();
+			await checkout();
 		}
 
 	}, [ orderData ] );
-
-	// console.log( 'theBillingStates', theBillingStates );
-	// console.log( 'theShippingStates', theShippingStates );
 
 	return (
 		<>
@@ -184,12 +182,26 @@ const CheckoutForm = ({countriesData}) => {
 							{/*Shipping Details*/}
 							<div className="billing-details">
 								<h2 className="text-xl font-medium mb-4">Shipping Details</h2>
-								<Address states={theShippingStates} countries={shippingCountries} input={ input?.shipping } handleOnChange={ (event) => handleOnChange(event, true) } isShipping/>
+								<Address
+									states={theShippingStates}
+									countries={shippingCountries}
+									input={ input?.shipping }
+									handleOnChange={ (event) => handleOnChange(event, true) }
+									isFetchingStates={isFetchingShippingStates}
+									isShipping
+								/>
 							</div>
 							{/*Billing Details*/}
 							<div className="billing-details">
 								<h2 className="text-xl font-medium mb-4">Billing Details</h2>
-								<Address states={theBillingStates} countries={billingCountries} input={ input?.billing } handleOnChange={ (event) => handleOnChange(event, false) } isShipping={false}/>
+								<Address
+									states={theBillingStates}
+									countries={billingCountries}
+									input={ input?.billing }
+									handleOnChange={ (event) => handleOnChange(event, false) }
+									isFetchingStates={isFetchingBillingStates}
+									isShipping={false}
+								/>
 							</div>
 						</div>
 						{/* Order & Payments*/}

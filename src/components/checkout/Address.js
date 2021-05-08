@@ -3,7 +3,7 @@ import CountrySelection from "./CountrySelection";
 import StateSelection from "./StatesSelection";
 import InputField from "./form-elements/InputField";
 
-const Address = ({input, countries, states, handleOnChange, isShipping}) => {
+const Address = ({input, countries, states, handleOnChange, isFetchingStates, isShipping}) => {
 
     const {errors} = input || {};
 
@@ -41,7 +41,12 @@ const Address = ({input, countries, states, handleOnChange, isShipping}) => {
                 containerClassNames="mb-4"
             />
             {/* Country */}
-            <CountrySelection input={input} handleOnChange={handleOnChange} countries={countries} isShipping={isShipping}/>
+            <CountrySelection
+                input={input}
+                handleOnChange={handleOnChange}
+                countries={countries}
+                isShipping={isShipping}
+            />
             <InputField
                 name="address1"
                 inputValue={input?.address1}
@@ -74,7 +79,13 @@ const Address = ({input, countries, states, handleOnChange, isShipping}) => {
                 containerClassNames="mb-4"
             />
             {/* State */}
-            <StateSelection input={input} handleOnChange={handleOnChange} states={states} isShipping={isShipping}/>
+            <StateSelection
+                input={input}
+                handleOnChange={handleOnChange}
+                states={states}
+                isShipping={isShipping}
+                isFetchingStates={isFetchingStates}
+            />
             <div className="flex flex-wrap overflow-hidden sm:-mx-3">
                 <InputField
                     name="postcode"
@@ -130,6 +141,7 @@ Address.propTypes = {
     input: PropTypes.object,
     countries: PropTypes.array,
     handleOnChange: PropTypes.func,
+    isFetchingStates: PropTypes.bool,
     isShipping: PropTypes.bool
 }
 
@@ -137,6 +149,7 @@ Address.defaultProps = {
     input: {},
     countries: [],
     handleOnChange: () => null,
+    isFetchingStates: false,
     isShipping: false
 }
 
