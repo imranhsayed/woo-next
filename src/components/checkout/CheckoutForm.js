@@ -112,8 +112,12 @@ const CheckoutForm = ({countriesData}) => {
     const handleFormSubmit = (event) => {
         event.preventDefault();
 
-        // Validate Billing and Shipping Details
-        const billingValidationResult = validateAndSanitizeCheckoutForm(input?.billing);
+        /**
+         * Validate Billing and Shipping Details
+         *
+         * Note: If billing is different than shipping address, only then validate billing.
+         */
+        const billingValidationResult = input?.billingDifferentThanShipping ? validateAndSanitizeCheckoutForm(input?.billing) : {errors: null, isValid: true};
         const shippingValidationResult = validateAndSanitizeCheckoutForm(input?.shipping);
 
         if (!shippingValidationResult.isValid || !billingValidationResult.isValid) {
