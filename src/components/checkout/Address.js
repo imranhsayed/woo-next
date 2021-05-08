@@ -40,7 +40,7 @@ const Address = ({input, countries, states, handleOnChange, isFetchingStates, is
                 isShipping={isShipping}
                 containerClassNames="mb-4"
             />
-            {/* Country */}
+            {/* Country Selection*/}
             <CountrySelection
                 input={input}
                 handleOnChange={handleOnChange}

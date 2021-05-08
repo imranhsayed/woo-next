@@ -15,7 +15,7 @@ const StateSelection = ({handleOnChange, input, states, isFetchingStates, isShip
         // Show loading component.
         return (
             <div className="mb-3">
-                <label className="leading-7 text-sm text-gray-600">
+                <label className="leading-7 text-sm text-gray-700">
                     State/County
                     <Abbr required/>
                 </label>
@@ -24,7 +24,7 @@ const StateSelection = ({handleOnChange, input, states, isFetchingStates, isShip
                         disabled
                         value=""
                         name="state"
-                        className="opacity-50 bg-gray-100 bg-opacity-50 border border-gray-400 text-gray-500 appearance-none inline-block py-3 pl-3 pr-8 rounded leading-tight w-full"
+                        className="opacity-50 bg-gray-100 bg-opacity-50 border border-gray-500 text-gray-500 appearance-none inline-block py-3 pl-3 pr-8 rounded leading-tight w-full"
                     >
                         <option value="">Loading...</option>
                     </select>

@@ -8,7 +8,7 @@ const InputField = ({ handleOnChange, inputValue, name, type, label, errors, pla
 
     return (
         <div className={containerClassNames}>
-            <label className="leading-7 text-sm text-gray-600" htmlFor={inputId}>
+            <label className="leading-7 text-sm text-gray-700" htmlFor={inputId}>
                 { label || '' }
                 <Abbr required={required}/>
             </label>
@@ -18,7 +18,7 @@ const InputField = ({ handleOnChange, inputValue, name, type, label, errors, pla
                 placeholder={placeholder}
                 type={type}
                 name={name}
-                className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-400 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-500 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-800 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 id={inputId}
             />
             <Error errors={ errors } fieldName={ name }/>

@@ -34,7 +34,7 @@ const defaultCustomerInfo = {
 	address1: '',
 	address2: '',
 	city: '',
-	country: 'IN',
+	country: '',
 	state: '',
 	postcode: '',
 	email: '',

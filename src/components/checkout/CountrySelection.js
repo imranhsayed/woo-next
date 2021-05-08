@@ -11,7 +11,7 @@ const CountrySelection = ({input, handleOnChange, countries, isShipping}) => {
 
     return (
         <div className="mb-3">
-            <label className="leading-7 text-sm text-gray-600" htmlFor={inputId}>
+            <label className="leading-7 text-sm text-gray-700" htmlFor={inputId}>
                 Country
                 <Abbr required/>
             </label>
@@ -20,7 +20,7 @@ const CountrySelection = ({input, handleOnChange, countries, isShipping}) => {
                     onChange={handleOnChange}
                     value={country}
                     name="country"
-                    className="bg-gray-100 bg-opacity-50 border border-gray-400 text-gray-500 appearance-none inline-block py-3 pl-3 pr-8 rounded leading-tight w-full"
+                    className="bg-gray-100 bg-opacity-50 border border-gray-500 text-gray-500 appearance-none inline-block py-3 pl-3 pr-8 rounded leading-tight w-full"
                     id={inputId}
                 >
                     <option value="">Select a country...</option>
