@@ -45,8 +45,6 @@ const defaultCustomerInfo = {
 const CheckoutForm = ({countriesData}) => {
 
 	const {billingCountries, shippingCountries} = countriesData || {}
-	const parsedBillingCountries = billingCountries ? JSON.parse(billingCountries) : {}
-	const parsedShippingCountries = shippingCountries ? JSON.parse(shippingCountries) : {}
 
 	const initialState = {
 		billing: {
@@ -195,12 +193,12 @@ const CheckoutForm = ({countriesData}) => {
 							{/*Shipping Details*/}
 							<div className="billing-details">
 								<h2 className="text-xl font-medium mb-4">Shipping Details</h2>
-								<Address states={billingStates} countries={parsedShippingCountries} input={ input?.shipping } handleOnChange={ (event) => handleOnChange(event, true) }/>
+								<Address states={billingStates} countries={billingCountries} input={ input?.shipping } handleOnChange={ (event) => handleOnChange(event, true) }/>
 							</div>
 							{/*Billing Details*/}
 							<div className="billing-details">
 								<h2 className="text-xl font-medium mb-4">Billing Details</h2>
-								<Address states={billingStates} countries={parsedBillingCountries} input={ input?.billing } handleOnChange={ (event) => handleOnChange(event, false) }/>
+								<Address states={billingStates} countries={shippingCountries} input={ input?.billing } handleOnChange={ (event) => handleOnChange(event, false) }/>
 							</div>
 						</div>
 						{/* Order & Payments*/}

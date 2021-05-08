@@ -213,30 +213,31 @@ export const getFormattedCart = ( data ) => {
 	let totalProductsCount = 0;
 
 	for( let i = 0; i < givenProducts.length; i++  ) {
-		const givenProduct = givenProducts[ i ].product;
+		const givenProduct = givenProducts?.[ i ]?.product?.node;
 		const product = {};
 		const total = getFloatVal( givenProducts[ i ].total );
 
-		product.productId = givenProduct.productId;
-		product.cartKey = givenProducts[ i ].key;
-		product.name = givenProduct.name;
-		product.qty = givenProducts[ i ].quantity;
-		product.price = total / product.qty;
-		product.totalPrice = givenProducts[ i ].total;
+		product.productId = givenProduct?.productId ?? '';
+		product.cartKey = givenProducts?.[ i ]?.key ?? '';
+		product.name = givenProduct?.name ?? '';
+		product.qty = givenProducts?.[ i ]?.quantity;
+		product.price = total / product?.qty;
+		product.totalPrice = givenProducts?.[ i ]?.total ?? '';
 		product.image = {
-			sourceUrl: givenProduct.image.sourceUrl,
-			srcSet: givenProduct.image.srcSet,
-			title: givenProduct.image.title
+			sourceUrl: givenProduct?.image?.sourceUrl ?? '',
+			srcSet: givenProduct?.image?.srcSet ?? '',
+			title: givenProduct?.image?.title ?? '',
+			altText: givenProduct?.image?.altText ?? ''
 		};
 
-		totalProductsCount += givenProducts[ i ].quantity;
+		totalProductsCount += givenProducts?.[ i ]?.quantity;
 
 		// Push each item into the products array.
 		formattedCart.products.push( product );
 	}
 
 	formattedCart.totalProductsCount = totalProductsCount;
-	formattedCart.totalProductsPrice = data.cart.total;
+	formattedCart.totalProductsPrice = data?.cart?.total ?? '';
 
 	return formattedCart;
 
@@ -275,7 +276,7 @@ export const createCheckoutData = ( order ) => {
 		shipToDifferentAddress: false,
 		paymentMethod: order.paymentMethod,
 		isPaid: false,
-		transactionId: "hjkhjkhsdsdiui"
+		transactionId: "tbc"
 	};
 
 	if (order.createAccount) {

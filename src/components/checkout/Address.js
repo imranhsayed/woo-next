@@ -117,13 +117,13 @@ const Address = ({ input, countries, states, handleOnChange } ) => {
 
 Address.propTypes = {
 	input: PropTypes.object,
-	countries: PropTypes.object,
+	countries: PropTypes.array,
 	handleOnChange: PropTypes.func
 }
 
 Address.defaultProps = {
 	input: {},
-	countries: {},
+	countries: [],
 	handleOnChange: () => {}
 }
 

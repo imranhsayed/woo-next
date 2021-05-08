@@ -62,7 +62,7 @@ const AddToCart = ( props ) => {
 	const { loading, error, data, refetch } = useQuery( GET_CART, {
 		notifyOnNetworkStatusChange: true,
 		onCompleted: () => {
-			// console.warn( 'completed GET_CART' );
+			console.warn( 'completed GET_CART' );
 
 			// Update cart in the localStorage.
 			const updatedCart = getFormattedCart( data );
@@ -79,12 +79,7 @@ const AddToCart = ( props ) => {
 			input: productQryInput,
 		},
 		onCompleted: () => {
-			// console.warn( 'completed ADD_TO_CART' );
-
-			// If error.
-			if ( addToCartError ) {
-				setRequestError( addToCartError.graphQLErrors[ 0 ].message );
-			}
+			console.warn( 'completed ADD_TO_CART' );
 
 			// On Success:
 			// 1. Make the GET_CART query to update the cart with new values in React context.
@@ -95,7 +90,7 @@ const AddToCart = ( props ) => {
 		},
 		onError: ( error ) => {
 			if ( error ) {
-				setRequestError( error.graphQLErrors[ 0 ].message );
+				setRequestError( error?.graphQLErrors?.[ 0 ]?.message ?? '');
 			}
 		}
 	} );

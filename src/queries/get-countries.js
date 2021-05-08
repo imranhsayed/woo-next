@@ -3,10 +3,16 @@ import { gql } from "@apollo/client";
 /**
  * GraphQL countries query.
  */
-const GET_COUNTRIES = gql`query {
+const GET_COUNTRIES = gql`query GET_COUNTRIES{
   wooCountries {
-    billingCountries
-    shippingCountries
+    billingCountries {
+      countryCode
+      countryName
+    }
+    shippingCountries {
+      countryCode
+      countryName
+    }
   }
 }`;
 

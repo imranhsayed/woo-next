@@ -1,10 +1,8 @@
 import Link from 'next/link';
 import AddToCartButton from '../components/cart/AddToCartButton';
-import clientConfig from '../../client-config';
-import { isEmpty } from 'lodash';
 import Price from "./single-product/price";
 import Image from "../image";
-import {DEFAULT_CATEGORY_IMG_URL, DEFAULT_PRODUCT_HOME_IMG_URL} from "../constants/urls";
+import {DEFAULT_PRODUCT_HOME_IMG_URL} from "../constants/urls";
 
 const Product = ( props ) => {
 	const { product } = props;
