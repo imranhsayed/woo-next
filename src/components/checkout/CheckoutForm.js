@@ -10,7 +10,13 @@ import OrderSuccess from "./OrderSuccess";
 import GET_CART from "../../queries/get-cart";
 import CHECKOUT_MUTATION from "../../mutations/checkout";
 import Address from "./Address";
-import {setStatesForCountry} from "../../utils/checkout";
+import {
+	handleBillingDifferentThanShipping,
+	handleBillingSameAsShipping,
+	handleCreateAccount,
+	setStatesForCountry
+} from "../../utils/checkout";
+import CheckboxField from "./form-elements/CheckboxField";
 
 // Use this for testing purposes, so you dont have to fill the checkout form over an over again.
 // const defaultCustomerInfo = {
@@ -56,6 +62,7 @@ const CheckoutForm = ({countriesData}) => {
 		},
 		createAccount: false,
 		orderNotes: '',
+		billingDifferentThanShipping: false,
 		paymentMethod: '',
 	};
 
@@ -69,11 +76,9 @@ const CheckoutForm = ({countriesData}) => {
 	const [isFetchingBillingStates, setIsFetchingBillingStates] = useState(false);
 
 	// Get Cart Data.
-	const { loading, error, data, refetch } = useQuery( GET_CART, {
+	const { data, refetch } = useQuery( GET_CART, {
 		notifyOnNetworkStatusChange: true,
 		onCompleted: () => {
-			// console.warn( 'completed GET_CART' );
-
 			// Update cart in the localStorage.
 			const updatedCart = getFormattedCart( data );
 			localStorage.setItem( 'woo-next-cart', JSON.stringify( updatedCart ) );
@@ -132,23 +137,28 @@ const CheckoutForm = ({countriesData}) => {
 	 * Handle onchange input.
 	 *
 	 * @param {Object} event Event Object.
-	 * @param {bool} isShipping is Shipping If this is false it means it is billing.
+	 * @param {bool} isShipping If this is false it means it is billing.
+	 * @param {bool} isBillingOrShipping If this is false means its standard input and not billing or shipping.
 	 *
 	 * @return {void}
 	 */
-	const handleOnChange = async ( event, isShipping ) => {
+	const handleOnChange = async ( event, isShipping = false, isBillingOrShipping = false ) => {
 
 		const {target}= event || {};
 
 		if ( 'createAccount' === target.name ) {
-			const newState = { ...input, [target.name]: ! input.createAccount };
-			setInput( newState );
-		} else {
+			handleCreateAccount( input, setInput, target )
+		} else if('billingDifferentThanShipping' === target.name) {
+			handleBillingDifferentThanShipping( input, setInput, target );
+		} else if (isBillingOrShipping) {
 			if ( isShipping ) {
 				await handleShippingChange( target )
 			} else {
 				await handleBillingChange( target )
 			}
+		} else {
+			const newState = { ...input, [target.name]: target.value };
+			setInput( newState );
 		}
 	};
 
@@ -173,6 +183,8 @@ const CheckoutForm = ({countriesData}) => {
 
 	}, [ orderData ] );
 
+	console.log( 'input', input );
+
 	return (
 		<>
 			{ cart ? (
@@ -189,20 +201,35 @@ const CheckoutForm = ({countriesData}) => {
 									handleOnChange={ (event) => handleOnChange(event, true) }
 									isFetchingStates={isFetchingShippingStates}
 									isShipping
+									isBillingOrShipping
 								/>
+							</div>
+							<div>
+							<CheckboxField
+								name="billingDifferentThanShipping"
+								type="checkbox"
+								checked={input?.billingDifferentThanShipping}
+								handleOnChange={handleOnChange}
+								label="Billing different than shipping"
+								containerClassNames="mb-4 pt-4"
+							/>
 							</div>
 							{/*Billing Details*/}
-							<div className="billing-details">
-								<h2 className="text-xl font-medium mb-4">Billing Details</h2>
-								<Address
-									states={theBillingStates}
-									countries={billingCountries}
-									input={ input?.billing }
-									handleOnChange={ (event) => handleOnChange(event, false) }
-									isFetchingStates={isFetchingBillingStates}
-									isShipping={false}
-								/>
-							</div>
+							{ input?.billingDifferentThanShipping ? (
+								<div className="billing-details">
+									<h2 className="text-xl font-medium mb-4">Billing Details</h2>
+									<Address
+										states={theBillingStates}
+										countries={billingCountries}
+										input={ input?.billing }
+										handleOnChange={ (event) => handleOnChange(event, false) }
+										isFetchingStates={isFetchingBillingStates}
+										isShipping={false}
+										isBillingOrShipping
+									/>
+								</div>
+							) : null }
+
 						</div>
 						{/* Order & Payments*/}
 						<div className="your-orders">

@@ -35,3 +35,13 @@ export const setStatesForCountry = async ( target, setTheStates, setIsFetchingSt
         setIsFetchingStates(false);
     }
 }
+
+export const handleBillingDifferentThanShipping = ( input, setInput, target ) => {
+    const newState = { ...input, [target.name]: ! input.billingDifferentThanShipping };
+    setInput( newState );
+}
+
+export const handleCreateAccount = ( input, setInput, target ) => {
+    const newState = { ...input, [target.name]: ! input.createAccount };
+    setInput( newState );
+}
