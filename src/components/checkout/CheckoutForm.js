@@ -115,10 +115,13 @@ const CheckoutForm = ({countriesData}) => {
         /**
          * Validate Billing and Shipping Details
          *
-         * Note: If billing is different than shipping address, only then validate billing.
+         * Note:
+         * 1. If billing is different than shipping address, only then validate billing.
+         * 2. We are passing theBillingStates?.length and theShippingStates?.length, so that
+         * the respective states should only be mandatory, if a country has states.
          */
-        const billingValidationResult = input?.billingDifferentThanShipping ? validateAndSanitizeCheckoutForm(input?.billing) : {errors: null, isValid: true};
-        const shippingValidationResult = validateAndSanitizeCheckoutForm(input?.shipping);
+        const billingValidationResult = input?.billingDifferentThanShipping ? validateAndSanitizeCheckoutForm(input?.billing, theBillingStates?.length) : {errors: null, isValid: true};
+        const shippingValidationResult = validateAndSanitizeCheckoutForm(input?.shipping, theShippingStates?.length);
 
         if (!shippingValidationResult.isValid || !billingValidationResult.isValid) {
             setInput({

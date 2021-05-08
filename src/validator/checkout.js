@@ -2,7 +2,7 @@ import validator from 'validator';
 import isEmpty from './isEmpty';
 
 
-const validateAndSanitizeCheckoutForm = ( data ) => {
+const validateAndSanitizeCheckoutForm = ( data, hasStates = true ) => {
 
 	let errors = {};
 	let sanitizedData = {};
@@ -62,7 +62,6 @@ const validateAndSanitizeCheckoutForm = ( data ) => {
 			errors[ fieldName ] = `${errorContent} is required`;
 		}
 
-
 		// If no errors
 		if ( ! errors[ fieldName ] ) {
 			sanitizedData[ fieldName ] = validator.trim( data[ fieldName ] );
@@ -79,7 +78,7 @@ const validateAndSanitizeCheckoutForm = ( data ) => {
 	addErrorAndSanitizedData( 'address1', 'Street address line 1', 12, 100,'string',true );
 	addErrorAndSanitizedData( 'address2', '', 0, 254, 'string', false );
 	addErrorAndSanitizedData( 'city', 'City field', 3, 25, 'string', true );
-	addErrorAndSanitizedData( 'state', 'State/County', 0, 254, 'string', true );
+	addErrorAndSanitizedData( 'state', 'State/County', 0, 254, 'string', hasStates );
 	addErrorAndSanitizedData( 'postcode', 'Post code', 2, 10, 'postcode', true );
 	addErrorAndSanitizedData( 'phone', 'Phone number', 10, 15, 'phone', true );
 	addErrorAndSanitizedData( 'email', 'Email', 11, 254, 'email', true );
