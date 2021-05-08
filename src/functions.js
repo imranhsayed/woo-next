@@ -276,10 +276,9 @@ export const createCheckoutData = ( order ) => {
 			phone: billingData?.phone,
 			company: billingData?.company,
 		},
-		shipToDifferentAddress: false,
+		shipToDifferentAddress: order.billingDifferentThanShipping,
 		paymentMethod: order.paymentMethod,
 		isPaid: false,
-		transactionId: "tbc"
 	};
 
 	if (order.createAccount) {

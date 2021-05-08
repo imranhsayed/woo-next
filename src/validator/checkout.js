@@ -1,6 +1,5 @@
 import validator from 'validator';
 import isEmpty from './isEmpty';
-import config from '../../client-config';
 
 
 const validateAndSanitizeCheckoutForm = ( data ) => {
@@ -42,7 +41,6 @@ const validateAndSanitizeCheckoutForm = ( data ) => {
 	 */
 	const addErrorAndSanitizedData = ( fieldName, errorContent, min, max, type = '', required ) => {
 
-		const postCodeLocale = config.postCodeLocale ? config.postCodeLocale : '';
 		/**
 		 * Please note that this isEmpty() belongs to validator and not our custom function defined above.
 		 *
@@ -57,10 +55,6 @@ const validateAndSanitizeCheckoutForm = ( data ) => {
 		}
 
 		if ( 'phone' === type && ! validator.isMobilePhone( data[ fieldName ] ) ) {
-			errors[ fieldName ] = `${errorContent} is not valid`;
-		}
-
-		if ( 'postcode' === type && postCodeLocale && ! validator.isPostalCode( data[ fieldName ], postCodeLocale ) ) {
 			errors[ fieldName ] = `${errorContent} is not valid`;
 		}
 
@@ -86,7 +80,7 @@ const validateAndSanitizeCheckoutForm = ( data ) => {
 	addErrorAndSanitizedData( 'address2', '', 0, 254, 'string', false );
 	addErrorAndSanitizedData( 'city', 'City field', 3, 25, 'string', true );
 	addErrorAndSanitizedData( 'state', 'State/County', 0, 254, 'string', true );
-	addErrorAndSanitizedData( 'postcode', 'Post code', 2, 9, 'postcode', true );
+	addErrorAndSanitizedData( 'postcode', 'Post code', 2, 10, 'postcode', true );
 	addErrorAndSanitizedData( 'phone', 'Phone number', 10, 15, 'phone', true );
 	addErrorAndSanitizedData( 'email', 'Email', 11, 254, 'email', true );
 

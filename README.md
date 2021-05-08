@@ -75,17 +75,8 @@ These Child categories data will automatically be used to create hero carousel o
 
 * _Note_ Below is for GraphQL implementation , for REST API check [feature/rest-api](https://github.com/imranhsayed/woo-next/tree/feature/rest-api) branch
 
-1. (Required) Create a `.env` file taking reference from `.env-example` and  update your WordPressSite URL.
-2. (optional) You can update your productImagePlaceholder, singleImagePlaceholder in `client-config.js`
-   
-   ```ruby
-   const clientConfig = {
-       productImagePlaceholder: 'https://via.placeholder.com/800', // e.g https://via.placeholder.com/434 - Placeholder image URL for index page
-       singleImagePlaceholder: 'https://via.placeholder.com/200', // e.g https://via.placeholder.com/200 - Placeholder image URL for individual product page
-   };
-   
-   export default clientConfig;
-   ```
+1. (Required) Create a `.env` file taking reference from `.env-example` and update your WordPressSite URL.
+- `NEXT_PUBLIC_WORDPRESS_URL=https://example.com`
 
 ## Branch details
 

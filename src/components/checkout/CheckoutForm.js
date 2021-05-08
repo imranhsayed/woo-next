@@ -75,7 +75,7 @@ const CheckoutForm = ({countriesData}) => {
     const [isFetchingBillingStates, setIsFetchingBillingStates] = useState(false);
 
     // Get Cart Data.
-    const {data, refetch} = useQuery(GET_CART, {
+    const {data} = useQuery(GET_CART, {
         notifyOnNetworkStatusChange: true,
         onCompleted: () => {
             // Update cart in the localStorage.
@@ -128,6 +128,10 @@ const CheckoutForm = ({countriesData}) => {
 
         const checkOutData = createCheckoutData(input);
         setRequestError(null);
+        /**
+         *  When order data is set, checkout mutation will automatically be called,
+         *  because 'orderData' is added in useEffect as a dependency.
+         */
         setOrderData(checkOutData);
     };
 
