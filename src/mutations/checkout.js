@@ -7,12 +7,13 @@ mutation CHECKOUT_MUTATION( $input: CheckoutInput! ) {
     order {
       id
       orderKey
+      orderNumber
+      status
       refunds {
         nodes {
           amount
         }
       }
-      status
     }
     result
     redirect

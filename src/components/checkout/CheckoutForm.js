@@ -258,7 +258,7 @@ const CheckoutForm = ({countriesData}) => {
                 </form>
             ) : ''}
 
-            {/*	Show message if Order Sucess*/}
+            {/*	Show message if Order Success*/}
             <OrderSuccess response={checkoutResponse}/>
         </>
     );
