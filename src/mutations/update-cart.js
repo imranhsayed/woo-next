@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 
 /**
  * Update Cart
@@ -7,13 +7,14 @@ import gql from "graphql-tag";
  * When the cart item needs to be deleted, we should pass quantity as 0 in the input along with other fields.
  */
 const UPDATE_CART = gql`
-  mutation ($input: UpdateItemQuantitiesInput!) {
-    updateItemQuantities(input: $input) {
-		items {
-        key
-        product {
+mutation UPDATE_CART($input: UpdateItemQuantitiesInput!) {
+  updateItemQuantities(input: $input) {
+    items {
+      key
+      product {
+        node {
           id
-          productId
+          productId: databaseId
           name
           description
           type
@@ -24,7 +25,7 @@ const UPDATE_CART = gql`
           image {
             id
             sourceUrl
-            altText      
+            altText
           }
           galleryImages {
             nodes {
@@ -34,9 +35,11 @@ const UPDATE_CART = gql`
             }
           }
         }
-        variation {
+      }
+      variation {
+        node {
           id
-          variationId
+          variationId: databaseId
           name
           description
           type
@@ -47,46 +50,53 @@ const UPDATE_CART = gql`
           image {
             id
             sourceUrl
-            altText      
+            altText
           }
-              attributes {
-            nodes {
-              id
+        }
+        attributes {
+          id
           attributeId
-              name
-              value
-            }
-          }
-        }
-        quantity
-        total
-        subtotal
-        subtotalTax
-      }
-      removed {
-        key
-        product {
-          id
-              productId
-        }
-        variation {
-          id
-          variationId
+          name
+          value
         }
       }
-      updated {
-        key
-        product {
+      quantity
+      total
+      subtotal
+      subtotalTax
+    }
+    removed {
+      key
+      product {
+        node {
           id
-      productId
+          productId: databaseId
         }
-        variation {
+      }
+      variation {
+        node {
           id
-          variationId
+          variationId: databaseId
+        }
+      }
+    }
+    updated {
+      key
+      product {
+        node {
+          id
+          productId: databaseId
+        }
+      }
+      variation {
+        node {
+          id
+          variationId: databaseId
         }
       }
     }
   }
+}
 `;
 
 export default UPDATE_CART;

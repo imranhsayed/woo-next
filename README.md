@@ -33,7 +33,7 @@ branch is upto date with those changes. You can also refer to the PR notes for c
 
 # Features:
 
-1. WooCommerce Store in React( contains: Products Page, Single Product Page, AddToCart, CartPage and Checkout Page ).
+1. WooCommerce Store in React( contains: Products Page, Single Product Page, AddToCart, CartPage and Checkout Page with country selection ).
 2. SSR
 3. SEO friendly
 4. Automatic Code Splitting
@@ -59,38 +59,30 @@ These instructions will get you a copy of the project up and running on your loc
 
 1. Download and activate the following plugins , in your WordPress plugin directory:
 
-* [wp-graphql](https://github.com/imranhsayed/woo-next/tree/master/wordpress/plugins) Exposes graphql for WordPress ( **Tested with v-0.8.0** of this plugin )
-* [wp-graphql-woocommerce](https://github.com/imranhsayed/woo-next/tree/master/wordpress/plugins) Adds Woocommerce functionality to a WPGraphQL schema ( **Tested with v-0.5.0** of this plugin )
+* [wp-graphql](https://github.com/imranhsayed/woo-next/tree/master/wordpress/plugins) Exposes graphql for WordPress ( **Tested with v-1.3.8** of this plugin )
+* [wp-graphql-woocommerce](https://github.com/imranhsayed/woo-next/tree/master/wordpress/plugins) Adds Woocommerce functionality to a WPGraphQL schema ( **Tested with v-0.8.1** of this plugin )
+* [headless-cms](https://github.com/imranhsayed/woo-next/tree/master/wordpress/plugins) Extends WPGraphQL Schema ( **Tested with v-1.8.0** of this plugin )
 
 * Make sure Woocommerce plugin is also installed in your WordPress site. You can also import default wooCommerce products that come with wooCommerce Plugin for development ( if you don't have any products in your WordPress install ) `WP Dashboard > Tools > Import > WooCommerce products(CSV)`: The WooCommerce default products csv file is available at `wp-content/plugins/woocommerce/sample-data/sample_products.csv`
 
 ## Hero Carousel.
 To use Hero carousel, create a category called 'offers' from WordPress Dashboard > Products > Categories.
 Now create and assign as many child categories to this parent 'offers' category with name, description and image.
-These Child categories data will automatically be used to create hero carousel on the frontend. 
+These Child categories data will automatically be used to create hero carousel on the frontend.
 
 
 ## Configuration(for GraphQL implementation) :wrench:
 
 * _Note_ Below is for GraphQL implementation , for REST API check [feature/rest-api](https://github.com/imranhsayed/woo-next/tree/feature/rest-api) branch
 
-1. (Required) Create a `.env` file taking reference from `.env-example` and  update your WordPressSite URL.
-2. (optional) You can update your productImagePlaceholder, singleImagePlaceholder in `client-config.js`
-   
-   ```ruby
-   const clientConfig = {
-       productImagePlaceholder: 'https://via.placeholder.com/800', // e.g https://via.placeholder.com/434 - Placeholder image URL for index page
-       singleImagePlaceholder: 'https://via.placeholder.com/200', // e.g https://via.placeholder.com/200 - Placeholder image URL for individual product page
-   };
-   
-   export default clientConfig;
-   ```
+1. (Required) Create a `.env` file taking reference from `.env-example` and update your WordPressSite URL.
+- `NEXT_PUBLIC_WORDPRESS_URL=https://example.com`
 
 ## Branch details
 
 1. [feature/rest-api](https://github.com/imranhsayed/woo-next/tree/feature/rest-api) Contains REST API Implementation.
 
-2. The `master` branch has the GraphQL implementation.  
+2. The `master` branch has the GraphQL implementation.
 
 ## Common Commands :computer:
 
@@ -98,15 +90,13 @@ These Child categories data will automatically be used to create hero carousel o
 
 ## Code Contributors ✰
 
-Thanks to all the people who contributed to the code of this project 🤝 
+Thanks to all the people who contributed to the code of this project 🤝
 
 <div>
     <img src="https://github.com/imranhsayed.png?size=30" alt="Imran Sayed">
     <img src="https://github.com/w3bdesign.png?size=30" alt="Daniel F">
     <img src="https://github.com/delunix.png?size=30" alt="Fandi Rahmawan">
     <img src="https://github.com/yudyananda.png?size=30" alt="yudyananda">
-    <img src="https://github.com/mahvash-fatima.png?size=30" alt="mahvash-fatima">
-    <img src="https://github.com/muhaimincs.png?size=30" alt="muhaimincs">
 </div>
 
 
@@ -116,7 +106,7 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 
 ## Versioning :bookmark_tabs:
 
-I use [Git](https://github.com/) for versioning. 
+I use [Git](https://github.com/) for versioning.
 
 ## Author :bust_in_silhouette:
 

@@ -213,70 +213,80 @@ export const getFormattedCart = ( data ) => {
 	let totalProductsCount = 0;
 
 	for( let i = 0; i < givenProducts.length; i++  ) {
-		const givenProduct = givenProducts[ i ].product;
+		const givenProduct = givenProducts?.[ i ]?.product?.node;
 		const product = {};
 		const total = getFloatVal( givenProducts[ i ].total );
 
-		product.productId = givenProduct.productId;
-		product.cartKey = givenProducts[ i ].key;
-		product.name = givenProduct.name;
-		product.qty = givenProducts[ i ].quantity;
-		product.price = total / product.qty;
-		product.totalPrice = givenProducts[ i ].total;
+		product.productId = givenProduct?.productId ?? '';
+		product.cartKey = givenProducts?.[ i ]?.key ?? '';
+		product.name = givenProduct?.name ?? '';
+		product.qty = givenProducts?.[ i ]?.quantity;
+		product.price = total / product?.qty;
+		product.totalPrice = givenProducts?.[ i ]?.total ?? '';
 		product.image = {
-			sourceUrl: givenProduct.image.sourceUrl,
-			srcSet: givenProduct.image.srcSet,
-			title: givenProduct.image.title
+			sourceUrl: givenProduct?.image?.sourceUrl ?? '',
+			srcSet: givenProduct?.image?.srcSet ?? '',
+			title: givenProduct?.image?.title ?? '',
+			altText: givenProduct?.image?.altText ?? ''
 		};
 
-		totalProductsCount += givenProducts[ i ].quantity;
+		totalProductsCount += givenProducts?.[ i ]?.quantity;
 
 		// Push each item into the products array.
 		formattedCart.products.push( product );
 	}
 
 	formattedCart.totalProductsCount = totalProductsCount;
-	formattedCart.totalProductsPrice = data.cart.total;
+	formattedCart.totalProductsPrice = data?.cart?.total ?? '';
 
 	return formattedCart;
 
 };
 
 export const createCheckoutData = ( order ) => {
+
+	// Set the billing Data to shipping, if applicable.
+	const billingData = order.billingDifferentThanShipping ? order.billing : order.shipping;
+
 	const checkoutData = {
 		clientMutationId: v4(),
-
-		billing: {
-			firstName: order.firstName,
-			lastName: order.lastName,
-			address1: order.address1,
-			address2: order.address2,
-			city: order.city,
-			country: order.country,
-			state: order.state,
-			postcode: order.postcode,
-			email: order.email,
-			phone: order.phone,
-			company: order.company,
-		},
 		shipping: {
-			firstName: order.firstName,
-			lastName: order.lastName,
-			address1: order.address1,
-			address2: order.address2,
-			city: order.city,
-			country: order.country,
-			state: order.state,
-			postcode: order.postcode,
-			email: order.email,
-			phone: order.phone,
-			company: order.company,
+			firstName: order?.shipping?.firstName,
+			lastName: order?.shipping?.lastName,
+			address1: order?.shipping?.address1,
+			address2: order?.shipping?.address2,
+			city: order?.shipping?.city,
+			country: order?.shipping?.country,
+			state: order?.shipping?.state,
+			postcode: order?.shipping?.postcode,
+			email: order?.shipping?.email,
+			phone: order?.shipping?.phone,
+			company: order?.shipping?.company,
 		},
-		shipToDifferentAddress: false,
+		billing: {
+			firstName: billingData?.firstName,
+			lastName: billingData?.lastName,
+			address1: billingData?.address1,
+			address2: billingData?.address2,
+			city: billingData?.city,
+			country: billingData?.country,
+			state: billingData?.state,
+			postcode: billingData?.postcode,
+			email: billingData?.email,
+			phone: billingData?.phone,
+			company: billingData?.company,
+		},
+		shipToDifferentAddress: order.billingDifferentThanShipping,
 		paymentMethod: order.paymentMethod,
 		isPaid: false,
-		transactionId: "hjkhjkhsdsdiui"
 	};
+
+	if (order.createAccount) {
+		checkoutData.account = {
+			username: order.username,
+			password: order.password,
+		};
+	}
 
 	return checkoutData;
 };

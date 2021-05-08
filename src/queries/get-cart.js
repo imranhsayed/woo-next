@@ -1,14 +1,15 @@
 import { gql } from "@apollo/client";
 
 const GET_CART = gql`
-  query GET_CART {
-    cart {
-      contents {
-        nodes {
-          key
-          product {
+query GET_CART {
+  cart {
+    contents {
+      nodes {
+        key
+        product {
+          node {
             id
-            productId
+            productId: databaseId
             name
             description
             type
@@ -18,10 +19,10 @@ const GET_CART = gql`
             reviewCount
             image {
               id
-                sourceUrl
-                srcSet
-                altText
-                title       
+              sourceUrl
+              srcSet
+              altText
+              title
             }
             galleryImages {
               nodes {
@@ -29,14 +30,15 @@ const GET_CART = gql`
                 sourceUrl
                 srcSet
                 altText
-                title   
+                title
               }
             }
-
           }
-          variation {
+        }
+        variation {
+          node {
             id
-            variationId
+            variationId: databaseId
             name
             description
             type
@@ -49,53 +51,38 @@ const GET_CART = gql`
               sourceUrl
               srcSet
               altText
-              title      
-            }
-            attributes {
-              nodes {
-                id
-                name
-                value
-              }
+              title
             }
           }
-          quantity
-          total
-          subtotal
-          subtotalTax
-        }
-      }
-      appliedCoupons {
-        nodes {
-          id
-          couponId
-          discountType
-          amount
-          dateExpiry
-          products {
-            nodes {
-              id
-            }
-          }
-          productCategories {
-            nodes {
-              id
-            }
+          attributes {
+            id
+            name
+            value
           }
         }
+        quantity
+        total
+        subtotal
+        subtotalTax
       }
-      subtotal
-      subtotalTax
-      shippingTax
-      shippingTotal
-      total
-      totalTax
-      feeTax
-      feeTotal
-      discountTax
-      discountTotal
     }
+    appliedCoupons {
+      code
+      discountAmount
+      discountTax
+    }
+    subtotal
+    subtotalTax
+    shippingTax
+    shippingTotal
+    total
+    totalTax
+    feeTax
+    feeTotal
+    discountTax
+    discountTotal
   }
+}
 `;
 
 export default GET_CART;

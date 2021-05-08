@@ -1,64 +1,66 @@
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 
 const ADD_TO_CART = gql`
-  mutation ($input: AddToCartInput!) {
-    addToCart(input: $input) {
-      cartItem {
-        key
-        product {
-          id
-          productId
-          name
-          description
-          type
-          onSale
-          slug
-          averageRating
-          reviewCount
-          image {
-            id
-            sourceUrl
-            altText      
-          }
-          galleryImages {
-            nodes {
+    mutation ADD_TO_CART($input: AddToCartInput!) {
+      addToCart(input: $input) {
+        cartItem {
+          key
+          product {
+            node {
               id
-              sourceUrl
-              altText
+              productId: databaseId
+              name
+              description
+              type
+              onSale
+              slug
+              averageRating
+              reviewCount
+              image {
+                id
+                sourceUrl
+                altText
+              }
+              galleryImages {
+                nodes {
+                  id
+                  sourceUrl
+                  altText
+                }
+              }
             }
           }
-        }
-        variation {
-          id
-          variationId
-          name
-          description
-          type
-          onSale
-          price
-          regularPrice
-          salePrice
-          image {
-            id
-            sourceUrl
-            altText      
-          }
-          attributes {
-            nodes {
+          variation {
+            node {
+              id
+              variationId: databaseId
+              name
+              description
+              type
+              onSale
+              price
+              regularPrice
+              salePrice
+              image {
+                id
+                sourceUrl
+                altText
+              }
+            }
+            attributes {
               id
               attributeId
               name
               value
             }
           }
+          quantity
+          total
+          subtotal
+          subtotalTax
         }
-        quantity
-        total
-        subtotal
-        subtotalTax
       }
     }
-  }
 `;
 
 export default ADD_TO_CART;
