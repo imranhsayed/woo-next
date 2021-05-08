@@ -20,7 +20,7 @@ branch is upto date with those changes. You can also refer to the PR notes for c
 
 ## Live Demo:
 
-[Live Demo Site](https://woo-next.imranhsayed.now.sh/)
+[Live Demo Site](https://woo-next-imranhsayed.vercel.app/)
 
 ## Checkout Page Demo
 ![](demos/Checkout-page.gif)
