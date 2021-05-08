@@ -12,7 +12,6 @@ import CHECKOUT_MUTATION from "../../mutations/checkout";
 import Address from "./Address";
 import {
 	handleBillingDifferentThanShipping,
-	handleBillingSameAsShipping,
 	handleCreateAccount,
 	setStatesForCountry
 } from "../../utils/checkout";
@@ -88,18 +87,17 @@ const CheckoutForm = ({countriesData}) => {
 		}
 	} );
 
-	// Checkout or CreateOrder Mutation.
+	// Create New order: Checkout Mutation.
 	const [ checkout, { data: checkoutResponse, loading: checkoutLoading, error: checkoutError } ] = useMutation( CHECKOUT_MUTATION, {
 		variables: {
 			input: orderData
 		},
-		onCompleted: () => {
-			// console.warn( 'completed CHECKOUT_MUTATION' );
-			refetch();
+		onCompleted: async () => {
+			await refetch();
 		},
 		onError: ( error ) => {
 			if ( error ) {
-				setRequestError( error.graphQLErrors[ 0 ].message );
+				setRequestError( error?.graphQLErrors?.[ 0 ]?.message ?? '' );
 			}
 		}
 	} );
@@ -198,7 +196,7 @@ const CheckoutForm = ({countriesData}) => {
 									states={theShippingStates}
 									countries={shippingCountries}
 									input={ input?.shipping }
-									handleOnChange={ (event) => handleOnChange(event, true) }
+									handleOnChange={ (event) => handleOnChange(event, true, true) }
 									isFetchingStates={isFetchingShippingStates}
 									isShipping
 									isBillingOrShipping
@@ -222,7 +220,7 @@ const CheckoutForm = ({countriesData}) => {
 										states={theBillingStates}
 										countries={billingCountries}
 										input={ input?.billing }
-										handleOnChange={ (event) => handleOnChange(event, false) }
+										handleOnChange={ (event) => handleOnChange(event, false, true) }
 										isFetchingStates={isFetchingBillingStates}
 										isShipping={false}
 										isBillingOrShipping
