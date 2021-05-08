@@ -10,6 +10,7 @@ import GET_CART from "../../queries/get-cart";
 import CHECKOUT_MUTATION from "../../mutations/checkout";
 import Address from "./Address";
 import GET_STATES from "../../queries/get-states";
+import {getStates, setStatesForCountry} from "../../utils/checkout";
 
 // Use this for testing purposes, so you dont have to fill the checkout form over an over again.
 // const defaultCustomerInfo = {
@@ -64,8 +65,6 @@ const CheckoutForm = ({countriesData}) => {
 	const [ requestError, setRequestError ] = useState( null );
 	const [theBillingStates, setTheBillingStates] = useState([]);
 	const [theShippingStates, setTheShippingStates] = useState([]);
-
-	const [getStates, { data: billingStates, loading: billingStatesLoading, error: billingStatesError }] = useLazyQuery( GET_STATES );
 
 	// Get Cart Data.
 	const { loading, error, data, refetch } = useQuery( GET_CART, {
@@ -135,7 +134,7 @@ const CheckoutForm = ({countriesData}) => {
 	 *
 	 * @return {void}
 	 */
-	const handleOnChange = ( event, isShipping ) => {
+	const handleOnChange = async ( event, isShipping ) => {
 
 		const {target}= event || {};
 
@@ -144,9 +143,10 @@ const CheckoutForm = ({countriesData}) => {
 			setInput( newState );
 		} else {
 			if ( isShipping ) {
-				handleShippingChange( target )
+				console.log( 'isShipping', isShipping );
+				await handleShippingChange( target )
 			} else {
-				handleBillingChange( target )
+				await handleBillingChange( target )
 			}
 		}
 	};
@@ -154,19 +154,13 @@ const CheckoutForm = ({countriesData}) => {
 	const handleShippingChange = async (target) => {
 		const newState = { ...input, shipping: { ...input?.shipping, [target.name]: target.value } };
 		setInput( newState );
-
-		if ( 'country' === target.name ) {
-			const countryCode = target[target.selectedIndex].getAttribute('data-countrycode')
-			const shippingStates = await getStates({
-				variables: { countryCode: countryCode || '' }
-			});
-			setTheShippingStates( shippingStates?.wooStates?.states ?? [] );
-		}
+		await setStatesForCountry( target, setTheShippingStates );
 	}
 
-	const handleBillingChange = (target) => {
+	const handleBillingChange = async (target) => {
 		const newState = { ...input, billing: { ...input?.billing, [target.name]: target.value } };
 		setInput( newState );
+		await setStatesForCountry( target, setTheBillingStates );
 	}
 
 	useEffect( () => {
@@ -178,7 +172,8 @@ const CheckoutForm = ({countriesData}) => {
 
 	}, [ orderData ] );
 
-	console.log( 'billingStates', billingStates );
+	// console.log( 'theBillingStates', theBillingStates );
+	// console.log( 'theShippingStates', theShippingStates );
 
 	return (
 		<>
@@ -189,12 +184,12 @@ const CheckoutForm = ({countriesData}) => {
 							{/*Shipping Details*/}
 							<div className="billing-details">
 								<h2 className="text-xl font-medium mb-4">Shipping Details</h2>
-								<Address states={theBillingStates} countries={billingCountries} input={ input?.shipping } handleOnChange={ (event) => handleOnChange(event, true) }/>
+								<Address states={theShippingStates} countries={shippingCountries} input={ input?.shipping } handleOnChange={ (event) => handleOnChange(event, true) } isShipping/>
 							</div>
 							{/*Billing Details*/}
 							<div className="billing-details">
 								<h2 className="text-xl font-medium mb-4">Billing Details</h2>
-								<Address states={theShippingStates} countries={shippingCountries} input={ input?.billing } handleOnChange={ (event) => handleOnChange(event, false) }/>
+								<Address states={theBillingStates} countries={billingCountries} input={ input?.billing } handleOnChange={ (event) => handleOnChange(event, false) } isShipping={false}/>
 							</div>
 						</div>
 						{/* Order & Payments*/}

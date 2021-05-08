@@ -3,7 +3,9 @@ import CountrySelection from "./CountrySelection";
 import StateSelection from "./StatesSelection";
 import InputField from "./form-elements/InputField";
 
-const Address = ({input, countries, states, handleOnChange}) => {
+const Address = ({input, countries, states, handleOnChange, isShipping}) => {
+
+    const {errors} = input || {};
 
     return (
         <>
@@ -14,7 +16,8 @@ const Address = ({input, countries, states, handleOnChange}) => {
                     required
                     handleOnChange={handleOnChange}
                     label="First name"
-                    errors={input?.errors}
+                    errors={errors}
+                    isShipping={isShipping}
                     containerClassNames="w-full overflow-hidden sm:my-2 sm:px-2 md:w-1/2"
                 />
                 <InputField
@@ -23,7 +26,8 @@ const Address = ({input, countries, states, handleOnChange}) => {
                     required
                     handleOnChange={handleOnChange}
                     label="Last name"
-                    errors={input?.errors}
+                    errors={errors}
+                    isShipping={isShipping}
                     containerClassNames="w-full overflow-hidden sm:my-2 sm:px-2 md:w-1/2"
                 />
             </div>
@@ -32,11 +36,12 @@ const Address = ({input, countries, states, handleOnChange}) => {
                 inputValue={input?.company}
                 handleOnChange={handleOnChange}
                 label="Company Name (Optional)"
-                errors={input?.errors}
+                errors={errors}
+                isShipping={isShipping}
                 containerClassNames="mb-4"
             />
             {/* Country */}
-            <CountrySelection input={input} handleOnChange={handleOnChange} countries={countries}/>
+            <CountrySelection input={input} handleOnChange={handleOnChange} countries={countries} isShipping={isShipping}/>
             <InputField
                 name="address1"
                 inputValue={input?.address1}
@@ -44,7 +49,8 @@ const Address = ({input, countries, states, handleOnChange}) => {
                 handleOnChange={handleOnChange}
                 label="Street address"
                 placeholder="House number and street name"
-                errors={input?.errors}
+                errors={errors}
+                isShipping={isShipping}
                 containerClassNames="mb-4"
             />
             <InputField
@@ -53,7 +59,8 @@ const Address = ({input, countries, states, handleOnChange}) => {
                 handleOnChange={handleOnChange}
                 label="Street address line two"
                 placeholder="Apartment floor unit building floor etc(optional)"
-                errors={input?.errors}
+                errors={errors}
+                isShipping={isShipping}
                 containerClassNames="mb-4"
             />
             <InputField
@@ -62,11 +69,12 @@ const Address = ({input, countries, states, handleOnChange}) => {
                 inputValue={input?.city}
                 handleOnChange={handleOnChange}
                 label="Town/City"
-                errors={input?.errors}
+                errors={errors}
+                isShipping={isShipping}
                 containerClassNames="mb-4"
             />
             {/* State */}
-            <StateSelection input={input} handleOnChange={handleOnChange} states={states}/>
+            <StateSelection input={input} handleOnChange={handleOnChange} states={states} isShipping={isShipping}/>
             <div className="flex flex-wrap overflow-hidden sm:-mx-3">
                 <InputField
                     name="postcode"
@@ -74,7 +82,8 @@ const Address = ({input, countries, states, handleOnChange}) => {
                     required
                     handleOnChange={handleOnChange}
                     label="Post code"
-                    errors={input?.errors}
+                    errors={errors}
+                    isShipping={isShipping}
                     containerClassNames="w-full overflow-hidden sm:my-2 sm:px-2 md:w-1/2"
                 />
                 <InputField
@@ -83,7 +92,8 @@ const Address = ({input, countries, states, handleOnChange}) => {
                     required
                     handleOnChange={handleOnChange}
                     label="Phone"
-                    errors={input?.errors}
+                    errors={errors}
+                    isShipping={isShipping}
                     containerClassNames="w-full overflow-hidden sm:my-2 sm:px-2 md:w-1/2"
                 />
             </div>
@@ -94,7 +104,8 @@ const Address = ({input, countries, states, handleOnChange}) => {
                 required
                 handleOnChange={handleOnChange}
                 label="Email"
-                errors={input?.errors}
+                errors={errors}
+                isShipping={isShipping}
                 containerClassNames="mb-4"
             />
             {/*	@TODO Create an Account */}
@@ -118,14 +129,15 @@ const Address = ({input, countries, states, handleOnChange}) => {
 Address.propTypes = {
     input: PropTypes.object,
     countries: PropTypes.array,
-    handleOnChange: PropTypes.func
+    handleOnChange: PropTypes.func,
+    isShipping: PropTypes.bool
 }
 
 Address.defaultProps = {
     input: {},
     countries: [],
-    handleOnChange: () => {
-    }
+    handleOnChange: () => null,
+    isShipping: false
 }
 
 export default Address;

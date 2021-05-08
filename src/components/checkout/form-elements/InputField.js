@@ -1,12 +1,16 @@
 import Error from "../Error";
 import PropTypes from 'prop-types';
+import Abbr from "./Abbr";
 
-const InputField = ({ handleOnChange, inputValue, name, type, label, errors, placeholder, required, containerClassNames }) => {
+const InputField = ({ handleOnChange, inputValue, name, type, label, errors, placeholder, required, containerClassNames, isShipping }) => {
+
+    const inputId = `${name}-${isShipping ? 'shipping' : ''}`;
+
     return (
         <div className={containerClassNames}>
-            <label className="leading-7 text-sm text-gray-600" htmlFor={name}>
+            <label className="leading-7 text-sm text-gray-600" htmlFor={inputId}>
                 { label || '' }
-                { required ? <abbr className="text-red-500" style={{textDecoration: 'none'}} title="required">*</abbr> : null }
+                <Abbr required={required}/>
             </label>
             <input
                 onChange={ handleOnChange }
@@ -15,7 +19,7 @@ const InputField = ({ handleOnChange, inputValue, name, type, label, errors, pla
                 type={type}
                 name={name}
                 className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-400 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                id={name}
+                id={inputId}
             />
             <Error errors={ errors } fieldName={ name }/>
         </div>
