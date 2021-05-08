@@ -59,10 +59,9 @@ const AddToCart = ( props ) => {
 	// };
 
 	// Get Cart Data.
-	const { loading, error, data, refetch } = useQuery( GET_CART, {
+	const { data, refetch } = useQuery( GET_CART, {
 		notifyOnNetworkStatusChange: true,
 		onCompleted: () => {
-			console.warn( 'completed GET_CART' );
 
 			// Update cart in the localStorage.
 			const updatedCart = getFormattedCart( data );
@@ -78,12 +77,10 @@ const AddToCart = ( props ) => {
 		variables: {
 			input: productQryInput,
 		},
-		onCompleted: () => {
-			console.warn( 'completed ADD_TO_CART' );
-
+		onCompleted: async () => {
 			// On Success:
 			// 1. Make the GET_CART query to update the cart with new values in React context.
-			refetch();
+			await refetch();
 
 			// 2. Show View Cart Button
 			setShowViewCart( true )

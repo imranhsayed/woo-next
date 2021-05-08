@@ -119,9 +119,6 @@ const CheckoutForm = ({countriesData}) => {
         const billingValidationResult = validateAndSanitizeCheckoutForm(input?.billing);
         const shippingValidationResult = validateAndSanitizeCheckoutForm(input?.shipping);
 
-        console.log( 'billingValidationResult', billingValidationResult );
-		console.log( 'shippingValidationResult', shippingValidationResult );
-
         if (!shippingValidationResult.isValid || !billingValidationResult.isValid) {
             setInput({
                 ...input,
@@ -188,8 +185,6 @@ const CheckoutForm = ({countriesData}) => {
         }
 
     }, [orderData]);
-
-    console.log('input', input);
 
     return (
         <>
