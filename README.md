@@ -33,7 +33,7 @@ branch is upto date with those changes. You can also refer to the PR notes for c
 
 # Features:
 
-1. WooCommerce Store in React( contains: Products Page, Single Product Page, AddToCart, CartPage and Checkout Page ).
+1. WooCommerce Store in React( contains: Products Page, Single Product Page, AddToCart, CartPage and Checkout Page with country selection ).
 2. SSR
 3. SEO friendly
 4. Automatic Code Splitting
@@ -68,7 +68,7 @@ These instructions will get you a copy of the project up and running on your loc
 ## Hero Carousel.
 To use Hero carousel, create a category called 'offers' from WordPress Dashboard > Products > Categories.
 Now create and assign as many child categories to this parent 'offers' category with name, description and image.
-These Child categories data will automatically be used to create hero carousel on the frontend. 
+These Child categories data will automatically be used to create hero carousel on the frontend.
 
 
 ## Configuration(for GraphQL implementation) :wrench:
@@ -82,7 +82,7 @@ These Child categories data will automatically be used to create hero carousel o
 
 1. [feature/rest-api](https://github.com/imranhsayed/woo-next/tree/feature/rest-api) Contains REST API Implementation.
 
-2. The `master` branch has the GraphQL implementation.  
+2. The `master` branch has the GraphQL implementation.
 
 ## Common Commands :computer:
 
@@ -90,7 +90,7 @@ These Child categories data will automatically be used to create hero carousel o
 
 ## Code Contributors ✰
 
-Thanks to all the people who contributed to the code of this project 🤝 
+Thanks to all the people who contributed to the code of this project 🤝
 
 <div>
     <img src="https://github.com/imranhsayed.png?size=30" alt="Imran Sayed">
@@ -106,7 +106,7 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 
 ## Versioning :bookmark_tabs:
 
-I use [Git](https://github.com/) for versioning. 
+I use [Git](https://github.com/) for versioning.
 
 ## Author :bust_in_silhouette:
 
