@@ -20,7 +20,7 @@ const CountrySelection = ({input, handleOnChange, countries}) => {
                 <option value="">Select a country...</option>
                     {!isEmpty(countries) &&
                     map(countries, (country) => (
-                        <option key={country?.countryCode} data-countrycode={country?.countryCode} value={country?.countryName}>
+                        <option key={country?.countryCode} data-countrycode={country?.countryCode} value={country?.countryCode}>
                             {country?.countryName}
                         </option>
                     ))}

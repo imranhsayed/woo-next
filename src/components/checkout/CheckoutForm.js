@@ -18,7 +18,7 @@ import GET_STATES from "../../queries/get-states";
 // 	address1: '123 Abc farm',
 // 	address2: 'Hill Road',
 // 	city: 'Mumbai',
-// 	country: 'India',
+// 	country: 'IN',
 // 	state: 'Maharastra',
 // 	postcode: '221029',
 // 	email: 'codeytek.academy@gmail.com',
@@ -62,15 +62,10 @@ const CheckoutForm = ({countriesData}) => {
 	const [ input, setInput ] = useState( initialState );
 	const [ orderData, setOrderData ] = useState( null );
 	const [ requestError, setRequestError ] = useState( null );
-	// const [billingStates, setBillingStates] = useState([]);
-	// const [shippingStates, setShippingStates] = useState([]);
+	const [theBillingStates, setTheBillingStates] = useState([]);
+	const [theShippingStates, setTheShippingStates] = useState([]);
 
-	const [getStates, { data: billingStates, loading: billingStatesLoading, error: billingStatesError }] = useLazyQuery( GET_STATES,{
-		notifyOnNetworkStatusChange: true,
-		onCompleted: (data) => {
-			console.warn( 'go states', data );
-		}
-	} );
+	const [getStates, { data: billingStates, loading: billingStatesLoading, error: billingStatesError }] = useLazyQuery( GET_STATES );
 
 	// Get Cart Data.
 	const { loading, error, data, refetch } = useQuery( GET_CART, {
@@ -156,15 +151,16 @@ const CheckoutForm = ({countriesData}) => {
 		}
 	};
 
-	const handleShippingChange = (target) => {
+	const handleShippingChange = async (target) => {
 		const newState = { ...input, shipping: { ...input?.shipping, [target.name]: target.value } };
 		setInput( newState );
 
 		if ( 'country' === target.name ) {
 			const countryCode = target[target.selectedIndex].getAttribute('data-countrycode')
-			getStates({
+			const shippingStates = await getStates({
 				variables: { countryCode: countryCode || '' }
-			})
+			});
+			setTheShippingStates( shippingStates?.wooStates?.states ?? [] );
 		}
 	}
 
@@ -193,12 +189,12 @@ const CheckoutForm = ({countriesData}) => {
 							{/*Shipping Details*/}
 							<div className="billing-details">
 								<h2 className="text-xl font-medium mb-4">Shipping Details</h2>
-								<Address states={billingStates} countries={billingCountries} input={ input?.shipping } handleOnChange={ (event) => handleOnChange(event, true) }/>
+								<Address states={theBillingStates} countries={billingCountries} input={ input?.shipping } handleOnChange={ (event) => handleOnChange(event, true) }/>
 							</div>
 							{/*Billing Details*/}
 							<div className="billing-details">
 								<h2 className="text-xl font-medium mb-4">Billing Details</h2>
-								<Address states={billingStates} countries={shippingCountries} input={ input?.billing } handleOnChange={ (event) => handleOnChange(event, false) }/>
+								<Address states={theShippingStates} countries={shippingCountries} input={ input?.billing } handleOnChange={ (event) => handleOnChange(event, false) }/>
 							</div>
 						</div>
 						{/* Order & Payments*/}
