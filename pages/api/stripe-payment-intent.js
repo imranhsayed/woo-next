@@ -5,7 +5,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 export default async (req, res) => {
     if (req.method === "POST") {
         try {
-            const { amount, currency } = req.body;
+            const { amount, currency, orderId } = req.body;
 
             console.log( 'req.body', JSON.stringify( req.body, null, 2 ) );
 
@@ -21,6 +21,8 @@ export default async (req, res) => {
                 amount,
                 currency: currency || "usd"
             });
+
+            console.log( 'paymentIntent', JSON.stringify(paymentIntent, null, 2) );
 
             res.status(200).send(paymentIntent.client_secret);
         } catch (err) {

@@ -53,6 +53,7 @@ const StripeCheckoutForm = ({orderData}) => {
             const { data: clientSecret } = await axios.post("/api/stripe-payment-intent", {
                 amount: total * 100,
                 currency: currency.toLowerCase(),
+                orderId
             });
 
             const paymentMethodReq = await stripe.createPaymentMethod({
@@ -71,6 +72,8 @@ const StripeCheckoutForm = ({orderData}) => {
                 payment_method: paymentMethodReq.paymentMethod.id
             });
 
+            console.log( 'paymentIntent', paymentIntent );
+
             if (error) {
                 setCheckoutError(error.message);
                 setProcessingTo(false);
@@ -78,7 +81,7 @@ const StripeCheckoutForm = ({orderData}) => {
             }
 
             // On successful payment, redirect to thank you page.
-            await Router.push("/thank-you")
+            // await Router.push("/thank-you")
         } catch (err) {
             setCheckoutError(err.message);
         }
