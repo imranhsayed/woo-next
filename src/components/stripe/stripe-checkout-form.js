@@ -5,7 +5,9 @@ import axios from "axios";
 import Router from "next/router";
 import {CARD_OPTIONS} from "../../constants/stripe";
 
-const StripeCheckoutForm = () => {
+const StripeCheckoutForm = ({orderData}) => {
+    console.log( 'orderData', orderData );
+    const { orderId, total, currency } = orderData || {};
     const [isProcessing, setProcessingTo] = useState(false);
     const [checkoutError, setCheckoutError] = useState();
 
@@ -46,11 +48,11 @@ const StripeCheckoutForm = () => {
         setProcessingTo(true);
 
         const cardElement = elements.getElement("card");
-        const price = 10;
 
         try {
             const { data: clientSecret } = await axios.post("/api/stripe-payment-intent", {
-                amount: price * 100
+                amount: total * 100,
+                currency: currency.toLowerCase(),
             });
 
             const paymentMethodReq = await stripe.createPaymentMethod({
@@ -65,7 +67,7 @@ const StripeCheckoutForm = () => {
                 return;
             }
 
-            const { error } = await stripe.confirmCardPayment(clientSecret, {
+            const {paymentIntent, error} = await stripe.confirmCardPayment(clientSecret, {
                 payment_method: paymentMethodReq.paymentMethod.id
             });
 
@@ -95,7 +97,7 @@ const StripeCheckoutForm = () => {
                 </div>
                 {checkoutError ? <div className="text-sm my-4 text-white">{checkoutError}</div> : null}
                 <button className="bg-pink-400 hover:bg-pink-300 text-white font-bold py-2 px-4" disabled={isProcessing || !stripe}>
-                    {isProcessing ? "Processing..." : `Pay $100`}
+                    {isProcessing ? "Processing..." : `Pay ${total}`}
                 </button>
             </form>
         </div>
