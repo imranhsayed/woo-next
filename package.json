@@ -10,7 +10,10 @@
   },
   "dependencies": {
     "@apollo/client": "^3.2.5",
+    "@stripe/react-stripe-js": "^1.4.0",
+    "@stripe/stripe-js": "^1.14.0",
     "@svgr/cli": "^5.5.0",
+    "axios": "^0.21.1",
     "classnames": "^2.3.1",
     "graphql": "^15.4.0",
     "lodash": "^4.17.20",
@@ -21,6 +24,7 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "sass": "^1.29.0",
+    "stripe": "^8.148.0",
     "uuid": "^8.3.1",
     "validator": "^13.1.17"
   },
