@@ -1,5 +1,4 @@
 import { v4 } from 'uuid';
-import {isEmpty, isArray} from 'lodash'
 
 /**
  * Extracts and returns float value from a string.
