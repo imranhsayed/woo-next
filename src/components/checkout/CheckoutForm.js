@@ -18,7 +18,6 @@ import {
 } from "../../utils/checkout";
 import CheckboxField from "./form-elements/CheckboxField";
 import CLEAR_CART_MUTATION from "../../mutations/clear-cart";
-import StripeCheckout from "../stripe/stripe-checkout";
 
 // Use this for testing purposes, so you dont have to fill the checkout form over an over again.
 const defaultCustomerInfo = {
