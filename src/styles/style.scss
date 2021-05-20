@@ -123,35 +123,3 @@ body {
     border-radius: 4px;
   }
 }
-
-.StripeElement {
-  box-shadow: 0 0 0 1px #e0e0e0, 0 2px 4px 0 rgb(0 0 0 / 7%), 0 1px 1.5px 0 rgb(0 0 0 / 5%);
-  padding: 8px;
-}
-
-.stripe-form-container {
-  display: flex;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  position: fixed;
-  z-index: 9;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.9);
-}
-
-.stripe-form {
-  z-index: 10;
-  margin: 24px 0;
-  background-color: #7795f8;
-  box-shadow: 0 6px 9px rgba(50, 50, 93, 0.06), 0 2px 5px rgba(0, 0, 0, 0.08),
-  inset 0 1px 0 #829fff;
-}
-
-.is-modal-open {
-  position: fixed;
-  overflow: hidden;
-}
-

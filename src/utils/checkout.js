@@ -1,5 +1,4 @@
 import client from "../components/ApolloClient";
-import Router from "next/router";
 import {isEmpty, isArray} from 'lodash';
 import { createCheckoutSession } from 'next-stripe/client'
 import { loadStripe } from "@stripe/stripe-js";
