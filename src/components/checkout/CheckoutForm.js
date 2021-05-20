@@ -283,8 +283,6 @@ const CheckoutForm = ({countriesData}) => {
                     </div>
                 </form>
             ) : null}
-            {/* Stripe Form */}
-            <StripeCheckout showStripeForm={showStripeForm} createdOrderData={createdOrderData}/>
             {/*	Show message if Order Success*/}
             <OrderSuccess response={checkoutResponse}/>
         </>
