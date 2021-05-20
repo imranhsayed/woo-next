@@ -76,7 +76,6 @@ const CheckoutForm = ({countriesData}) => {
     const [theBillingStates, setTheBillingStates] = useState([]);
     const [isFetchingBillingStates, setIsFetchingBillingStates] = useState(false);
     const [isStripeOrderProcessing, setIsStripeOrderProcessing] = useState(false);
-    const [showStripeForm, setShowStripeForm] = useState(false);
     const [createdOrderData, setCreatedOrderData] = useState({});
 
     // Get Cart Data.
@@ -141,7 +140,7 @@ const CheckoutForm = ({countriesData}) => {
         }
 
         if ( 'stripe-mode' === input.paymentMethod ) {
-            const createdOrderData = await handleStripeCheckout(input, cart?.products, setRequestError, setShowStripeForm, clearCartMutation, setIsStripeOrderProcessing, setCreatedOrderData);
+            const createdOrderData = await handleStripeCheckout(input, cart?.products, setRequestError, clearCartMutation, setIsStripeOrderProcessing, setCreatedOrderData);
         	return null;
         }
 

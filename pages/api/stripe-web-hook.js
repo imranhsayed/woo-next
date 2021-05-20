@@ -1,14 +1,17 @@
-
-const WooCommerceRestApi = require("@woocommerce/woocommerce-rest-api").default;
+import { buffer } from "micro";
 const Stripe = require('stripe');
+const WooCommerceRestApi = require("@woocommerce/woocommerce-rest-api").default;
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: '2020-08-27'
 });
+const webhookSecret = process.env.STRIPE_WEBHOOK_ENDPOINT_SECRET;
 
-const endpointSecret = process.env.STRIPE_WEBHOOK_ENDPOINT_SECRET;
-
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+export const config = {
+    api: {
+        bodyParser: false,
+    },
+};
 
 const api = new WooCommerceRestApi({
     url: process.env.NEXT_PUBLIC_WORDPRESS_URL,
@@ -42,77 +45,45 @@ const updateOrder = async ( newStatus, orderId, transactionId = '' ) => {
     try {
         const {data} = await api.put( `orders/${ orderId }`, newOrderData );
         console.log( '✅ Order updated data', data );
-
-        await sleep(3000);
     } catch (ex) {
-        console.error(ex);
+        console.error('Order creation error', ex);
         throw ex;
     }
 }
 
-const webhookHandler = async function (request, response) {
+const handler = async (req, res) => {
+    if (req.method === "POST") {
+        const buf = await buffer(req);
+        const sig = req.headers["stripe-signature"];
 
-    return new Promise((resolve) => {
-        if (request.method === 'POST') {
-            const sig = request.headers['stripe-signature'];
+        let stripeEvent;
 
-            let buffer = '';
-            request.on('data', (chunk) => {
-                buffer += chunk;
-            });
-
-            request.on('end', async () => {
-                let stripeEvent;
-                try {
-                    stripeEvent = stripe.webhooks.constructEvent(
-                        Buffer.from(buffer).toString(),
-                        sig,
-                        endpointSecret
-                    );
-                } catch (err) {
-                    // On error, log and return the error message.
-                    console.log(`❌ Error message: ${err.message}`);
-                    response.status(400).send(`Webhook Error: ${err.message}`);
-                    return;
-                }
-
-                console.log('✅ Success:', stripeEvent.id);
-
-                /**
-                 * Handle Event: 'checkout.session.completed'.
-                 */
-                if ( 'checkout.session.completed' === stripeEvent.type ) {
-                    const session = stripeEvent.data.object;
-
-                    try {
-                        console.log( '✅ session.metadata.orderId', session.metadata.orderId, session.id );
-                        // Payment Success.
-                        await updateOrder( 'processing', session.metadata.orderId, session.id );
-                    } catch (err) {
-                        await updateOrder( 'failed', session.metadata.orderId );
-
-                        console.error('EXCEPTION handleCheckoutSession', err);
-                        response.status(400).send(
-                            JSON.stringify({
-                                error: `Webhook Error: ${err.toString()}`
-                            })
-                        );
-
-                        return;
-                    }
-                }
-
-                response.status(200).send(JSON.stringify({ received: true }));
-
-                // response.json({ received: true });
-                resolve();
-            });
-        } else {
-            response.setHeader('Allow', 'POST');
-            response.status(405).end('Method Not Allowed');
-            resolve();
+        try {
+            stripeEvent = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
+            console.log( 'stripeEvent', stripeEvent );
+        } catch (err) {
+            res.status(400).send(`Webhook Error: ${err.message}`);
+            return;
         }
-    });
+
+        if ( 'checkout.session.completed' === stripeEvent.type ) {
+            const session = stripeEvent.data.object;
+            console.log( 'sessionsession', session );
+            console.log( '✅ session.metadata.orderId', session.metadata.orderId, session.id );
+            // Payment Success.
+            try {
+                await updateOrder( 'processing', session.metadata.orderId, session.id );
+            } catch (error) {
+                await updateOrder( 'failed', session.metadata.orderId );
+                console.error('Update order error', error);
+            }
+        }
+
+        res.json({ received: true });
+    } else {
+        res.setHeader("Allow", "POST");
+        res.status(405).end("Method Not Allowed");
+    }
 };
 
-export default webhookHandler;
+export default handler;

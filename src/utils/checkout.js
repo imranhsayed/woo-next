@@ -1,6 +1,6 @@
 import client from "../components/ApolloClient";
 import {isEmpty, isArray} from 'lodash';
-import { createCheckoutSession } from 'next-stripe/client'
+import { createCheckoutSession } from 'next-stripe/client' // @see https://github.com/ynnoj/next-stripe
 import { loadStripe } from "@stripe/stripe-js";
 
 import GET_STATES from "../queries/get-states";
@@ -68,7 +68,7 @@ export const handleCreateAccount = ( input, setInput, target ) => {
  * @param setIsStripeOrderProcessing
  *
  */
-export const handleStripeCheckout = async (input, products, setRequestError, setShowStripeForm, clearCartMutation, setIsStripeOrderProcessing, setCreatedOrderData) => {
+export const handleStripeCheckout = async (input, products, setRequestError, clearCartMutation, setIsStripeOrderProcessing, setCreatedOrderData) => {
     setIsStripeOrderProcessing(true);
     const orderData = getCreateOrderData( input, products );
     const createCustomerOrder = await createTheOrder( orderData, setRequestError,  '' );
@@ -84,23 +84,22 @@ export const handleStripeCheckout = async (input, products, setRequestError, set
 
     // On success show stripe form.
     setCreatedOrderData(createCustomerOrder)
-    setShowStripeForm(true)
     await createCheckoutSessionAndRedirect( products, input, createCustomerOrder?.orderId );
 
     return createCustomerOrder;
 }
 
 const createCheckoutSessionAndRedirect = async ( products, input, orderId ) => {
-    const session = await createCheckoutSession({
-        success_url: window.location.origin + '/thank-you?session_id={CHECKOUT_SESSION_ID}',
+    const sessionData = {
+        success_url: window.location.origin + `/thank-you?session_id={CHECKOUT_SESSION_ID}&order_id=${orderId}`,
         cancel_url: window.location.href,
         customer_email: input.billingDifferentThanShipping ? input?.billing?.email : input?.shipping?.email,
         line_items: getStripeLineItems( products ),
         metadata: getMetaData( input, orderId ),
         payment_method_types: ['card'],
         mode: 'payment'
-    })
-
+    }
+    const session = await createCheckoutSession(sessionData)
     try {
         const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
         if (stripe) {
