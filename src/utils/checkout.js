@@ -1,5 +1,11 @@
 import client from "../components/ApolloClient";
+import {isEmpty, isArray} from 'lodash';
+import { createCheckoutSession } from 'next-stripe/client'
+import { loadStripe } from "@stripe/stripe-js";
+
 import GET_STATES from "../queries/get-states";
+import {createTheOrder, getCreateOrderData} from "./order";
+import {clearTheCart} from "./cart";
 
 /**
  * Get states
@@ -44,4 +50,102 @@ export const handleBillingDifferentThanShipping = ( input, setInput, target ) =>
 export const handleCreateAccount = ( input, setInput, target ) => {
     const newState = { ...input, [target.name]: ! input.createAccount };
     setInput( newState );
+}
+
+/**
+ * Handle Stripe checkout.
+ *
+ * 1. Create Formatted Order data.
+ * 2. Create Order using Next.js create-order endpoint.
+ * 3. Clear the cart session.
+ * 4. On success set show stripe form to true
+ *
+ * @param input
+ * @param products
+ * @param setRequestError
+ * @param setShowStripeForm
+ * @param clearCartMutation
+ * @param setIsStripeOrderProcessing
+ *
+ */
+export const handleStripeCheckout = async (input, products, setRequestError, setShowStripeForm, clearCartMutation, setIsStripeOrderProcessing, setCreatedOrderData) => {
+    setIsStripeOrderProcessing(true);
+    const orderData = getCreateOrderData( input, products );
+    const createCustomerOrder = await createTheOrder( orderData, setRequestError,  '' );
+    const cartCleared = await clearTheCart( clearCartMutation, createCustomerOrder?.error );
+    setIsStripeOrderProcessing(false);
+
+
+    if ( isEmpty( createCustomerOrder?.orderId ) || cartCleared?.error ) {
+        console.log( 'came in' );
+        setRequestError('Clear cart failed')
+    	return null;
+    }
+
+    // On success show stripe form.
+    setCreatedOrderData(createCustomerOrder)
+    setShowStripeForm(true)
+    await createCheckoutSessionAndRedirect( products, input, createCustomerOrder?.orderId );
+
+    return createCustomerOrder;
+}
+
+const createCheckoutSessionAndRedirect = async ( products, input, orderId ) => {
+    const session = await createCheckoutSession({
+        success_url: window.location.origin + '/thank-you?session_id={CHECKOUT_SESSION_ID}',
+        cancel_url: window.location.href,
+        customer_email: input.billingDifferentThanShipping ? input?.billing?.email : input?.shipping?.email,
+        line_items: getStripeLineItems( products ),
+        metadata: getMetaData( input, orderId ),
+        payment_method_types: ['card'],
+        mode: 'payment'
+    })
+
+    try {
+        const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+        if (stripe) {
+            stripe.redirectToCheckout({ sessionId: session.id });
+        }
+    } catch (error) {
+        console.log( error );
+    }
+}
+
+const getStripeLineItems = (products) => {
+    if (isEmpty(products) && !isArray(products)) {
+        return [];
+    }
+
+    return products.map(product => {
+        return {
+            quantity: product?.qty ?? 0,
+            name: product?.name ?? '',
+            images: [product?.image?.sourceUrl ?? ''],
+            amount: Math.round(product?.price * 100),
+            currency: 'usd',
+        }
+    })
+}
+
+/**
+ * Get meta data.
+ *
+ * @param input
+ * @param {String} orderId Order Id.
+ *
+ * @returns {{lineItems: string, shipping: string, orderId, billing: string}}
+ */
+export const getMetaData = ( input, orderId ) => {
+
+    return {
+        billing: JSON.stringify(input?.billing),
+        shipping: JSON.stringify(input.billingDifferentThanShipping ? input?.billing?.email : input?.shipping?.email),
+        orderId,
+    };
+
+    // @TODO
+    // if ( customerId ) {
+    //     metadata.customerId = customerId;
+    // }
+
 }

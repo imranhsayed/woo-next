@@ -1,52 +1,54 @@
 import {useState, useContext, useEffect} from 'react';
 import {useMutation, useQuery} from '@apollo/client';
+import cx from 'classnames'
 
 import YourOrder from "./YourOrder";
 import PaymentModes from "./PaymentModes";
 import {AppContext} from "../context/AppContext";
 import validateAndSanitizeCheckoutForm from '../../validator/checkout';
-import {getFormattedCart, createCheckoutData} from "../../functions";
+import {getFormattedCart, createCheckoutData,} from "../../functions";
 import OrderSuccess from "./OrderSuccess";
 import GET_CART from "../../queries/get-cart";
 import CHECKOUT_MUTATION from "../../mutations/checkout";
 import Address from "./Address";
 import {
     handleBillingDifferentThanShipping,
-    handleCreateAccount,
+    handleCreateAccount, handleStripeCheckout,
     setStatesForCountry
 } from "../../utils/checkout";
 import CheckboxField from "./form-elements/CheckboxField";
+import CLEAR_CART_MUTATION from "../../mutations/clear-cart";
 
 // Use this for testing purposes, so you dont have to fill the checkout form over an over again.
-// const defaultCustomerInfo = {
-// 	firstName: 'Imran',
-// 	lastName: 'Sayed',
-// 	address1: '123 Abc farm',
-// 	address2: 'Hill Road',
-// 	city: 'Mumbai',
-// 	country: 'IN',
-// 	state: 'Maharastra',
-// 	postcode: '221029',
-// 	email: 'codeytek.academy@gmail.com',
-// 	phone: '9883778278',
-// 	company: 'The Company',
-// 	errors: null
-// }
-
 const defaultCustomerInfo = {
-    firstName: '',
-    lastName: '',
-    address1: '',
-    address2: '',
-    city: '',
-    country: '',
-    state: '',
-    postcode: '',
-    email: '',
-    phone: '',
-    company: '',
-    errors: null
+	firstName: 'Imran',
+	lastName: 'Sayed',
+	address1: '123 Abc farm',
+	address2: 'Hill Road',
+	city: 'Mumbai',
+	country: 'IN',
+	state: 'Maharastra',
+	postcode: '221029',
+	email: 'codeytek.academy@gmail.com',
+	phone: '9883778278',
+	company: 'The Company',
+	errors: null
 }
+
+// const defaultCustomerInfo = {
+//     firstName: '',
+//     lastName: '',
+//     address1: '',
+//     address2: '',
+//     city: '',
+//     country: '',
+//     state: '',
+//     postcode: '',
+//     email: '',
+//     phone: '',
+//     company: '',
+//     errors: null
+// }
 
 const CheckoutForm = ({countriesData}) => {
 
@@ -73,6 +75,9 @@ const CheckoutForm = ({countriesData}) => {
     const [isFetchingShippingStates, setIsFetchingShippingStates] = useState(false);
     const [theBillingStates, setTheBillingStates] = useState([]);
     const [isFetchingBillingStates, setIsFetchingBillingStates] = useState(false);
+    const [isStripeOrderProcessing, setIsStripeOrderProcessing] = useState(false);
+    const [showStripeForm, setShowStripeForm] = useState(false);
+    const [createdOrderData, setCreatedOrderData] = useState({});
 
     // Get Cart Data.
     const {data} = useQuery(GET_CART, {
@@ -102,6 +107,8 @@ const CheckoutForm = ({countriesData}) => {
         }
     });
 
+    const [ clearCartMutation ] = useMutation( CLEAR_CART_MUTATION );
+
     /*
      * Handle form submit.
      *
@@ -109,7 +116,7 @@ const CheckoutForm = ({countriesData}) => {
      *
      * @return {void}
      */
-    const handleFormSubmit = (event) => {
+    const handleFormSubmit = async (event) => {
         event.preventDefault();
 
         /**
@@ -131,6 +138,11 @@ const CheckoutForm = ({countriesData}) => {
             });
 
             return;
+        }
+
+        if ( 'stripe-mode' === input.paymentMethod ) {
+            const createdOrderData = await handleStripeCheckout(input, cart?.products, setRequestError, setShowStripeForm, clearCartMutation, setIsStripeOrderProcessing, setCreatedOrderData);
+        	return null;
         }
 
         const checkOutData = createCheckoutData(input);
@@ -192,6 +204,9 @@ const CheckoutForm = ({countriesData}) => {
 
     }, [orderData]);
 
+    // Loading state
+    const isOrderProcessing = checkoutLoading || isStripeOrderProcessing;
+
     return (
         <>
             {cart ? (
@@ -246,21 +261,27 @@ const CheckoutForm = ({countriesData}) => {
 
                             {/*Payment*/}
                             <PaymentModes input={input} handleOnChange={handleOnChange}/>
+
                             <div className="woo-next-place-order-btn-wrap mt-5">
-                                <button className="bg-purple-600 text-white px-5 py-3 rounded-sm w-auto xl:w-full"
-                                        type="submit">
+                                <button
+                                    disabled={isOrderProcessing}
+                                    className={cx(
+                                        'bg-purple-600 text-white px-5 py-3 rounded-sm w-auto xl:w-full',
+                                        {'opacity-50': isOrderProcessing}
+                                    )}
+                                    type="submit"
+                                >
                                     Place Order
                                 </button>
                             </div>
 
                             {/* Checkout Loading*/}
-                            {checkoutLoading && <p>Processing Order...</p>}
+                            {isOrderProcessing && <p>Processing Order...</p>}
                             {requestError && <p>Error : {requestError} :( Please try again</p>}
                         </div>
                     </div>
                 </form>
-            ) : ''}
-
+            ) : null}
             {/*	Show message if Order Success*/}
             <OrderSuccess response={checkoutResponse}/>
         </>
