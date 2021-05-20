@@ -47,12 +47,6 @@ const PaymentModes = ( { input, handleOnChange } ) => {
 					<span className="woo-next-payment-content">CC Avenue</span>
 				</label>
 			</div>
-			<div className="form-check woo-next-payment-input-container mt-2">
-				<label className="form-check-label">
-					<input onChange={ handleOnChange } value="stripe-mode" className="form-check-input mr-3" name="paymentMethod" type="radio" checked={'stripe-mode' === paymentMethod}/>
-					<span className="woo-next-payment-content">Stripe</span>
-				</label>
-			</div>
 			{/*	Payment Instructions*/}
 			<div className="woo-next-checkout-payment-instructions mt-2">
 				Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.
