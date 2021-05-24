@@ -1,4 +1,4 @@
-# [Woo Next React Theme](https://woo-next-imranhsayed.vercel.app/) :rocket:
+# [Woo Next React Theme](https://woo-next.imranhsayed.now.sh/) :rocket:
 [![Project Status: Active.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 ![Stars](https://img.shields.io/github/stars/imranhsayed/woo-next?label=%E2%AD%90%20Stars)
 ![Forks](https://img.shields.io/github/forks/imranhsayed/woo-next?color=%23ff69b4)
@@ -31,6 +31,9 @@ branch is upto date with those changes. You can also refer to the PR notes for c
 ## Order Received Demo
 ![](demos/order-received-demo.gif)
 
+## Stripe Checkout 
+![](demos/stripe-demo.gif)
+
 # Features:
 
 1. WooCommerce Store in React( contains: Products Page, Single Product Page, AddToCart, CartPage and Checkout Page with country selection ).
@@ -42,6 +45,7 @@ branch is upto date with those changes. You can also refer to the PR notes for c
 8. Incremental Static (Re)generation ( Next.js 10 support )
 9. GraphQL with Apollo Client
 10. Tailwindcss
+11. Stripe Checkout ( with Stripe Session and Stripe webhook)
 
 ## Getting Started :rocket:
 
