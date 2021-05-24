@@ -1,4 +1,4 @@
-# [Woo Next React Theme](https://woo-next.imranhsayed.now.sh/) :rocket:
+# [Woo Next React Theme](https://woo-next-imranhsayed.vercel.app/) :rocket:
 [![Project Status: Active.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 ![Stars](https://img.shields.io/github/stars/imranhsayed/woo-next?label=%E2%AD%90%20Stars)
 ![Forks](https://img.shields.io/github/forks/imranhsayed/woo-next?color=%23ff69b4)
