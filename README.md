@@ -32,6 +32,7 @@ branch is upto date with those changes. You can also refer to the PR notes for c
 ![](demos/order-received-demo.gif)
 
 ## Stripe Checkout 
+[Stripe Demo Video](https://youtu.be/i75_Vtx-CnA)
 ![](demos/stripe-demo.gif)
 
 # Features:
