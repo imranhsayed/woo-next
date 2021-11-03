@@ -28,7 +28,7 @@
     "sass": "^1.29.0",
     "stripe": "^8.148.0",
     "uuid": "^8.3.1",
-    "validator": "^13.1.17"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "install": "^0.13.0",
