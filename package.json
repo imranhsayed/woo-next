@@ -3,7 +3,7 @@
   "version": "2.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
     "svg": "svgr -d src/components/icons src/components/icons/svgs"
@@ -19,6 +19,7 @@
     "lodash": "^4.17.20",
     "micro": "^9.3.4",
     "next": "^11.1.1",
+    "next-auth": "^4.0.0-next.26",
     "next-stripe": "^1.0.0-beta.9",
     "node-fetch": "^2.6.1",
     "nprogress": "^0.2.0",
