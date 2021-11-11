@@ -1,4 +1,5 @@
 import { SessionProvider } from "next-auth/react"
+import { ChakraProvider } from "@chakra-ui/react"
 import "../src/styles/style.scss"
 import "../src/styles/main.scss"
 
@@ -13,7 +14,9 @@ Router.events.on('routeChangeError', () => NProgress.done())
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <SessionProvider session={session} refetchInterval={5 * 60}>
-      <Component {...pageProps}></Component>
+      <ChakraProvider>
+        <Component {...pageProps}></Component>
+      </ChakraProvider>
     </SessionProvider>
   )
 }

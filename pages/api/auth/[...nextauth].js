@@ -3,11 +3,12 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { print } from 'graphql';
 import gql from 'graphql-tag';
 import axios from 'axios'
+import { JWT_SECRET } from '../../../src/utils/endpoints'
 
-const LOGIN_USER = gql`mutation LoginUser {
+const LOGIN_USER = gql`mutation LoginUser($username: String!, $password: String!) {
   login( input: {
-    username: "your_login",
-    password: "your password"
+    username: $username,
+    password: $password
   } ) {
     authToken
     user {
@@ -31,23 +32,19 @@ const options = {
           const response = await axios.post('https://staging.drip.ge/graphql', {
             query: print(LOGIN_USER),
             variables: {
-              username: credentials.email,
-              password: credentials.password
-            }
-          }, credentials);
-          const {jwt} = response?.data?.data;
-          const userObj = await axios.get(JWT_VALIDATE_TOKEN, {
-            headers: {
-              'Authorization': 'Bearer ' + jwt
+              username: credentials?.email,
+              password: credentials?.password
             }
           });
 
-          if ( userObj ) {
-            const {user} = userObj?.data?.data
+          const {authToken} = response?.data?.data?.login;
+
+          if ( authToken ) {
+            const {user} = response?.data?.data?.login
             const userData = {
-              id: user?.ID,
-              name: user?.user_nicename,
-              email: user?.user_email
+              id: user?.id,
+              name: user?.name,
+              // email: user?.user_email
             }
             return userData
           }
@@ -78,6 +75,9 @@ const options = {
       session.user.id = token.id
       return session
     }
+  },
+  pages: {
+    signIn: '/auth/signin'
   }
 }
 
