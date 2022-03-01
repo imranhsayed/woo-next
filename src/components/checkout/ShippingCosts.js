@@ -3,7 +3,7 @@ import { v4 } from 'uuid';
 import { useMutation, useQuery } from '@apollo/client';
 import UPDATE_SHIPPING_ADDRESS from "../../mutations/update-shipping-address";
 import { UPDATE_SHIPPING_METHOD } from "../../mutations/update-shipping-method";
-import Loading from "../icons/Loading";
+import LoadingImg from "../LoadingImg";
 import { isEmpty } from 'lodash';
 import cx from 'classnames';
 
@@ -158,7 +158,7 @@ const ShippingSelection = ({
                                             Choose Shipping Method
                                         </h2>
                                         {isLoading &&
-                                            <Loading />
+                                            <LoadingImg />
                                         }
                                     </div>
                                     <hr className="my-2" />
