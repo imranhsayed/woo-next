@@ -44,7 +44,7 @@ const ShippingSelection = ({
     // Update Customer Shipping Address for cart shipping calculations.
     const [updateShippingAddress, {
         data: updatedShippingData,
-        loading: updatingShippinZipcode,
+        loading: updatingShippingAddress,
         error: updateShippingAddressError
     }] = useMutation(UPDATE_SHIPPING_ADDRESS, requestDefaultOptions);
 
@@ -67,14 +67,13 @@ const ShippingSelection = ({
         //     || cart?.customer?.shipping.state != shippingAddress.state
         //     || cart?.customer?.shipping.postcode != shippingAddress.postcode
         // ) {
-        const { 
-            errors, 
+        const {
+            errors,
             createAccount,
             orderNotes,
-            ...shipping 
+            ...shipping
         } = shippingAddress;
 
-        console.log("update shipping add", shipping);
         updateShippingAddress({
             variables: {
                 input: {
@@ -104,9 +103,18 @@ const ShippingSelection = ({
 
         };
     }
-    console.log("shipping method", cart?.availableShippingMethods);
+
+    const isLoading = updatingShippingAddress
+        || choosingShippingMethod
+        || loadingCart;
+
     return (
-        <div className="choose-shipping-wrap flex-grow">
+        <div
+            className={cx(
+                'choose-shipping-wrap flex-grow',
+                { 'opacity-50': isLoading }
+            )}
+        >
             {cart?.needsShippingAddress &&
                 <>
                     <h2 className="mb-2 text-xl text-bold">Shipping Costs</h2>
@@ -116,12 +124,12 @@ const ShippingSelection = ({
                             {
                                 <>
                                     <button
-                                        disabled={updatingShippinZipcode || loadingCart}
+                                        disabled={isLoading}
                                         type={"button"}
                                         onClick={handleCalcShippingClick}
                                         className={cx(
                                             'bg-purple-600 text-white px-5 py-3 rounded-sm w-auto xl:w-full',
-                                            { 'opacity-50': updatingShippinZipcode }
+                                            { 'opacity-50': isLoading }
                                         )}
                                     >
                                         Update Shipping Costs
@@ -129,9 +137,13 @@ const ShippingSelection = ({
                                     {requestError
                                         ? <p className="my-4 text-red-600">{requestError}</p>
                                         : <p className="my-4 text-xs opacity-75">
-                                            {shippingAddress.address1}
-                                            - {shippingAddress.city}
-                                            / {shippingAddress.state}
+                                            {
+                                                [
+                                                    shippingAddress.address1,
+                                                    shippingAddress.city,
+                                                    shippingAddress.state
+                                                ].filter(val => val).join(' - ')
+                                            }
                                         </p>
                                     }
                                 </>
@@ -145,7 +157,7 @@ const ShippingSelection = ({
                                         <h2 className="my-2 self-center text-xl text-bold">
                                             Choose Shipping Method
                                         </h2>
-                                        {(updatingShippinZipcode || loadingCart) &&
+                                        {isLoading &&
                                             <Loading />
                                         }
                                     </div>
@@ -157,7 +169,7 @@ const ShippingSelection = ({
                                                     type="radio"
                                                     name="chosenShippingMethod"
                                                     className="my-2"
-                                                    disabled={updatingShippinZipcode}
+                                                    disabled={isLoading}
                                                     value={method.id}
                                                     onChange={handleShippingSelection}
                                                     checked={shippingMethod == method.id}
@@ -169,7 +181,20 @@ const ShippingSelection = ({
                             }
                         </div>
                     </div>
-
+                    <table className="mt-4 checkout-cart table table-hover w-full mb-10">
+                        <tbody>
+                            <tr className="bg-gray-200">
+                                <td className="w-24" />
+                                <td className="woo-next-checkout-total font-normal ">Shipping</td>
+                                <td className="woo-next-checkout-total font-bold ">{cart.shippingTotal}</td>
+                            </tr>
+                            <tr className="bg-gray-200">
+                                <td className="" />
+                                <td className="woo-next-checkout-total font-normal text-xl">Total</td>
+                                <td className="woo-next-checkout-total font-bold text-xl">{cart.total}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </>
             }
         </div>
