@@ -237,8 +237,17 @@ export const getFormattedCart = ( data ) => {
 		formattedCart.products.push( product );
 	}
 
+	formattedCart.needsShippingAddress = data?.cart?.needsShippingAddress;
+	formattedCart.shippingMethod = data?.cart?.chosenShippingMethods[0] ?? '';
+	formattedCart.shippingMethods = data?.cart?.availableShippingMethods
+		? data?.cart?.availableShippingMethods[0]?.rates
+		: [];
+	formattedCart.shippingTotal = formattedCart?.shippingMethods?.find(
+		ship => ship.id == formattedCart?.shippingMethod
+	)?.cost;
+
 	formattedCart.totalProductsCount = totalProductsCount;
-	formattedCart.totalProductsPrice = data?.cart?.total ?? '';
+	formattedCart.totalProductsPrice = data?.cart?.subtotal ?? '';
 
 	return formattedCart;
 
