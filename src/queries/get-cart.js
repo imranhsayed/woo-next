@@ -81,6 +81,17 @@ query GET_CART {
     feeTotal
     discountTax
     discountTotal
+    availableShippingMethods {
+      packageDetails
+      rates {
+        id
+        label
+        cost
+        methodId
+      }
+    }
+    chosenShippingMethods
+    needsShippingAddress
   }
 }
 `;
