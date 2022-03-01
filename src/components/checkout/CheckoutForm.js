@@ -18,6 +18,7 @@ import {
 } from "../../utils/checkout";
 import CheckboxField from "./form-elements/CheckboxField";
 import CLEAR_CART_MUTATION from "../../mutations/clear-cart";
+import ShippingCosts from './ShippingCosts';
 
 // Use this for testing purposes, so you dont have to fill the checkout form over an over again.
 // const defaultCustomerInfo = {
@@ -79,13 +80,18 @@ const CheckoutForm = ({countriesData}) => {
     const [createdOrderData, setCreatedOrderData] = useState({});
 
     // Get Cart Data.
-    const {data} = useQuery(GET_CART, {
+    const {
+        loading: loadingCart,
+        data, 
+        refetch
+    } = useQuery(GET_CART, {
         notifyOnNetworkStatusChange: true,
         onCompleted: () => {
             // Update cart in the localStorage.
             const updatedCart = getFormattedCart(data);
             localStorage.setItem('woo-next-cart', JSON.stringify(updatedCart));
 
+            console.log("car refetch", data, updatedCart);
             // Update cart data in React Context.
             setCart(updatedCart);
         }
@@ -257,7 +263,12 @@ const CheckoutForm = ({countriesData}) => {
                             {/*	Order*/}
                             <h2 className="text-xl font-medium mb-4">Your Order</h2>
                             <YourOrder cart={cart}/>
-
+                            <ShippingCosts
+                                cart={cart}
+                                refetchCart={refetch}
+                                shippingAddress={input?.shipping}
+                                loadingCart={loadingCart}
+                            />
                             {/*Payment*/}
                             <PaymentModes input={input} handleOnChange={handleOnChange}/>
 
