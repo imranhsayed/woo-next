@@ -12,13 +12,16 @@ const ShippingSelection = ({
     refetchCart,
     shippingAddress,
     loadingCart,
-    setRequestError
+    validateFields,
+    // setRequestError
 }) => {
 
     const [
         shippingMethod,
         setShippingMethod
     ] = useState(cart?.shippingMethod ?? '');
+
+    const [requestError, setRequestError] = useState(null);
 
     const requestDefaultOptions = {
         onCompleted: () => {
@@ -53,12 +56,24 @@ const ShippingSelection = ({
     }] = useMutation(UPDATE_SHIPPING_METHOD, requestDefaultOptions);
 
     const handleCalcShippingClick = async (event) => {
+
+        setRequestError("");
+        if (!validateFields()) {
+            setRequestError('Please fill out all required shipping fields to calculate shipping costs.');
+            return;
+        }
         // if (cart?.customer?.shipping.address1 != shippingAddress.address1
         //     || cart?.customer?.shipping.city != shippingAddress.city
         //     || cart?.customer?.shipping.state != shippingAddress.state
         //     || cart?.customer?.shipping.postcode != shippingAddress.postcode
         // ) {
-        const { errors, ...shipping } = shippingAddress;
+        const { 
+            errors, 
+            createAccount,
+            orderNotes,
+            ...shipping 
+        } = shippingAddress;
+
         console.log("update shipping add", shipping);
         updateShippingAddress({
             variables: {
@@ -96,60 +111,65 @@ const ShippingSelection = ({
                 <>
                     <h2 className="mb-2 text-xl text-bold">Shipping Costs</h2>
                     <hr className="my-4 " />
-                    {shippingAddress?.country && shippingAddress?.state && shippingAddress?.postcode &&
-                        <div className="flex flex-wrap justify-between">
-                            <div className="flex-grow">
-                                {
-                                    <>
-                                        <button
-                                            disabled={updatingShippinZipcode || loadingCart}
-                                            type={"button"}
-                                            onClick={handleCalcShippingClick}
-                                            className={cx(
-                                                'bg-purple-600 text-white px-5 py-3 rounded-sm w-auto xl:w-full',
-                                                { 'opacity-50': updatingShippinZipcode }
-                                            )}
-                                        >
-                                            Update Shipping Costs
-                                        </button>
-                                        <p className="my-4 text-xs opacity-75">
+                    <div className="flex flex-wrap justify-between">
+                        <div className="flex-grow">
+                            {
+                                <>
+                                    <button
+                                        disabled={updatingShippinZipcode || loadingCart}
+                                        type={"button"}
+                                        onClick={handleCalcShippingClick}
+                                        className={cx(
+                                            'bg-purple-600 text-white px-5 py-3 rounded-sm w-auto xl:w-full',
+                                            { 'opacity-50': updatingShippinZipcode }
+                                        )}
+                                    >
+                                        Update Shipping Costs
+                                    </button>
+                                    {requestError
+                                        ? <p className="my-4 text-red-600">{requestError}</p>
+                                        : <p className="my-4 text-xs opacity-75">
                                             {shippingAddress.address1}
                                             - {shippingAddress.city}
                                             / {shippingAddress.state}
                                         </p>
-                                    </>
-                                }
-                                {cart?.shippingMethods?.length
-                                    && <div className='shipping-methods-wrap'>
-                                        <div className='flex'>
-                                            <h2 className="my-2 self-center text-xl text-bold">
-                                                Choose Shipping Method
-                                            </h2>
-                                            {(updatingShippinZipcode || loadingCart) &&
-                                                <Loading />
-                                            }
-                                        </div>
-                                        <hr className="my-2" />
-                                        {cart?.shippingMethods?.map(method => (
-                                            <div key={method.id}>
-                                                <label>
-                                                    <input
-                                                        type="radio"
-                                                        name="chosenShippingMethod"
-                                                        className="my-2"
-                                                        disabled={updatingShippinZipcode}
-                                                        value={method.id}
-                                                        onChange={handleShippingSelection}
-                                                        checked={shippingMethod == method.id}
-                                                    /> {method.label} - {method.cost}
-                                                </label>
-                                            </div>
-                                        ))}
+                                    }
+                                </>
+                            }
+                            {shippingAddress?.country
+                                && shippingAddress?.state
+                                && shippingAddress?.postcode
+                                && cart?.shippingMethods?.length
+                                && <div className='shipping-methods-wrap'>
+                                    <div className='flex'>
+                                        <h2 className="my-2 self-center text-xl text-bold">
+                                            Choose Shipping Method
+                                        </h2>
+                                        {(updatingShippinZipcode || loadingCart) &&
+                                            <Loading />
+                                        }
                                     </div>
-                                }
-                            </div>
+                                    <hr className="my-2" />
+                                    {cart?.shippingMethods?.map(method => (
+                                        <div key={method.id}>
+                                            <label>
+                                                <input
+                                                    type="radio"
+                                                    name="chosenShippingMethod"
+                                                    className="my-2"
+                                                    disabled={updatingShippinZipcode}
+                                                    value={method.id}
+                                                    onChange={handleShippingSelection}
+                                                    checked={shippingMethod == method.id}
+                                                /> {method.label} - {method.cost}
+                                            </label>
+                                        </div>
+                                    ))}
+                                </div>
+                            }
                         </div>
-                    }
+                    </div>
+
                 </>
             }
         </div>

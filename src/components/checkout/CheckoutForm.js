@@ -114,40 +114,50 @@ const CheckoutForm = ({countriesData}) => {
 
     const [ clearCartMutation ] = useMutation( CLEAR_CART_MUTATION );
 
-    /*
-     * Handle form submit.
+    /**
+     * Validate Billing and Shipping Details
      *
-     * @param {Object} event Event Object.
-     *
-     * @return {void}
+     * Note:
+     * 1. If billing is different than shipping address, only then validate billing.
+     * 2. We are passing theBillingStates?.length and theShippingStates?.length, so that
+     * the respective states should only be mandatory, if a country has states.
      */
-    const handleFormSubmit = async (event) => {
-        event.preventDefault();
+    const validateFields = () => {
+        let isValid= true;
 
-        /**
-         * Validate Billing and Shipping Details
-         *
-         * Note:
-         * 1. If billing is different than shipping address, only then validate billing.
-         * 2. We are passing theBillingStates?.length and theShippingStates?.length, so that
-         * the respective states should only be mandatory, if a country has states.
-         */
-        const billingValidationResult = input?.billingDifferentThanShipping ? validateAndSanitizeCheckoutForm(input?.billing, theBillingStates?.length) : {errors: null, isValid: true};
+        const billingValidationResult = input?.billingDifferentThanShipping ? validateAndSanitizeCheckoutForm(input?.billing, theBillingStates?.length) : { errors: null, isValid: true };
         const shippingValidationResult = validateAndSanitizeCheckoutForm(input?.shipping, theShippingStates?.length);
 
         if (!shippingValidationResult.isValid || !billingValidationResult.isValid) {
             setInput({
                 ...input,
-                billing: {...input.billing, errors: billingValidationResult.errors},
-                shipping: {...input.shipping, errors: shippingValidationResult.errors}
+                billing: { ...input.billing, errors: billingValidationResult.errors },
+                shipping: { ...input.shipping, errors: shippingValidationResult.errors }
             });
 
+            isValid = false;
+        }
+
+        return isValid;
+    };
+    
+    /*
+    * Handle form submit.
+    *
+    * @param {Object} event Event Object.
+    *
+    * @return {void}
+    */
+    const handleFormSubmit = async (event) => {
+        event.preventDefault();
+
+        if( ! validateFields() ) {
             return;
         }
 
-        if ( 'stripe-mode' === input.paymentMethod ) {
+        if ('stripe-mode' === input.paymentMethod) {
             const createdOrderData = await handleStripeCheckout(input, cart?.products, setRequestError, clearCartMutation, setIsStripeOrderProcessing, setCreatedOrderData);
-        	return null;
+            return null;
         }
 
         const checkOutData = createCheckoutData(input);
@@ -268,6 +278,7 @@ const CheckoutForm = ({countriesData}) => {
                                 refetchCart={refetch}
                                 shippingAddress={input?.shipping}
                                 loadingCart={loadingCart}
+                                validateFields={validateFields}
                             />
                             {/*Payment*/}
                             <PaymentModes input={input} handleOnChange={handleOnChange}/>
