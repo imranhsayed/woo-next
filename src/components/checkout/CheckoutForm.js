@@ -18,6 +18,7 @@ import {
 } from "../../utils/checkout";
 import CheckboxField from "./form-elements/CheckboxField";
 import CLEAR_CART_MUTATION from "../../mutations/clear-cart";
+import ShippingCosts from './ShippingCosts';
 
 // Use this for testing purposes, so you dont have to fill the checkout form over an over again.
 // const defaultCustomerInfo = {
@@ -79,7 +80,11 @@ const CheckoutForm = ({countriesData}) => {
     const [createdOrderData, setCreatedOrderData] = useState({});
 
     // Get Cart Data.
-    const {data} = useQuery(GET_CART, {
+    const {
+        loading: loadingCart,
+        data, 
+        refetch
+    } = useQuery(GET_CART, {
         notifyOnNetworkStatusChange: true,
         onCompleted: () => {
             // Update cart in the localStorage.
@@ -108,40 +113,50 @@ const CheckoutForm = ({countriesData}) => {
 
     const [ clearCartMutation ] = useMutation( CLEAR_CART_MUTATION );
 
-    /*
-     * Handle form submit.
+    /**
+     * Validate Billing and Shipping Details
      *
-     * @param {Object} event Event Object.
-     *
-     * @return {void}
+     * Note:
+     * 1. If billing is different than shipping address, only then validate billing.
+     * 2. We are passing theBillingStates?.length and theShippingStates?.length, so that
+     * the respective states should only be mandatory, if a country has states.
      */
-    const handleFormSubmit = async (event) => {
-        event.preventDefault();
+    const validateFields = () => {
+        let isValid= true;
 
-        /**
-         * Validate Billing and Shipping Details
-         *
-         * Note:
-         * 1. If billing is different than shipping address, only then validate billing.
-         * 2. We are passing theBillingStates?.length and theShippingStates?.length, so that
-         * the respective states should only be mandatory, if a country has states.
-         */
-        const billingValidationResult = input?.billingDifferentThanShipping ? validateAndSanitizeCheckoutForm(input?.billing, theBillingStates?.length) : {errors: null, isValid: true};
+        const billingValidationResult = input?.billingDifferentThanShipping ? validateAndSanitizeCheckoutForm(input?.billing, theBillingStates?.length) : { errors: null, isValid: true };
         const shippingValidationResult = validateAndSanitizeCheckoutForm(input?.shipping, theShippingStates?.length);
 
         if (!shippingValidationResult.isValid || !billingValidationResult.isValid) {
             setInput({
                 ...input,
-                billing: {...input.billing, errors: billingValidationResult.errors},
-                shipping: {...input.shipping, errors: shippingValidationResult.errors}
+                billing: { ...input.billing, errors: billingValidationResult.errors },
+                shipping: { ...input.shipping, errors: shippingValidationResult.errors }
             });
 
+            isValid = false;
+        }
+
+        return isValid;
+    };
+    
+    /*
+    * Handle form submit.
+    *
+    * @param {Object} event Event Object.
+    *
+    * @return {void}
+    */
+    const handleFormSubmit = async (event) => {
+        event.preventDefault();
+
+        if( ! validateFields() ) {
             return;
         }
 
-        if ( 'stripe-mode' === input.paymentMethod ) {
+        if ('stripe-mode' === input.paymentMethod) {
             const createdOrderData = await handleStripeCheckout(input, cart?.products, setRequestError, clearCartMutation, setIsStripeOrderProcessing, setCreatedOrderData);
-        	return null;
+            return null;
         }
 
         const checkOutData = createCheckoutData(input);
@@ -257,7 +272,13 @@ const CheckoutForm = ({countriesData}) => {
                             {/*	Order*/}
                             <h2 className="text-xl font-medium mb-4">Your Order</h2>
                             <YourOrder cart={cart}/>
-
+                            <ShippingCosts
+                                cart={cart}
+                                refetchCart={refetch}
+                                shippingAddress={input?.shipping}
+                                loadingCart={loadingCart}
+                                validateFields={validateFields}
+                            />
                             {/*Payment*/}
                             <PaymentModes input={input} handleOnChange={handleOnChange}/>
 

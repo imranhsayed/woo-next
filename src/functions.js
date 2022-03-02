@@ -15,6 +15,23 @@ export const getFloatVal = ( string ) => {
 };
 
 /**
+ * Format float value as Currency string.
+ *
+ * @param {float} num The number to be formatted.
+ * @return {string}
+ */
+ export const formatCurrency = (num, currency = '$') => {
+	let floatValue = num;
+	if ('string' === typeof floatValue) {
+		floatValue = getFloatVal(floatValue);
+	}
+	if( ! floatValue ) {
+		floatValue = 0;
+	}
+	return (currency + floatValue.toFixed(2));
+};
+
+/**
  * Add first product.
  *
  * @param {Object} product Product
@@ -237,8 +254,27 @@ export const getFormattedCart = ( data ) => {
 		formattedCart.products.push( product );
 	}
 
+	formattedCart.needsShippingAddress = data?.cart?.needsShippingAddress;
+	formattedCart.shippingMethod = data?.cart?.chosenShippingMethods[0] ?? '';
+	formattedCart.shippingMethods = data?.cart?.availableShippingMethods
+		? data?.cart?.availableShippingMethods[0]?.rates
+		: [];
+	formattedCart.shippingTotal = formattedCart?.shippingMethods?.find(
+		ship => ship.id == formattedCart?.shippingMethod
+	)?.cost;
+
 	formattedCart.totalProductsCount = totalProductsCount;
-	formattedCart.totalProductsPrice = data?.cart?.total ?? '';
+	formattedCart.totalProductsPrice = data?.cart?.subtotal ?? '';
+	formattedCart.total = data?.cart?.total ?? '';
+
+	if (data?.customer) {
+		let customer = {
+			...data?.customer,
+			shipping: { ...data?.customer?.shipping },
+			billing: { ...data?.customer?.billing }
+		};
+		formattedCart.customer = customer;
+	}
 
 	return formattedCart;
 
