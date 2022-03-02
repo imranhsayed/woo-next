@@ -14,7 +14,6 @@ const ShippingSelection = ({
     shippingAddress,
     loadingCart,
     validateFields,
-    // setRequestError
 }) => {
 
     const [
@@ -136,18 +135,18 @@ const ShippingSelection = ({
                                         : <p className="my-4 text-xs opacity-75">
                                             {
                                                 [
-                                                    shippingAddress.address1,
-                                                    shippingAddress.city,
-                                                    shippingAddress.state
+                                                    cart?.customer?.shipping?.address1,
+                                                    cart?.customer?.shipping?.city,
+                                                    cart?.customer?.shipping?.state
                                                 ].filter(val => val).join(' - ')
                                             }
                                         </p>
                                     }
                                 </>
                             }
-                            {shippingAddress?.country
-                                && shippingAddress?.state
-                                && shippingAddress?.postcode
+                            {cart?.customer?.shipping?.country
+                                && cart?.customer?.shipping?.state
+                                && cart?.customer?.shipping?.postcode
                                 && cart?.shippingMethods?.length
                                 && <div className='shipping-methods-wrap'>
                                     <div className='flex'>
