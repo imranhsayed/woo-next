@@ -15,6 +15,23 @@ export const getFloatVal = ( string ) => {
 };
 
 /**
+ * Format float value as Currency string.
+ *
+ * @param {float} num The number to be formatted.
+ * @return {string}
+ */
+ export const formatCurrency = (num, currency = '$') => {
+	let floatValue = num;
+	if ('string' === typeof floatValue) {
+		floatValue = getFloatVal(floatValue);
+	}
+	if( ! floatValue ) {
+		floatValue = 0;
+	}
+	return (currency + floatValue.toFixed(2));
+};
+
+/**
  * Add first product.
  *
  * @param {Object} product Product

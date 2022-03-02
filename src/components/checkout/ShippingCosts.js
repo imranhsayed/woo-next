@@ -6,6 +6,7 @@ import { UPDATE_SHIPPING_METHOD } from "../../mutations/update-shipping-method";
 import LoadingImg from "../LoadingImg";
 import { isEmpty } from 'lodash';
 import cx from 'classnames';
+import { formatCurrency } from "../../functions";
 
 const ShippingSelection = ({
     cart,
@@ -62,11 +63,7 @@ const ShippingSelection = ({
             setRequestError('Please fill out all required shipping fields to calculate shipping costs.');
             return;
         }
-        // if (cart?.customer?.shipping.address1 != shippingAddress.address1
-        //     || cart?.customer?.shipping.city != shippingAddress.city
-        //     || cart?.customer?.shipping.state != shippingAddress.state
-        //     || cart?.customer?.shipping.postcode != shippingAddress.postcode
-        // ) {
+
         const {
             errors,
             createAccount,
@@ -82,7 +79,6 @@ const ShippingSelection = ({
                 }
             },
         });
-        // }
     };
 
     const handleShippingSelection = (event) => {
@@ -134,6 +130,9 @@ const ShippingSelection = ({
                                     >
                                         Update Shipping Costs
                                     </button>
+                                    {isLoading &&
+                                        <LoadingImg />
+                                    }
                                     {requestError
                                         ? <p className="my-4 text-red-600">{requestError}</p>
                                         : <p className="my-4 text-xs opacity-75">
@@ -157,9 +156,6 @@ const ShippingSelection = ({
                                         <h2 className="my-2 self-center text-xl text-bold">
                                             Choose Shipping Method
                                         </h2>
-                                        {isLoading &&
-                                            <LoadingImg />
-                                        }
                                     </div>
                                     <hr className="my-2" />
                                     {cart?.shippingMethods?.map(method => (
@@ -173,7 +169,7 @@ const ShippingSelection = ({
                                                     value={method.id}
                                                     onChange={handleShippingSelection}
                                                     checked={shippingMethod == method.id}
-                                                /> {method.label} - {method.cost}
+                                                /> {method.label} - {formatCurrency(method.cost)}
                                             </label>
                                         </div>
                                     ))}
@@ -186,7 +182,7 @@ const ShippingSelection = ({
                             <tr className="bg-gray-200">
                                 <td className="w-24" />
                                 <td className="woo-next-checkout-total font-normal ">Shipping</td>
-                                <td className="woo-next-checkout-total font-bold ">{cart.shippingTotal}</td>
+                                <td className="woo-next-checkout-total font-bold ">{formatCurrency(cart.shippingTotal)}</td>
                             </tr>
                             <tr className="bg-gray-200">
                                 <td className="" />
