@@ -250,6 +250,15 @@ export const getFormattedCart = ( data ) => {
 	formattedCart.totalProductsPrice = data?.cart?.subtotal ?? '';
 	formattedCart.total = data?.cart?.total ?? '';
 
+	if (data?.customer) {
+		let customer = {
+			...data?.customer,
+			shipping: { ...data?.customer?.shipping },
+			billing: { ...data?.customer?.billing }
+		};
+		formattedCart.customer = customer;
+	}
+
 	return formattedCart;
 
 };
