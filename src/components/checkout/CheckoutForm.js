@@ -91,7 +91,6 @@ const CheckoutForm = ({countriesData}) => {
             const updatedCart = getFormattedCart(data);
             localStorage.setItem('woo-next-cart', JSON.stringify(updatedCart));
 
-            console.log("car refetch", data, updatedCart);
             // Update cart data in React Context.
             setCart(updatedCart);
         }

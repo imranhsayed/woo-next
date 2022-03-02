@@ -26,7 +26,6 @@ const ShippingSelection = ({
 
     const requestDefaultOptions = {
         onCompleted: () => {
-            console.log("completed, refetch");
             refetchCart('cart');
         },
         onError: (error) => {
@@ -87,7 +86,6 @@ const ShippingSelection = ({
         setShippingMethod(chosenShippingMethod);
 
         if (chosenShippingMethod != shippingMethod) {
-            console.log("mutate shipping method", chosenShippingMethod, shippingMethod);
             ShippingSelectionMethod({
                 variables: {
                     shippingMethod: {
