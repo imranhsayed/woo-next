@@ -1,8 +1,13 @@
-const WooCommerceRestApi = require("@woocommerce/woocommerce-rest-api").default;
+import WooCommerceRestApiPkg from "@woocommerce/woocommerce-rest-api";
 import {isEmpty} from 'lodash'
+import { WORDPRESS_URL } from "../../src/constants/urls";
+
+// The package is CommonJS and exposes the class on `.default`, so unwrap it
+// explicitly rather than relying on bundler interop.
+const WooCommerceRestApi = WooCommerceRestApiPkg.default ?? WooCommerceRestApiPkg;
 
 const api = new WooCommerceRestApi({
-    url: process.env.NEXT_PUBLIC_WORDPRESS_URL,
+    url: WORDPRESS_URL,
     consumerKey: process.env.WC_CONSUMER_KEY,
     consumerSecret: process.env.WC_CONSUMER_SECRET,
     version: "wc/v3"
@@ -30,7 +35,7 @@ export default async function handler(req, res) {
 
     if ( isEmpty(req.body) ) {
         responseData.error = 'Required data not sent';
-        return responseData
+        return res.status(400).json(responseData);
     }
 
     const data = req.body;

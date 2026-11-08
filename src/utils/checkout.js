@@ -1,7 +1,5 @@
 import client from "../components/ApolloClient";
-import {isEmpty, isArray} from 'lodash';
-import { createCheckoutSession } from 'next-stripe/client' // @see https://github.com/ynnoj/next-stripe
-import { loadStripe } from "@stripe/stripe-js";
+import {isEmpty} from 'lodash';
 
 import GET_STATES from "../queries/get-states";
 import {createTheOrder, getCreateOrderData} from "./order";
@@ -84,46 +82,49 @@ export const handleStripeCheckout = async (input, products, setRequestError, cle
 
     // On success show stripe form.
     setCreatedOrderData(createCustomerOrder)
-    await createCheckoutSessionAndRedirect( products, input, createCustomerOrder?.orderId );
+    await createCheckoutSessionAndRedirect( products, input, createCustomerOrder );
 
     return createCustomerOrder;
 }
 
-const createCheckoutSessionAndRedirect = async ( products, input, orderId ) => {
+const createCheckoutSessionAndRedirect = async ( products, input, createdOrderData ) => {
+
+    const orderId = createdOrderData?.orderId;
+
     const sessionData = {
-        success_url: window.location.origin + `/thank-you?session_id={CHECKOUT_SESSION_ID}&order_id=${orderId}`,
-        cancel_url: window.location.href,
-        customer_email: input.billingDifferentThanShipping ? input?.billing?.email : input?.shipping?.email,
-        line_items: getStripeLineItems( products ),
+        products,
+        currency: createdOrderData?.currency,
+        customerEmail: input.billingDifferentThanShipping ? input?.billing?.email : input?.shipping?.email,
         metadata: getMetaData( input, orderId ),
-        payment_method_types: ['card'],
-        mode: 'payment'
-    }
-    const session = await createCheckoutSession(sessionData)
+        successUrl: `${window.location.origin}/thank-you?session_id={CHECKOUT_SESSION_ID}&order_id=${orderId}`,
+        cancelUrl: window.location.href,
+    };
+
     try {
-        const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
-        if (stripe) {
-            stripe.redirectToCheckout({ sessionId: session.id });
-        }
-    } catch (error) {
-        console.log( error );
-    }
-}
+        const response = await fetch( '/api/create-checkout-session', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify( sessionData ),
+        } );
 
-const getStripeLineItems = (products) => {
-    if (isEmpty(products) && !isArray(products)) {
-        return [];
-    }
+        const session = await response.json();
 
-    return products.map(product => {
-        return {
-            quantity: product?.qty ?? 0,
-            name: product?.name ?? '',
-            images: [product?.image?.sourceUrl ?? ''],
-            amount: Math.round(product?.price * 100),
-            currency: 'usd',
+        if ( ! response.ok || ! session?.url ) {
+            console.error( 'Stripe checkout session failed', session?.error );
+            return;
         }
-    })
+
+        /**
+         * Redirect to the Stripe-hosted checkout page.
+         * `redirectToCheckout` from @stripe/stripe-js is deprecated in favour of
+         * the session url, so the publishable key is no longer needed here.
+         */
+        window.location.assign( session.url );
+    } catch ( error ) {
+        console.error( 'Stripe checkout session error', error );
+    }
 }
 
 /**

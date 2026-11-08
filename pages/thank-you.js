@@ -11,11 +11,11 @@ const ThankYouContent = () => {
     const [cart, setCart] = useContext(AppContext);
     const [isSessionFetching, setSessionFetching] = useState(false);
     const [sessionData, setSessionData] = useState({});
-    const session_id = process.browser ? Router.query.session_id : null;
+    const session_id = typeof window !== 'undefined' ? Router.query.session_id : null;
 
     useEffect(() => {
         setSessionFetching(true);
-        if (process.browser) {
+        if (typeof window !== 'undefined') {
             localStorage.removeItem('woo-next-cart');
             setCart(null);
 
@@ -59,9 +59,7 @@ const ThankYouContent = () => {
                             </tr>
                             </tbody>
                         </table>
-                        <Link href="/">
-                            <a className="bg-purple-600 text-white px-5 py-3 rounded-sm w-auto">Shop more</a>
-                        </Link>
+                        <Link href="/" className="bg-purple-600 text-white px-5 py-3 rounded-sm w-auto">Shop more</Link>
                     </>
                 )}
             </div>

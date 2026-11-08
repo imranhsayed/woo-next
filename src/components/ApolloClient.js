@@ -1,6 +1,6 @@
-import fetch from 'node-fetch';
-
 import { ApolloClient, ApolloLink, InMemoryCache, createHttpLink } from "@apollo/client";
+
+import { GRAPHQL_URL } from "../constants/urls";
 
 /**
  * Middleware operation
@@ -10,7 +10,7 @@ export const middleware = new ApolloLink( ( operation, forward ) => {
 	/**
 	 * If session data exist in local storage, set value as session header.
 	 */
-	const session = ( process.browser ) ?  localStorage.getItem( "woo-session" ) : null;
+	const session = ( typeof window !== 'undefined' ) ?  localStorage.getItem( "woo-session" ) : null;
 
 	if ( session ) {
 		operation.setContext( ( { headers = {} } ) => ( {
@@ -33,7 +33,7 @@ export const afterware = new ApolloLink( ( operation, forward ) => {
 
 	return forward( operation ).map( response => {
 
-		if ( !process.browser ) {
+		if ( typeof window === 'undefined' ) {
 			return response;
 		}
 
@@ -67,8 +67,7 @@ export const afterware = new ApolloLink( ( operation, forward ) => {
 // Apollo GraphQL client.
 const client = new ApolloClient({
 	link: middleware.concat( afterware.concat( createHttpLink({
-		uri: `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/graphql`,
-		fetch: fetch
+		uri: GRAPHQL_URL
 	}) ) ),
 	cache: new InMemoryCache(),
 });

@@ -2,6 +2,123 @@ import { v4 } from 'uuid';
 import {isEmpty, isArray} from 'lodash'
 
 /**
+ * Named HTML entities WooCommerce uses in its formatted price strings.
+ *
+ * Currency symbols are commonly emitted as entities (e.g. `&#036;`), and the
+ * gap between amount and symbol is a `&nbsp;`.
+ */
+const NAMED_ENTITIES = {
+	amp: '&',
+	lt: '<',
+	gt: '>',
+	quot: '"',
+	apos: "'",
+	nbsp: '\u00a0',
+	euro: '\u20ac',
+	pound: '\u00a3',
+	yen: '\u00a5',
+	cent: '\u00a2',
+	ndash: '\u2013',
+	mdash: '\u2014',
+};
+
+/**
+ * Decode HTML entities in a string.
+ *
+ * WooCommerce returns prices as HTML (`15,00&nbsp;\u20ac`), but React escapes
+ * text nodes, so the raw entity would be shown to the user. Decoding here keeps
+ * the value a plain string, so we never need `dangerouslySetInnerHTML`.
+ *
+ * Implemented without the DOM so it behaves identically during SSR.
+ *
+ * @param {string} value Possibly entity-encoded string.
+ * @return {string} Decoded string, or the input unchanged if not a string.
+ */
+export const decodeHtmlEntities = ( value ) => {
+
+	if ( 'string' !== typeof value ) {
+		return value;
+	}
+
+	return value.replace( /&(#x[0-9a-f]+|#[0-9]+|[a-z][a-z0-9]*);/gi, ( match, entity ) => {
+
+		if ( '#' === entity[ 0 ] ) {
+			const isHex = 'x' === entity[ 1 ].toLowerCase();
+			const codePoint = parseInt( entity.slice( isHex ? 2 : 1 ), isHex ? 16 : 10 );
+
+			try {
+				return String.fromCodePoint( codePoint );
+			} catch ( error ) {
+				// Out-of-range code point; leave the original text untouched.
+				return match;
+			}
+		}
+
+		const named = NAMED_ENTITIES[ entity.toLowerCase() ];
+
+		return undefined !== named ? named : match;
+	} );
+};
+
+/**
+ * Parse the first number out of a formatted price string.
+ *
+ * Handles both separator conventions, since the currency symbol may lead
+ * (`$1,234.56`) or trail (`1.234,56\u00a0\u20ac`), and picks the first amount
+ * from a range such as `15,00\u20ac - 20,00\u20ac`.
+ *
+ * @param {string|number} value Formatted price.
+ * @return {number} Parsed amount, or NaN when there is no number to read.
+ */
+export const parsePriceNumber = ( value ) => {
+
+	if ( 'number' === typeof value ) {
+		return value;
+	}
+
+	if ( 'string' !== typeof value ) {
+		return NaN;
+	}
+
+	const match = decodeHtmlEntities( value ).match( /-?\d[\d.,\s\u00a0]*/ );
+
+	if ( ! match ) {
+		return NaN;
+	}
+
+	// Drop grouping spaces, e.g. the French "1 234,56".
+	let digits = match[ 0 ].replace( /[\s\u00a0]/g, '' ).replace( /[.,]$/, '' );
+
+	const lastDot = digits.lastIndexOf( '.' );
+	const lastComma = digits.lastIndexOf( ',' );
+	const lastSeparator = Math.max( lastDot, lastComma );
+
+	if ( -1 !== lastSeparator ) {
+		/**
+		 * When both separators appear, the right-most one is the decimal mark.
+		 * With only one, three trailing digits mean thousands grouping
+		 * (`1,234`), anything else means a decimal mark (`15,00`).
+		 */
+		const hasBoth = -1 !== lastDot && -1 !== lastComma;
+		const trailingDigits = digits.length - lastSeparator - 1;
+		const isDecimalMark = hasBoth || 3 !== trailingDigits;
+
+		if ( isDecimalMark ) {
+			// Strip grouping marks, then normalise the decimal mark to a dot.
+			const grouping = '.' === digits[ lastSeparator ] ? ',' : '.';
+			digits = digits.split( grouping ).join( '' );
+			digits = digits.replace( /[.,]([^.,]*)$/, '.$1' );
+		} else {
+			digits = digits.split( digits[ lastSeparator ] ).join( '' );
+		}
+	}
+
+	const amount = parseFloat( digits );
+
+	return Number.isNaN( amount ) ? NaN : amount;
+};
+
+/**
  * Extracts and returns float value from a string.
  *
  * @param {string} string String
@@ -223,7 +340,7 @@ export const getFormattedCart = ( data ) => {
 		product.name = givenProduct?.name ?? '';
 		product.qty = givenProducts?.[ i ]?.quantity;
 		product.price = total / product?.qty;
-		product.totalPrice = givenProducts?.[ i ]?.total ?? '';
+		product.totalPrice = decodeHtmlEntities( givenProducts?.[ i ]?.total ?? '' );
 		product.image = {
 			sourceUrl: givenProduct?.image?.sourceUrl ?? '',
 			srcSet: givenProduct?.image?.srcSet ?? '',
@@ -238,7 +355,7 @@ export const getFormattedCart = ( data ) => {
 	}
 
 	formattedCart.totalProductsCount = totalProductsCount;
-	formattedCart.totalProductsPrice = data?.cart?.total ?? '';
+	formattedCart.totalProductsPrice = decodeHtmlEntities( data?.cart?.total ?? '' );
 
 	return formattedCart;
 

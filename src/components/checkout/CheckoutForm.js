@@ -1,6 +1,7 @@
 import {useState, useContext, useEffect} from 'react';
 import {useMutation, useQuery} from '@apollo/client';
 import cx from 'classnames'
+import {isEmpty} from 'lodash'
 
 import YourOrder from "./YourOrder";
 import PaymentModes from "./PaymentModes";
@@ -54,6 +55,17 @@ const CheckoutForm = ({countriesData}) => {
 
     const {billingCountries, shippingCountries} = countriesData || {}
 
+    /**
+     * Fall back to the shipping countries when billing countries come back empty.
+     *
+     * headless-cms resolves `billingCountries` from the raw
+     * `WC()->countries->countries` property, which modern WooCommerce leaves
+     * unpopulated until `get_countries()` runs. Without this the billing country
+     * dropdown would render with no options, making the "billing address
+     * different than shipping" path impossible to complete.
+     */
+    const billingCountryOptions = isEmpty( billingCountries ) ? shippingCountries : billingCountries;
+
     const initialState = {
         billing: {
             ...defaultCustomerInfo,
@@ -80,16 +92,27 @@ const CheckoutForm = ({countriesData}) => {
 
     // Get Cart Data.
     const {data} = useQuery(GET_CART, {
-        notifyOnNetworkStatusChange: true,
-        onCompleted: () => {
-            // Update cart in the localStorage.
-            const updatedCart = getFormattedCart(data);
-            localStorage.setItem('woo-next-cart', JSON.stringify(updatedCart));
-
-            // Update cart data in React Context.
-            setCart(updatedCart);
-        }
+        notifyOnNetworkStatusChange: true
     });
+
+    /**
+     * Sync the cart whenever new cart data arrives.
+     *
+     * `useQuery`'s `onCompleted` is deprecated for exactly this case; deriving
+     * from `data` also avoids reading a stale `data` from the previous render.
+     */
+    useEffect(() => {
+        if (!data) {
+            return;
+        }
+
+        // Update cart in the localStorage.
+        const updatedCart = getFormattedCart(data);
+        localStorage.setItem('woo-next-cart', JSON.stringify(updatedCart));
+
+        // Update cart data in React Context.
+        setCart(updatedCart);
+    }, [data, setCart]);
 
     // Create New order: Checkout Mutation.
     const [checkout, {
@@ -194,12 +217,24 @@ const CheckoutForm = ({countriesData}) => {
         await setStatesForCountry(target, setTheBillingStates, setIsFetchingBillingStates);
     }
 
-    useEffect(async () => {
+    useEffect(() => {
 
-        if (null !== orderData) {
+        if (null === orderData) {
+            return;
+        }
+
+        /**
+         * The effect callback must not be `async`: it would return a Promise,
+         * which React treats as the cleanup function and then tries to call on
+         * unmount ("destroy is not a function" on React 19). Keep the callback
+         * synchronous and run the async work inside it.
+         */
+        const placeOrder = async () => {
             // Call the checkout mutation when the value for orderData changes/updates.
             await checkout();
-        }
+        };
+
+        placeOrder();
 
     }, [orderData]);
 
@@ -241,7 +276,7 @@ const CheckoutForm = ({countriesData}) => {
                                     <h2 className="text-xl font-medium mb-4">Billing Details</h2>
                                     <Address
                                         states={theBillingStates}
-                                        countries={billingCountries}
+                                        countries={billingCountryOptions}
                                         input={input?.billing}
                                         handleOnChange={(event) => handleOnChange(event, false, true)}
                                         isFetchingStates={isFetchingBillingStates}

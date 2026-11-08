@@ -2,7 +2,18 @@ import Error from "../Error";
 import PropTypes from 'prop-types';
 import Abbr from "./Abbr";
 
-const InputField = ({ handleOnChange, inputValue, name, type, label, errors, placeholder, required, containerClassNames, isShipping }) => {
+const InputField = ({
+    handleOnChange = () => null,
+    inputValue = '',
+    name = '',
+    type = 'text',
+    label = '',
+    errors = {},
+    placeholder = '',
+    required = false,
+    containerClassNames = '',
+    isShipping
+}) => {
 
     const inputId = `${name}-${isShipping ? 'shipping' : ''}`;
 
@@ -36,18 +47,6 @@ InputField.propTypes = {
     errors: PropTypes.object,
     required: PropTypes.bool,
     containerClassNames: PropTypes.string
-}
-
-InputField.defaultProps = {
-    handleOnChange: () => null,
-    inputValue: '',
-    name: '',
-    type: 'text',
-    label: '',
-    placeholder: '',
-    errors: {},
-    required: false,
-    containerClassNames: ''
 }
 
 export default InputField;

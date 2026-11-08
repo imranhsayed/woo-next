@@ -3,7 +3,14 @@ import CountrySelection from "./CountrySelection";
 import StateSelection from "./StatesSelection";
 import InputField from "./form-elements/InputField";
 
-const Address = ({input, countries, states, handleOnChange, isFetchingStates, isShipping}) => {
+const Address = ({
+    input = {},
+    countries = [],
+    states,
+    handleOnChange = () => null,
+    isFetchingStates = false,
+    isShipping = false
+}) => {
 
     const {errors} = input || {};
 
@@ -143,14 +150,6 @@ Address.propTypes = {
     handleOnChange: PropTypes.func,
     isFetchingStates: PropTypes.bool,
     isShipping: PropTypes.bool
-}
-
-Address.defaultProps = {
-    input: {},
-    countries: [],
-    handleOnChange: () => null,
-    isFetchingStates: false,
-    isShipping: false
 }
 
 export default Address;

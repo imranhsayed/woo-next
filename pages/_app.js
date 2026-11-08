@@ -1,3 +1,4 @@
+import "nprogress/nprogress.css";
 import "../src/styles/style.scss";
 import "../src/styles/main.scss";
 

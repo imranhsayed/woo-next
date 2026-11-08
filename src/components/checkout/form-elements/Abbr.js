@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const Abbr = ({required}) => {
+const Abbr = ({required = false}) => {
     if ( !required ) {
     	return null;
     }
@@ -10,10 +10,6 @@ const Abbr = ({required}) => {
 
 Abbr.propTypes = {
     required: PropTypes.bool
-}
-
-Abbr.defaultProps = {
-    required: false
 }
 
 export default Abbr

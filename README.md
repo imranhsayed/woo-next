@@ -5,7 +5,7 @@
 ![Contributors](https://img.shields.io/github/contributors/imranhsayed/woo-next?color=blue)
 ![Follow](https://img.shields.io/github/followers/imranhsayed?label=Please%20follow%20%20to%20support%20my%20work%20%F0%9F%99%8F&style=social)
 
-> * This is a React WooCommerce theme, built with Next JS, Webpack, Babel, Node, GraphQl
+> * This is a React WooCommerce theme, built with Next JS, Turbopack, Node, GraphQl
 
 📹 [Full Course Video Tutorial](https://codeytek.com/course/woocommerce-with-react-course/)
 
@@ -43,7 +43,7 @@ branch is upto date with those changes. You can also refer to the PR notes for c
 4. Automatic Code Splitting
 5. Hot Reloading
 6. Prefetching
-8. Incremental Static (Re)generation ( Next.js 10 support )
+8. Incremental Static (Re)generation ( Next.js 16 support )
 9. GraphQL with Apollo Client
 10. Tailwindcss
 11. Stripe Checkout ( with Stripe Session and Stripe webhook)
@@ -54,11 +54,15 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites :page_facing_up:
 
+* Node.js `20.9.0` or later ( required by Next.js 16 )
+
 ### Installing :wrench:
 
 1. Clone this repo using terminal `git clone git@github.com:imranhsayed/woo-next`
 2. `cd woo-next`
-3. `yarn install`
+3. `npm install`
+4. Copy `.env-example` to `.env.local` and fill in your values
+5. `npm run dev`
 
 ## Add GraphQl support for WordPress
 

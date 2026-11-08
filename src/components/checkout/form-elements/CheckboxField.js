@@ -1,6 +1,13 @@
 import PropTypes from 'prop-types';
 
-const CheckboxField = ({ handleOnChange, checked, name, label, placeholder, containerClassNames }) => {
+const CheckboxField = ({
+    handleOnChange = () => null,
+    checked = false,
+    name = '',
+    label = '',
+    placeholder = '',
+    containerClassNames = ''
+}) => {
 
     return (
         <div className={containerClassNames}>
@@ -27,16 +34,6 @@ CheckboxField.propTypes = {
     label: PropTypes.string,
     placeholder: PropTypes.string,
     containerClassNames: PropTypes.string
-}
-
-CheckboxField.defaultProps = {
-    handleOnChange: () => null,
-    checked: false,
-    name: '',
-    label: '',
-    placeholder: '',
-    errors: {},
-    containerClassNames: ''
 }
 
 export default CheckboxField;

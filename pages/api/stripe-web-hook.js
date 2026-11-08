@@ -1,10 +1,12 @@
-import { buffer } from "micro";
-const Stripe = require('stripe');
-const WooCommerceRestApi = require("@woocommerce/woocommerce-rest-api").default;
+import Stripe from 'stripe';
+import { WORDPRESS_URL } from "../../src/constants/urls";
+import WooCommerceRestApiPkg from "@woocommerce/woocommerce-rest-api";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: '2020-08-27'
-});
+// The package is CommonJS and exposes the class on `.default`, so unwrap it
+// explicitly rather than relying on bundler interop.
+const WooCommerceRestApi = WooCommerceRestApiPkg.default ?? WooCommerceRestApiPkg;
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const webhookSecret = process.env.STRIPE_WEBHOOK_ENDPOINT_SECRET;
 
 export const config = {
@@ -13,8 +15,28 @@ export const config = {
     },
 };
 
+/**
+ * Read the raw request body.
+ *
+ * Stripe signature verification needs the unparsed payload, which is why
+ * `bodyParser` is disabled above. Replaces the `micro` package's `buffer()`.
+ *
+ * @param {Object} req Request.
+ *
+ * @returns {Promise<Buffer>} Raw request body.
+ */
+const getRawBody = async ( req ) => {
+    const chunks = [];
+
+    for await ( const chunk of req ) {
+        chunks.push( typeof chunk === 'string' ? Buffer.from( chunk ) : chunk );
+    }
+
+    return Buffer.concat( chunks );
+};
+
 const api = new WooCommerceRestApi({
-    url: process.env.NEXT_PUBLIC_WORDPRESS_URL,
+    url: WORDPRESS_URL,
     consumerKey: process.env.WC_CONSUMER_KEY,
     consumerSecret: process.env.WC_CONSUMER_SECRET,
     version: "wc/v3"
@@ -53,7 +75,7 @@ const updateOrder = async ( newStatus, orderId, transactionId = '' ) => {
 
 const handler = async (req, res) => {
     if (req.method === "POST") {
-        const buf = await buffer(req);
+        const buf = await getRawBody(req);
         const sig = req.headers["stripe-signature"];
 
         let stripeEvent;

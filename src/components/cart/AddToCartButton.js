@@ -1,4 +1,4 @@
-import {useState, useContext} from "react";
+import {useState, useContext, useEffect} from "react";
 import {useQuery, useMutation} from '@apollo/client';
 import Link from "next/link";
 import {v4} from 'uuid';
@@ -22,19 +22,29 @@ const AddToCart = (props) => {
     const [showViewCart, setShowViewCart] = useState(false);
     const [requestError, setRequestError] = useState(null);
 
-        // Get Cart Data.
+    // Get Cart Data.
     const {data, refetch} = useQuery(GET_CART, {
-            notifyOnNetworkStatusChange: true,
-            onCompleted: () => {
+        notifyOnNetworkStatusChange: true
+    });
 
-                // Update cart in the localStorage.
-                const updatedCart = getFormattedCart(data);
-                localStorage.setItem('woo-next-cart', JSON.stringify(updatedCart));
+    /**
+     * Sync the cart whenever new cart data arrives.
+     *
+     * `useQuery`'s `onCompleted` is deprecated for exactly this case; deriving
+     * from `data` also avoids reading a stale `data` from the previous render.
+     */
+    useEffect(() => {
+        if (!data) {
+            return;
+        }
 
-                // Update cart data in React Context.
-                setCart(updatedCart);
-            }
-        });
+        // Update cart in the localStorage.
+        const updatedCart = getFormattedCart(data);
+        localStorage.setItem('woo-next-cart', JSON.stringify(updatedCart));
+
+        // Update cart data in React Context.
+        setCart(updatedCart);
+    }, [data, setCart]);
 
     // Add to Cart Mutation.
     const [addToCart, {
@@ -87,11 +97,11 @@ const AddToCart = (props) => {
                 </button>
             }
             {showViewCart ? (
-                <Link href="/cart">
-                    <button
-                        className="px-3 py-1 rounded-sm text-sm border-solid border border-current inline-block hover:bg-purple-600 hover:text-white hover:border-purple-600">View
-                        Cart
-                    </button>
+                <Link
+                    href="/cart"
+                    className="px-3 py-1 rounded-sm text-sm border-solid border border-current inline-block hover:bg-purple-600 hover:text-white hover:border-purple-600"
+                >
+                    View Cart
                 </Link>
             ) : ''}
         </div>
