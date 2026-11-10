@@ -12,6 +12,16 @@ const { protocol, hostname } = new URL( wordPressUrl );
 
 module.exports = {
     trailingSlash: true,
+    /**
+     * Expose the checkout autofill flag to the browser.
+     *
+     * Client code can only read env vars inlined at build time, which normally
+     * requires a NEXT_PUBLIC_ prefix. Mapping it here keeps the variable named
+     * AUTOFILL_CHECKOUT_FORM in .env.local.
+     */
+    env: {
+        AUTOFILL_CHECKOUT_FORM: process.env.AUTOFILL_CHECKOUT_FORM,
+    },
     sassOptions: {
         includePaths: [path.join(__dirname, "src/styles")],
     },

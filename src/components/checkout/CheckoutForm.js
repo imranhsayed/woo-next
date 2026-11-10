@@ -13,6 +13,7 @@ import GET_CART from "../../queries/get-cart";
 import CHECKOUT_MUTATION from "../../mutations/checkout";
 import Address from "./Address";
 import {
+    getStates,
     handleBillingDifferentThanShipping,
     handleCreateAccount, handleStripeCheckout,
     setStatesForCountry
@@ -20,23 +21,7 @@ import {
 import CheckboxField from "./form-elements/CheckboxField";
 import CLEAR_CART_MUTATION from "../../mutations/clear-cart";
 
-// Use this for testing purposes, so you dont have to fill the checkout form over an over again.
-// const defaultCustomerInfo = {
-// 	firstName: 'Imran',
-// 	lastName: 'Sayed',
-// 	address1: '123 Abc farm',
-// 	address2: 'Hill Road',
-// 	city: 'Mumbai',
-// 	country: 'IN',
-// 	state: 'Maharastra',
-// 	postcode: '221029',
-// 	email: 'codeytek.academy@gmail.com',
-// 	phone: '9883778278',
-// 	company: 'The Company',
-// 	errors: null
-// }
-
-const defaultCustomerInfo = {
+const emptyCustomerInfo = {
     firstName: '',
     lastName: '',
     address1: '',
@@ -50,6 +35,33 @@ const defaultCustomerInfo = {
     company: '',
     errors: null
 }
+
+/**
+ * Dummy details used when AUTOFILL_CHECKOUT_FORM is enabled, so the form does
+ * not have to be filled in by hand on every checkout test run.
+ *
+ * The values are chosen to pass validateAndSanitizeCheckoutForm: `address1`
+ * needs at least 12 characters, `phone` must be a valid mobile number, and
+ * `state` must match a `stateName` WooCommerce returns for `country`.
+ */
+const dummyCustomerInfo = {
+    firstName: 'Imran',
+    lastName: 'Sayed',
+    address1: '123 Abc farm',
+    address2: 'Hill Road',
+    city: 'Mumbai',
+    country: 'IN',
+    state: 'Maharashtra',
+    postcode: '221029',
+    email: 'codeytek.academy@gmail.com',
+    phone: '9883778278',
+    company: 'The Company',
+    errors: null
+}
+
+const isAutofillEnabled = 'true' === process.env.AUTOFILL_CHECKOUT_FORM;
+
+const defaultCustomerInfo = isAutofillEnabled ? dummyCustomerInfo : emptyCustomerInfo;
 
 const CheckoutForm = ({countriesData}) => {
 
@@ -113,6 +125,34 @@ const CheckoutForm = ({countriesData}) => {
         // Update cart data in React Context.
         setCart(updatedCart);
     }, [data, setCart]);
+
+    /**
+     * Load the states for the autofilled country on mount.
+     *
+     * `setStatesForCountry` reads the country code off the <select> element, so
+     * it cannot be reused here. Without this the state dropdown stays empty,
+     * the prefilled state never shows as selected, and the order is placed
+     * without one.
+     */
+    useEffect(() => {
+        if (!isAutofillEnabled) {
+            return;
+        }
+
+        const loadStatesForAutofill = async () => {
+            setIsFetchingShippingStates(true);
+            setIsFetchingBillingStates(true);
+
+            const states = await getStates(dummyCustomerInfo.country);
+
+            setTheShippingStates(states);
+            setTheBillingStates(states);
+            setIsFetchingShippingStates(false);
+            setIsFetchingBillingStates(false);
+        };
+
+        loadStatesForAutofill();
+    }, []);
 
     // Create New order: Checkout Mutation.
     const [checkout, {
