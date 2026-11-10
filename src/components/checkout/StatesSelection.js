@@ -5,7 +5,13 @@ import cx from 'classnames';
 import Abbr from "./form-elements/Abbr";
 import Error from './Error';
 
-const StateSelection = ({handleOnChange, input, states, isFetchingStates, isShipping}) => {
+const StateSelection = ({
+    handleOnChange = () => null,
+    input = {},
+    states = [],
+    isFetchingStates = false,
+    isShipping = true
+}) => {
 
     const {state, errors} = input || {};
 
@@ -74,14 +80,6 @@ StateSelection.propTypes = {
     states: PropTypes.array,
     isFetchingStates: PropTypes.bool,
     isShipping: PropTypes.bool
-}
-
-StateSelection.defaultProps = {
-    handleOnChange: () => null,
-    input: {},
-    states: [],
-    isFetchingStates: false,
-    isShipping: true
 }
 
 export default memo(StateSelection);

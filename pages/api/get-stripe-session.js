@@ -1,10 +1,28 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+import Stripe from 'stripe';
 
-module.exports = async (req, res) => {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-    const { session_id } = req.query;
+/**
+ * Retrieve a Stripe Checkout Session, used by the thank-you page.
+ *
+ * @param {Object} req Request.
+ * @param {Object} res Response.
+ *
+ * @return {Promise<void>}
+ */
+export default async function handler(req, res) {
 
-    const session = await stripe.checkout.sessions.retrieve(session_id);
+    const { session_id: sessionId } = req.query;
 
-    res.status(200).json(session);
-};
+    if ( ! sessionId ) {
+        return res.status(400).json({ error: 'session_id is required' });
+    }
+
+    try {
+        const session = await stripe.checkout.sessions.retrieve(sessionId);
+        res.status(200).json(session);
+    } catch (error) {
+        console.error('Stripe session retrieve error', error);
+        res.status(500).json({ error: error.message });
+    }
+}

@@ -82,9 +82,7 @@ const HeroCarousel = ({heroCarousel}) => {
             <div className="banner-content pt-10 sm:pt-0 px-10 sm:w-4/12">
                 <h2 className="banner-content__title text-base md:text-4xl uppercase">{heroCarousel[activeIndex]?.name}</h2>
                 <p className="banner-content__description text-base md:text-2xl text-gray-700">{heroCarousel[activeIndex]?.description}</p>
-                <Link href={`/category/${heroCarousel[activeIndex]?.slug}/`}>
-                    <a className="banner-content__link text-gray-700">+ Explore</a>
-                </Link>
+                <Link href={`/category/${heroCarousel[activeIndex]?.slug}/`} className="banner-content__link text-gray-700">+ Explore</Link>
             </div>
         </div>
     )

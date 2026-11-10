@@ -48,7 +48,7 @@ export const clearTheCart = async (clearCartMutation, previousRequestError) => {
 // const handleAddToCartLocalStorage = () => {
 //
 // 	// If component is rendered client side.
-// 	if ( process.browser ) {
+// 	if ( typeof window !== 'undefined' ) {
 //
 // 		let existingCart = localStorage.getItem( 'woo-next-cart' );
 //

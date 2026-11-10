@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { AppContext } from "../../context/AppContext";
 import { getFormattedCart, getUpdatedItems } from '../../../functions';
 import CartItem from "./CartItem";
@@ -20,17 +20,27 @@ const CartItemsContainer = () => {
 
 	// Get Cart Data.
 	const { loading, error, data, refetch } = useQuery( GET_CART, {
-		notifyOnNetworkStatusChange: true,
-		onCompleted: () => {
-
-			// Update cart in the localStorage.
-			const updatedCart = getFormattedCart( data );
-			localStorage.setItem( 'woo-next-cart', JSON.stringify( updatedCart ) );
-
-			// Update cart data in React Context.
-			setCart( updatedCart );
-		}
+		notifyOnNetworkStatusChange: true
 	} );
+
+	/**
+	 * Sync the cart whenever new cart data arrives.
+	 *
+	 * `useQuery`'s `onCompleted` is deprecated for exactly this case; deriving
+	 * from `data` also avoids reading a stale `data` from the previous render.
+	 */
+	useEffect( () => {
+		if ( ! data ) {
+			return;
+		}
+
+		// Update cart in the localStorage.
+		const updatedCart = getFormattedCart( data );
+		localStorage.setItem( 'woo-next-cart', JSON.stringify( updatedCart ) );
+
+		// Update cart data in React Context.
+		setCart( updatedCart );
+	}, [ data, setCart ] );
 
 	// Update Cart Mutation.
 	const [updateCart, { data: updateCartResponse, loading: updateCartProcessing, error: updateCartError }] = useMutation( UPDATE_CART, {
@@ -165,11 +175,9 @@ const CartItemsContainer = () => {
 									</tr> */}
 									</tbody>
 								</table>
-								<Link href="/checkout">
-									<button className="bg-purple-600 text-white px-5 py-3 rounded-sm w-auto xl:w-full">
-										<span className="woo-next-cart-checkout-txt">Proceed to Checkout</span>
-										<i className="fas fa-long-arrow-alt-right"/>
-									</button>
+								<Link href="/checkout" className="bg-purple-600 text-white px-5 py-3 rounded-sm w-auto xl:w-full inline-block text-center">
+									<span className="woo-next-cart-checkout-txt">Proceed to Checkout</span>
+									<i className="fas fa-long-arrow-alt-right"/>
 								</Link>
 							</div>
 						</div>
@@ -181,11 +189,9 @@ const CartItemsContainer = () => {
 			) : (
 				<div className="container mx-auto my-32 px-4 xl:px-0">
 					<h2 className="text-2xl mb-5">No items in the cart</h2>
-					<Link href="/">
-						<button className="bg-purple-600 text-white px-5 py-3 rounded-sm">
-							<span className="woo-next-cart-checkout-txt">Add New Products</span>
-							<i className="fas fa-long-arrow-alt-right"/>
-						</button>
+					<Link href="/" className="bg-purple-600 text-white px-5 py-3 rounded-sm inline-block">
+						<span className="woo-next-cart-checkout-txt">Add New Products</span>
+						<i className="fas fa-long-arrow-alt-right"/>
 					</Link>
 				</div>
 			) }

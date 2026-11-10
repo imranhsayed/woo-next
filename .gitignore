@@ -9,4 +9,5 @@ dist/
 .cache
 .next
 .env
+.env*.local
 .now

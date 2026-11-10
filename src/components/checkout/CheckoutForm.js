@@ -1,6 +1,7 @@
 import {useState, useContext, useEffect} from 'react';
 import {useMutation, useQuery} from '@apollo/client';
 import cx from 'classnames'
+import {isEmpty} from 'lodash'
 
 import YourOrder from "./YourOrder";
 import PaymentModes from "./PaymentModes";
@@ -12,6 +13,7 @@ import GET_CART from "../../queries/get-cart";
 import CHECKOUT_MUTATION from "../../mutations/checkout";
 import Address from "./Address";
 import {
+    getStates,
     handleBillingDifferentThanShipping,
     handleCreateAccount, handleStripeCheckout,
     setStatesForCountry
@@ -19,23 +21,7 @@ import {
 import CheckboxField from "./form-elements/CheckboxField";
 import CLEAR_CART_MUTATION from "../../mutations/clear-cart";
 
-// Use this for testing purposes, so you dont have to fill the checkout form over an over again.
-// const defaultCustomerInfo = {
-// 	firstName: 'Imran',
-// 	lastName: 'Sayed',
-// 	address1: '123 Abc farm',
-// 	address2: 'Hill Road',
-// 	city: 'Mumbai',
-// 	country: 'IN',
-// 	state: 'Maharastra',
-// 	postcode: '221029',
-// 	email: 'codeytek.academy@gmail.com',
-// 	phone: '9883778278',
-// 	company: 'The Company',
-// 	errors: null
-// }
-
-const defaultCustomerInfo = {
+const emptyCustomerInfo = {
     firstName: '',
     lastName: '',
     address1: '',
@@ -50,9 +36,47 @@ const defaultCustomerInfo = {
     errors: null
 }
 
+/**
+ * Dummy details used when AUTOFILL_CHECKOUT_FORM is enabled, so the form does
+ * not have to be filled in by hand on every checkout test run.
+ *
+ * The values are chosen to pass validateAndSanitizeCheckoutForm: `address1`
+ * needs at least 12 characters, `phone` must be a valid mobile number, and
+ * `state` must match a `stateName` WooCommerce returns for `country`.
+ */
+const dummyCustomerInfo = {
+    firstName: 'Imran',
+    lastName: 'Sayed',
+    address1: '123 Abc farm',
+    address2: 'Hill Road',
+    city: 'Mumbai',
+    country: 'IN',
+    state: 'Maharashtra',
+    postcode: '221029',
+    email: 'codeytek.academy@gmail.com',
+    phone: '9883778278',
+    company: 'The Company',
+    errors: null
+}
+
+const isAutofillEnabled = 'true' === process.env.AUTOFILL_CHECKOUT_FORM;
+
+const defaultCustomerInfo = isAutofillEnabled ? dummyCustomerInfo : emptyCustomerInfo;
+
 const CheckoutForm = ({countriesData}) => {
 
     const {billingCountries, shippingCountries} = countriesData || {}
+
+    /**
+     * Fall back to the shipping countries when billing countries come back empty.
+     *
+     * headless-cms resolves `billingCountries` from the raw
+     * `WC()->countries->countries` property, which modern WooCommerce leaves
+     * unpopulated until `get_countries()` runs. Without this the billing country
+     * dropdown would render with no options, making the "billing address
+     * different than shipping" path impossible to complete.
+     */
+    const billingCountryOptions = isEmpty( billingCountries ) ? shippingCountries : billingCountries;
 
     const initialState = {
         billing: {
@@ -80,16 +104,55 @@ const CheckoutForm = ({countriesData}) => {
 
     // Get Cart Data.
     const {data} = useQuery(GET_CART, {
-        notifyOnNetworkStatusChange: true,
-        onCompleted: () => {
-            // Update cart in the localStorage.
-            const updatedCart = getFormattedCart(data);
-            localStorage.setItem('woo-next-cart', JSON.stringify(updatedCart));
-
-            // Update cart data in React Context.
-            setCart(updatedCart);
-        }
+        notifyOnNetworkStatusChange: true
     });
+
+    /**
+     * Sync the cart whenever new cart data arrives.
+     *
+     * `useQuery`'s `onCompleted` is deprecated for exactly this case; deriving
+     * from `data` also avoids reading a stale `data` from the previous render.
+     */
+    useEffect(() => {
+        if (!data) {
+            return;
+        }
+
+        // Update cart in the localStorage.
+        const updatedCart = getFormattedCart(data);
+        localStorage.setItem('woo-next-cart', JSON.stringify(updatedCart));
+
+        // Update cart data in React Context.
+        setCart(updatedCart);
+    }, [data, setCart]);
+
+    /**
+     * Load the states for the autofilled country on mount.
+     *
+     * `setStatesForCountry` reads the country code off the <select> element, so
+     * it cannot be reused here. Without this the state dropdown stays empty,
+     * the prefilled state never shows as selected, and the order is placed
+     * without one.
+     */
+    useEffect(() => {
+        if (!isAutofillEnabled) {
+            return;
+        }
+
+        const loadStatesForAutofill = async () => {
+            setIsFetchingShippingStates(true);
+            setIsFetchingBillingStates(true);
+
+            const states = await getStates(dummyCustomerInfo.country);
+
+            setTheShippingStates(states);
+            setTheBillingStates(states);
+            setIsFetchingShippingStates(false);
+            setIsFetchingBillingStates(false);
+        };
+
+        loadStatesForAutofill();
+    }, []);
 
     // Create New order: Checkout Mutation.
     const [checkout, {
@@ -194,12 +257,24 @@ const CheckoutForm = ({countriesData}) => {
         await setStatesForCountry(target, setTheBillingStates, setIsFetchingBillingStates);
     }
 
-    useEffect(async () => {
+    useEffect(() => {
 
-        if (null !== orderData) {
+        if (null === orderData) {
+            return;
+        }
+
+        /**
+         * The effect callback must not be `async`: it would return a Promise,
+         * which React treats as the cleanup function and then tries to call on
+         * unmount ("destroy is not a function" on React 19). Keep the callback
+         * synchronous and run the async work inside it.
+         */
+        const placeOrder = async () => {
             // Call the checkout mutation when the value for orderData changes/updates.
             await checkout();
-        }
+        };
+
+        placeOrder();
 
     }, [orderData]);
 
@@ -241,7 +316,7 @@ const CheckoutForm = ({countriesData}) => {
                                     <h2 className="text-xl font-medium mb-4">Billing Details</h2>
                                     <Address
                                         states={theBillingStates}
-                                        countries={billingCountries}
+                                        countries={billingCountryOptions}
                                         input={input?.billing}
                                         handleOnChange={(event) => handleOnChange(event, false, true)}
                                         isFetchingStates={isFetchingBillingStates}

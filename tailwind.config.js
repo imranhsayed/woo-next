@@ -1,12 +1,9 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  // @see https://tailwindcss.com/docs/upcoming-changes
-  future: {
-    removeDeprecatedGapUtilities: true,
-    purgeLayersByDefault: true,
-  },
-  purge: [
-    './src/components/**/*.js',
-    './pages/**/*.js'],
+  content: [
+    './src/**/*.js',
+    './pages/**/*.js',
+  ],
   theme: {
     extend: {
       height: {
@@ -19,10 +16,5 @@ module.exports = {
       },
     },
   },
-  variants: {},
-  plugins: [
-    require( 'tailwindcss' ),
-    require( 'precss' ),
-    require( 'autoprefixer' )
-  ]
+  plugins: [],
 }
