@@ -1,11 +1,12 @@
-# [WooCommerce Nextjs React Theme](https://woo-next-imranhsayed.vercel.app/) :rocket:
+# [WooCommerce Nextjs React Theme](https://codeytek.org/course/react-woocommerce-theme-with-nextjs-course/) :rocket:
 [![Project Status: Active.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 ![Stars](https://img.shields.io/github/stars/imranhsayed/woo-next?label=%E2%AD%90%20Stars)
 ![Forks](https://img.shields.io/github/forks/imranhsayed/woo-next?color=%23ff69b4)
 ![Contributors](https://img.shields.io/github/contributors/imranhsayed/woo-next?color=blue)
 ![Follow](https://img.shields.io/github/followers/imranhsayed?label=Please%20follow%20%20to%20support%20my%20work%20%F0%9F%99%8F&style=social)
 
-> * This is a React WooCommerce theme, built with Next JS, Turbopack, Node, GraphQl
+> * A headless WooCommerce storefront built with Next.js, React, Tailwind CSS and GraphQL —
+> with a full catalog, variable-product support, cart, coupons and Stripe checkout.
 
 📹 [Full Course Video Tutorial](https://codeytek.org/course/nextjs-woocommerce-graphql-course/)
 
@@ -16,37 +17,50 @@ branch is upto date with those changes. You can also refer to the PR notes for c
 
 ## Demo Desktop :video_camera:
 
-![](demos/home-demo.gif)
+![](demos/home-redesign-scroll-800.gif)
+
+## Single Product Page Demo :tshirt:
+
+Variation picking on a real WooCommerce product — per-size pricing, sold-out
+size/colour combinations, add to bag, and the product information tabs.
+
+![](demos/product-redesign-800.gif)
 
 ## Live Demo:
 
-[Live Demo Site](https://woo-next-imranhsayed.vercel.app/)
+[Live Demo Site](https://codeytek.org/course/react-woocommerce-theme-with-nextjs-course/)
 
 ## Checkout Page Demo
-![](demos/Checkout-page.gif)
-
-## Payment Demo ( Paypal example )
-![](demos/paypal-payment-demo.gif)
-
-## Order Received Demo
-![](demos/order-received-demo.gif)
+![](demos/checkout-redesign-800.gif)
 
 ## Stripe Checkout 
 [Stripe Demo Video](https://youtu.be/i75_Vtx-CnA)
-![](demos/stripe-demo.gif)
+![](demos/stripe-redesign-800.gif)
 
-# Features:
+# Features
 
-1. WooCommerce Store in React( contains: Products Page, Single Product Page, AddToCart, CartPage and Checkout Page with country selection ).
-2. SSR
-3. SEO friendly
-4. Automatic Code Splitting
-5. Hot Reloading
-6. Prefetching
-8. Incremental Static (Re)generation ( Next.js 16 support )
-9. GraphQL with Apollo Client
-10. Tailwindcss
-11. Stripe Checkout ( with Stripe Session and Stripe webhook)
+### Storefront
+
+* **Home** — hero, category tiles, featured products, editorial sections, testimonials and an FAQ accordion
+* **Catalog** — `/shop`, category and subcategory landing pages, and search
+* **Filtering** — by category, size, colour, price band and availability, with live result counts
+* **Sorting** — relevance, newest, popularity, price ascending and descending
+* **Product page** — gallery with zoom and a full-screen viewer, variation picker, size guide, reviews, related products and recently viewed
+* **Variable products** — per-variation pricing and stock, with unavailable size/colour pairings disabled
+* **Cart** — slide-over drawer plus a full cart page, quantity editing, coupons and a free-shipping meter
+* **Checkout** — contact and billing, optional separate delivery address, shipping and payment selection, order notes
+* **Order confirmation** — reads the real order, with a key-gated server-side lookup so guests can view their own order
+* **Wishlist** and **quick view**
+
+### Technical
+
+* Next.js 16 with Turbopack, React 19
+* Incremental Static Regeneration — catalog and product pages are prerendered and revalidated
+* GraphQL via Apollo Client, against WPGraphQL and WooGraphQL
+* Tailwind CSS 3 with a custom design token set
+* Stripe Checkout (session + webhook) alongside WooCommerce's own gateways
+* Accessible by construction — focus traps on every dialog, roving-tabindex tabs, visible focus rings, `prefers-reduced-motion` honoured throughout
+* SEO friendly, automatic code splitting, prefetching
 
 ## Getting Started :rocket:
 
@@ -68,24 +82,55 @@ These instructions will get you a copy of the project up and running on your loc
 
 1. Download and activate the following plugins , in your WordPress plugin directory:
 
-* [wp-graphql](https://github.com/imranhsayed/woo-next/tree/master/wordpress/plugins) Exposes graphql for WordPress ( **Tested with v-1.3.8** of this plugin )
-* [wp-graphql-woocommerce](https://github.com/imranhsayed/woo-next/tree/master/wordpress/plugins) Adds Woocommerce functionality to a WPGraphQL schema ( **Tested with v-0.8.1** of this plugin )
-* [headless-cms](https://github.com/imranhsayed/woo-next/tree/master/wordpress/plugins) Extends WPGraphQL Schema ( **Tested with v-1.8.0** of this plugin )
+* [wp-graphql](https://github.com/imranhsayed/woo-next/tree/master/wordpress/plugins) Exposes GraphQL for WordPress ( **tested with v2.26.2** )
+* [wp-graphql-woocommerce](https://github.com/imranhsayed/woo-next/tree/master/wordpress/plugins) Adds WooCommerce to the WPGraphQL schema ( **tested with v1.0.3** ) — install the **built release zip**, not the GitHub source archive, which omits `vendor/` and fatals on every request
+* [headless-cms](https://github.com/imranhsayed/woo-next/tree/master/wordpress/plugins) Extends the schema with the `wooCountries` and `wooStates` fields checkout needs ( **tested with v2.0.4** )
 
 * Make sure Woocommerce plugin is also installed in your WordPress site. You can also import default wooCommerce products that come with wooCommerce Plugin for development ( if you don't have any products in your WordPress install ) `WP Dashboard > Tools > Import > WooCommerce products(CSV)`: The WooCommerce default products csv file is available at `wp-content/plugins/woocommerce/sample-data/sample_products.csv`
 
-## Hero Carousel.
-To use Hero carousel, create a category called 'offers' from WordPress Dashboard > Products > Categories.
-Now create and assign as many child categories to this parent 'offers' category with name, description and image.
-These Child categories data will automatically be used to create hero carousel on the frontend.
+## WooCommerce store setup
 
+The storefront reads everything from WooCommerce, so a few store settings decide
+what it can show.
 
-## Configuration(for GraphQL implementation) :wrench:
+**Products** — categories drive the navigation. Top-level categories become the
+main nav and the mega menu; their children become the subcategory filters. Use
+parent-prefixed child slugs (`women-tops`, `kids-outerwear`) since term slugs are
+global and names like "Outerwear" repeat across departments.
 
-* _Note_ Below is for GraphQL implementation , for REST API check [feature/rest-api](https://github.com/imranhsayed/woo-next/tree/feature/rest-api) branch
+**Shipping** — create a zone covering the countries you sell to and add the
+methods you want. Their titles and costs are shown as-is at cart and checkout.
 
-1. (Required) Create a `.env` file taking reference from `.env-example` and update your WordPressSite URL.
-- `NEXT_PUBLIC_WORDPRESS_URL=https://example.com`
+**Coupons** — any WooCommerce coupon works; the cart and checkout both accept codes.
+
+**Tax** — if your catalog prices include tax, set *prices entered with tax* and
+WooCommerce's tax display to **including tax**. The storefront adds each net
+figure to its tax when showing a total, so this must match or totals will read low.
+
+**Payments** — whichever gateways you enable are offered at checkout, filtered
+against the `paymentGateways` query. Card is handled separately through Stripe.
+
+## Configuration :wrench:
+
+* _Note_ Below is for the GraphQL implementation. For REST API see the [feature/rest-api](https://github.com/imranhsayed/woo-next/tree/feature/rest-api) branch.
+
+Copy `.env-example` to `.env.local` and fill in:
+
+| Variable | Required | Purpose |
+|---|---|---|
+| `NEXT_PUBLIC_WORDPRESS_URL` | yes | Your WordPress site, without a trailing slash |
+| `WC_CONSUMER_KEY` / `WC_CONSUMER_SECRET` | for card payments | WooCommerce REST keys, used server-side to create the order before Stripe and to read it back on the confirmation page |
+| `STRIPE_SECRET_KEY` | for card payments | Stripe secret key |
+| `STRIPE_WEBHOOK_ENDPOINT_SECRET` | for card payments | Verifies the webhook that marks a paid order `processing` |
+
+### Stripe webhook
+
+A card order is created as `pending` and only becomes `processing` once Stripe
+calls the webhook. Stripe cannot reach `localhost`, so forward it while developing:
+
+```bash
+stripe listen --forward-to localhost:3000/api/stripe-web-hook
+```
 
 ## Branch details
 
@@ -95,7 +140,10 @@ These Child categories data will automatically be used to create hero carousel o
 
 ## Common Commands :computer:
 
-* `dev` Runs server in development mode
+* `npm run dev` Start the development server
+* `npm run build` Build for production
+* `npm start` Serve the production build
+* `npm run svg` Regenerate icon components from `src/components/icons/svgs`
 
 ## Code Contributors ✰
 
