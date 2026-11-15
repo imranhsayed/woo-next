@@ -28,7 +28,7 @@ size/colour combinations, add to bag, and the product information tabs.
 
 ## Live Demo:
 
-[Live Demo Site](https://codeytek.org/course/react-woocommerce-theme-with-nextjs-course/)
+[[Live Demo Site]](https://woo-next-delta.vercel.app/)
 
 ## Checkout Page Demo
 ![](demos/checkout-redesign-800.gif)
