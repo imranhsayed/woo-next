@@ -70,6 +70,20 @@ const client = new ApolloClient({
 		uri: GRAPHQL_URL
 	}) ) ),
 	cache: new InMemoryCache(),
+	/**
+	 * Keep one-off queries out of the normalised cache.
+	 *
+	 * `getStaticProps` and `getServerSideProps` reach for this same module, so
+	 * anything they cache during a build is still there when the page renders
+	 * in that process — putting data into the prerendered HTML that the browser
+	 * cannot reproduce on its first render, which breaks hydration. `query` is
+	 * only used for that server-side fetching; components use `useQuery`, which
+	 * reads `watchQuery` and keeps its cache.
+	 */
+	defaultOptions: {
+		query: { fetchPolicy: 'no-cache' },
+		watchQuery: { fetchPolicy: 'cache-first' },
+	},
 });
 
 export default client;

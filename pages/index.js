@@ -1,50 +1,82 @@
 import Layout from "../src/components/Layout";
-import Product from "../src/components/Product";
-import client from '../src/components/ApolloClient';
-import ParentCategoriesBlock from "../src/components/category/category-block/ParentCategoriesBlock";
-import PRODUCTS_AND_CATEGORIES_QUERY from "../src/queries/product-and-categories";
-import HeroCarousel from "../src/components/home/hero-carousel";
+import client from "../src/components/ApolloClient";
 
-export default function Home (props) {
+import Hero from "../src/components/home/Hero";
+import ServicesStrip from "../src/components/home/ServicesStrip";
+import CategoryTiles from "../src/components/home/CategoryTiles";
+import FeaturedPieces from "../src/components/home/FeaturedPieces";
+import StorySection from "../src/components/home/StorySection";
+import BrandStrip from "../src/components/home/BrandStrip";
+import SaleBanner from "../src/components/home/SaleBanner";
+import StoreMosaic from "../src/components/home/StoreMosaic";
+import StyleTicker from "../src/components/home/StyleTicker";
+import Testimonials from "../src/components/home/Testimonials";
+import FaqAccordion from "../src/components/home/FaqAccordion";
 
-	const { products, productCategories, heroCarousel } = props || {};
+import GET_HOME, { buildTickerCountsQuery } from "../src/queries/get-home";
+import { FEATURED, TICKER, TRENDING } from "../src/constants/home";
+import { normaliseProducts, orderBySlugs } from "../src/utils/product";
+
+/**
+ * Storefront home page.
+ *
+ * @param {Object} props Page props.
+ *
+ * @return {jsx}
+ */
+export default function Home( { featured = [], trending = [], tickerCounts = {} } ) {
 
 	return (
-			<Layout>
-				{/*Hero Carousel*/}
-				<HeroCarousel heroCarousel={heroCarousel}/>
-				{/*Categories*/ }
-				<div className="product-categories-container container mx-auto my-32 px-4 xl:px-0">
-					<h2 className="main-title text-xl mb-5 uppercase"><span className="main-title-inner">Categories</span></h2>
-					<ParentCategoriesBlock productCategories={ productCategories }/>
-				</div>
-				{/*Products*/ }
-				<div className="products container mx-auto my-32 px-4 xl:px-0">
-					<h2 className="products-main-title main-title mb-5 text-xl uppercase"><span className="main-title-inner">Products</span></h2>
-					<div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4">
-						{ products.length ? (
-							products.map( product => <Product key={ product.id } product={ product }/> )
-						) : '' }
-					</div>
-				</div>
+		<Layout
+			title="WooNext — Step Back Into Style"
+			description="Timeless retro pieces with a modern twist — tailored for the bold, the bright and the everyday."
+		>
+			<div className="flex flex-col gap-4 pb-4 sm:gap-6">
+				<Hero />
+				<ServicesStrip />
+				<CategoryTiles />
+				<FeaturedPieces featured={ featured } trending={ trending } />
+				<StorySection />
+				<BrandStrip />
+				<SaleBanner />
+				<StoreMosaic />
+				<StyleTicker counts={ tickerCounts } />
+				<Testimonials />
+				<FaqAccordion />
+			</div>
+		</Layout>
+	);
+}
 
-			</Layout>
-	)
-};
+export async function getStaticProps() {
 
-export async function getStaticProps () {
+	const featuredSlugs = FEATURED.map( ( item ) => item.slug );
 
 	const { data } = await client.query( {
-		query: PRODUCTS_AND_CATEGORIES_QUERY,
+		query: GET_HOME,
+		variables: { featuredSlugs, trendingSlugs: TRENDING.slugs },
+	} );
+
+	// Ticker terms resolve to product counts; the "Fashion" tile uses the total.
+	const searchTerms = TICKER.filter( ( item ) => item.search ).map( ( item ) => item.search );
+
+	const { data: counts } = await client.query( {
+		query: buildTickerCountsQuery( searchTerms ),
+	} );
+
+	const tickerCounts = { total: data?.catalog?.found ?? 0 };
+
+	searchTerms.forEach( ( term, index ) => {
+		tickerCounts[ term ] = counts?.[ `term_${ index }` ]?.found ?? 0;
 	} );
 
 	return {
 		props: {
-			productCategories: data?.productCategories?.nodes ? data.productCategories.nodes : [],
-			products: data?.products?.nodes ? data.products.nodes : [],
-			heroCarousel: data?.heroCarousel?.nodes[0]?.children?.nodes ? data.heroCarousel.nodes[0].children.nodes : []
+			// GraphQL ignores `slugIn` ordering, so restore the editorial order.
+			featured: orderBySlugs( normaliseProducts( data?.featured?.nodes ), featuredSlugs ),
+			trending: orderBySlugs( normaliseProducts( data?.trending?.nodes ), TRENDING.slugs ),
+			tickerCounts,
 		},
-		revalidate: 1
-	}
-
-};
+		revalidate: 60,
+	};
+}

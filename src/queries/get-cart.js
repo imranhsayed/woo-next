@@ -4,6 +4,7 @@ const GET_CART = gql`
 query GET_CART {
   cart {
     contents {
+      itemCount
       nodes {
         key
         product {
@@ -68,9 +69,20 @@ query GET_CART {
     }
     appliedCoupons {
       code
+      description
       discountAmount
       discountTax
     }
+    availableShippingMethods {
+      packageDetails
+      rates {
+        id
+        label
+        cost
+      }
+    }
+    chosenShippingMethods
+    needsShippingAddress
     subtotal
     subtotalTax
     shippingTax
