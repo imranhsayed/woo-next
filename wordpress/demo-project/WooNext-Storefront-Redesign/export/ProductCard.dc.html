@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<sc-if value="{{ ready }}" hint-placeholder-val="{{ false }}">
+<article class="group relative flex h-full flex-col overflow-hidden rounded-md bg-petrol ring-1 ring-white/10 transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/40 hover:ring-ember/60 motion-reduce:transition-none motion-reduce:hover:translate-y-0">
+  <div class="relative aspect-portrait overflow-hidden bg-teal">
+    <a href="{{ href }}" class="absolute inset-0 block focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-flame" aria-label="{{ name }} — view product">
+      <sc-if value="{{ hasImg }}" hint-placeholder-val="{{ false }}">
+        <img src="{{ img1 }}" alt="{{ name }}" loading="lazy" class="absolute inset-0 h-full w-full object-cover transition duration-500 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100">
+        <sc-if value="{{ hasImg2 }}"><img src="{{ img2 }}" alt="" loading="lazy" class="absolute inset-0 h-full w-full object-cover opacity-0 transition duration-500 group-hover:opacity-100 motion-reduce:transition-none"></sc-if>
+      </sc-if>
+      <sc-if value="{{ isArt }}">
+        <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-rust via-ember to-flame p-6 text-center transition duration-500 group-hover:scale-105">
+          <span class="font-display text-7xl uppercase leading-none text-midnight">Woo</span>
+          <span class="font-script text-4xl text-cream">the {{ artWord }}</span>
+          <span class="mt-2 rounded-full border border-midnight/40 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-midnight">Digital download</span>
+        </div>
+      </sc-if>
+      <span class="absolute inset-0 bg-gradient-to-t from-midnight/80 via-transparent to-transparent"></span>
+    </a>
+    <div class="pointer-events-none absolute left-3 top-3 flex flex-col items-start gap-1.5">
+      <sc-if value="{{ onSale }}"><span class="rounded bg-ember px-2 py-1 text-xs font-bold uppercase tracking-wider text-midnight">Flat {{ pct }}% off</span></sc-if>
+      <sc-if value="{{ isNew }}"><span class="rounded bg-cream px-2 py-1 text-xs font-bold uppercase tracking-wider text-midnight">New</span></sc-if>
+      <sc-if value="{{ soldOut }}"><span class="rounded bg-midnight/90 px-2 py-1 text-xs font-bold uppercase tracking-wider text-peach ring-1 ring-peach/40">Sold out</span></sc-if>
+      <sc-if value="{{ low }}"><span class="rounded bg-midnight/90 px-2 py-1 text-xs font-bold uppercase tracking-wider text-flame">Only {{ stockQty }} left</span></sc-if>
+    </div>
+    <button type="button" onClick="{{ onWish }}" aria-pressed="{{ wished }}" aria-label="{{ wishLabel }}" class="absolute right-3 top-3 grid h-11 w-11 place-items-center rounded-full transition duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-flame active:scale-90 motion-reduce:transition-none {{ wishCls }}">
+      <dc-import name="Icon" hint-size="20px,20px" dc-props="{{ heartProps }}"></dc-import>
+    </button>
+    <div class="absolute inset-x-3 bottom-3 flex items-end justify-between gap-2">
+      <div class="min-w-0">
+        <p class="text-xs font-semibold uppercase tracking-widest text-peach/90">{{ sub }}</p>
+        <h3 class="font-display text-xl uppercase leading-tight tracking-wide text-cream sm:text-2xl"><a href="{{ href }}" class="transition-colors hover:text-flame focus-visible:outline-none focus-visible:underline">{{ name }}</a></h3>
+      </div>
+      <button type="button" onClick="{{ onQuick }}" aria-label="Quick view {{ name }}" class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-cream/15 text-cream ring-1 ring-cream/30 backdrop-blur transition duration-200 hover:bg-cream hover:text-midnight focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-flame">
+        <dc-import name="Icon" i="eye" cls="h-4 w-4" hint-size="16px,16px"></dc-import>
+      </button>
+    </div>
+  </div>
+  <div class="flex flex-1 flex-col gap-3 p-3 sm:p-4">
+    <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+      <span class="font-display text-xl tracking-wide text-flame">{{ priceText }}</span>
+      <sc-if value="{{ onSale }}"><span class="text-sm text-peach/60 line-through">{{ regularText }}</span><span class="sr-only">Sale price</span></sc-if>
+    </div>
+    <sc-if value="{{ hasSwatches }}">
+      <div class="flex items-center gap-1.5" aria-label="Available colours">
+        <sc-for list="{{ swatches }}" as="s"><span title="{{ s.name }}" class="h-3.5 w-3.5 rounded-full ring-1 ring-white/30 {{ s.cls }}"></span></sc-for>
+        <span class="ml-1 text-xs text-peach/70">{{ sizeNote }}</span>
+      </div>
+    </sc-if>
+    <button type="button" onClick="{{ onAdd }}" disabled="{{ soldOut }}" class="group/btn mt-auto inline-flex min-h-11 items-center justify-between gap-2 rounded-md bg-rust px-4 py-2.5 text-sm font-bold uppercase tracking-wider text-cream transition duration-200 hover:bg-ember hover:text-midnight focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-flame disabled:cursor-not-allowed disabled:bg-navy disabled:text-peach/50 motion-reduce:transition-none">
+      <span>{{ addLabel }}</span>
+      <span class="grid h-6 w-6 place-items-center rounded-full bg-cream/20 transition-transform duration-200 group-hover/btn:translate-x-1 group-hover/btn:-rotate-45 motion-reduce:transform-none"><dc-import name="Icon" i="arrow-right" cls="h-3.5 w-3.5" hint-size="14px,14px"></dc-import></span>
+    </button>
+  </div>
+</article>
+</sc-if>
+<sc-if value="{{ notReady }}" hint-placeholder-val="{{ true }}"><div class="aspect-portrait w-full animate-pulse rounded-md bg-petrol"></div></sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:300,&quot;height&quot;:560},&quot;pid&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;solstice-silk-blouse&quot;,&quot;tsType&quot;:&quot;string|number&quot;}}">
+class Component extends DCLogic {
+  componentDidMount(){const go=()=>window.WN?(this.u=WN.subscribe(()=>this.forceUpdate()),this.forceUpdate()):setTimeout(go,20);go();}
+  componentWillUnmount(){this.u&&this.u();}
+  renderVals(){
+    const W=window.WN;const p=W&&W.get(this.props.pid);
+    if(!p)return{ready:false,notReady:true};
+    const wished=W.isWished(p.id);const out=p.stock==='out';
+    return{ready:true,notReady:false,name:p.name,sub:p.sub,href:'#/product/'+p.slug,
+      hasImg:!!p.imgs.length,hasImg2:p.imgs.length>1,img1:p.imgs.length?W.img(p.imgs[0],700):'',img2:p.imgs[1]!=null?W.img(p.imgs[1],700):'',
+      isArt:!!p.art,artWord:p.art,onSale:!!p.regular,pct:p.regular?Math.round((1-p.price/p.regular)*100):0,isNew:!!p.isNew,soldOut:out,low:p.stock==='low',stockQty:p.stockQty,
+      priceText:W.priceLabel(p),regularText:p.regular?W.fmt(p.regular):'',
+      hasSwatches:p.colors.length>0&&p.type!=='downloadable',swatches:p.colors.map(c=>({name:c,cls:W.SWATCH[c]||'bg-neutral-500'})),sizeNote:p.sizes.length?p.sizes.length+' sizes':'One size',
+      wished:wished?'true':'false',wishLabel:(wished?'Remove ':'Add ')+p.name+(wished?' from':' to')+' wishlist',
+      wishCls:wished?'bg-ember text-midnight scale-100 shadow-lg shadow-ember/40':'bg-midnight/60 text-cream ring-1 ring-cream/30 backdrop-blur hover:bg-cream hover:text-rust',
+      heartProps:{i:'heart',fill:wished,cls:'h-5 w-5'},
+      addLabel:out?'Sold out':p.type==='variable'?'Select options':'Add to bag',
+      onWish:e=>{e.preventDefault();W.toggleWish(p.id)},
+      onQuick:()=>W.ui({quick:p.id}),
+      onAdd:()=>{if(out)return;if(p.type==='variable')W.go('/product/'+p.slug);else W.addToCart(p.id,{color:p.colors[0]||''});}
+    };
+  }
+}
+</script>
+</body>
+</html>

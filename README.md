@@ -7,7 +7,7 @@
 
 > * This is a React WooCommerce theme, built with Next JS, Turbopack, Node, GraphQl
 
-📹 [Full Course Video Tutorial](https://codeytek.com/course/woocommerce-with-react-course/)
+📹 [Full Course Video Tutorial](https://codeytek.org/course/nextjs-woocommerce-graphql-course/)
 
 ## Important Note ⭐:
 The code for the Video Tutorial is in the branch [youtube-course](https://github.com/imranhsayed/woo-next/tree/youtube-course)

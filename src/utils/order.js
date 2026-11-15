@@ -1,149 +1,144 @@
-import {isArray, isEmpty} from "lodash";
+import { isArray, isEmpty } from "lodash";
 
 /**
- * Get line items for stripe
+ * Turn an address from the checkout form into the shape the REST API wants.
  *
- * @param {array} products Products.
+ * @param {Object} address Form address.
  *
- * @returns {*[]|*} Line items, Array of objects.
+ * @return {Object} REST address.
  */
-export const getStripeLineItems = ( products ) => {
-
-    if ( isEmpty( products ) || !isArray( products ) ) {
-        return []
-    }
-
-    return products?.map(
-        ( { productId, name, price, qty: quantity, image } ) => {
-            return {
-                price: price?.toString(), // The reason we pass price here and not total, because stripe multiplies it with qty.
-                quantity,
-                name,
-                image,
-                productId,
-            };
-        },
-    );
-}
+const toRestAddress = ( address = {} ) => ( {
+	first_name: address.firstName ?? '',
+	last_name: address.lastName ?? '',
+	company: address.company ?? '',
+	address_1: address.address1 ?? '',
+	address_2: address.address2 ?? '',
+	city: address.city ?? '',
+	state: address.state ?? '',
+	postcode: address.postcode ?? '',
+	country: address.country ?? '',
+	email: address.email ?? '',
+	phone: address.phone ?? '',
+} );
 
 /**
- * Get line items for create order
+ * Line items for order creation.
  *
- * @param {array} products Products.
+ * A variable product must carry its `variation_id`, otherwise WooCommerce
+ * records the parent and the order loses the size and colour the customer
+ * chose — and prices it from the parent rather than the variation.
  *
- * @returns {*[]|*} Line items, Array of objects.
+ * @param {Array} products Formatted cart products.
+ *
+ * @return {Array} REST line items.
  */
-export const getCreateOrderLineItems = (products) => {
+export const getCreateOrderLineItems = ( products ) => {
 
-    if (isEmpty(products) || !isArray( products )) {
-        return []
-    }
+	if ( isEmpty( products ) || ! isArray( products ) ) {
+		return [];
+	}
 
-    console.log( 'products', products );
-
-    return products?.map(
-        ({productId, qty: quantity}) => {
-            return {
-                quantity,
-                product_id: productId,
-                // variation_id: '', // @TODO to be added.
-            };
-        },
-    );
-}
+	return products.map( ( { productId, variationId, qty: quantity } ) => ( {
+		quantity,
+		product_id: productId,
+		...( variationId ? { variation_id: variationId } : {} ),
+	} ) );
+};
 
 /**
- * Get Formatted create order data.
+ * Order payload for `POST /api/create-order`.
  *
- * @param order
- * @param products
- * @return {{shipping: {country: *, city: *, phone: *, address_1: (string|*), address_2: (string|*), postcode: (string|*), last_name: (string|*), company: *, state: *, first_name: (string|*), email: *}, payment_method_title: string, line_items: (*[]|*), payment_method: string, billing: {country: *, city: *, phone: *, address_1: (string|*), address_2: (string|*), postcode: (string|*), last_name: (string|*), company: *, state: *, first_name: (string|*), email: *}}}
+ * Shipping and coupon lines are included so the order WooCommerce records
+ * totals the same as the cart the customer agreed to. Without them the order
+ * would be cheaper than the cart — no delivery charge — while still showing
+ * the customer the higher figure.
+ *
+ * @param {Object} input    `{ billing, shipping, shipToDifferent, paymentMethod, paymentMethodTitle, customerNote, shippingLine, coupons }`.
+ * @param {Array}  products Formatted cart products.
+ *
+ * @return {Object} REST order payload.
  */
-export const getCreateOrderData = (order, products) => {
-    // Set the billing Data to shipping, if applicable.
-    const billingData = order.billingDifferentThanShipping ? order.billing : order.shipping;
+export const getCreateOrderData = ( input, products ) => {
 
-    // Checkout data.
-    return {
-        shipping: {
-            first_name: order?.shipping?.firstName,
-            last_name: order?.shipping?.lastName,
-            address_1: order?.shipping?.address1,
-            address_2: order?.shipping?.address2,
-            city: order?.shipping?.city,
-            country: order?.shipping?.country,
-            state: order?.shipping?.state,
-            postcode: order?.shipping?.postcode,
-            email: order?.shipping?.email,
-            phone: order?.shipping?.phone,
-            company: order?.shipping?.company,
-        },
-        billing: {
-            first_name: billingData?.firstName,
-            last_name: billingData?.lastName,
-            address_1: billingData?.address1,
-            address_2: billingData?.address2,
-            city: billingData?.city,
-            country: billingData?.country,
-            state: billingData?.state,
-            postcode: billingData?.postcode,
-            email: billingData?.email,
-            phone: billingData?.phone,
-            company: billingData?.company,
-        },
-        payment_method: 'stripe',
-        payment_method_title: 'Stripe',
-        line_items: getCreateOrderLineItems( products ),
-    };
-}
+	// Billing is the address always collected; shipping falls back to it.
+	const shippingAddress = input.shipToDifferent ? input.shipping : input.billing;
+
+	const data = {
+		payment_method: input.paymentMethod ?? 'stripe',
+		payment_method_title: input.paymentMethodTitle ?? 'Card',
+		customer_note: input.customerNote ?? '',
+		billing: toRestAddress( input.billing ),
+		shipping: toRestAddress( { ...shippingAddress, email: '', phone: '' } ),
+		line_items: getCreateOrderLineItems( products ),
+	};
+
+	if ( input.shippingLine?.title ) {
+		data.shipping_lines = [ {
+			method_id: input.shippingLine.methodId ?? '',
+			method_title: input.shippingLine.title,
+			// REST expects the net amount as a string.
+			total: String( input.shippingLine.total ?? 0 ),
+		} ];
+	}
+
+	if ( ! isEmpty( input.coupons ) ) {
+		data.coupon_lines = input.coupons.map( ( code ) => ( { code: String( code ).toLowerCase() } ) );
+	}
+
+	return data;
+};
 
 /**
- * Create order.
+ * Create the order through the Next.js REST endpoint.
  *
- * @param {Object} orderData Order data.
- * @param {function} setOrderFailedError sets the react state to true if the order creation fails.
- * @param {string} previousRequestError Previous request error.
+ * @param {Object}   orderData            Order payload.
+ * @param {Function} setOrderFailedError  Reports a failure to the page.
+ * @param {string}   previousRequestError Error from an earlier step, if any.
  *
- * @returns {Promise<{orderId: null, error: string}>}
+ * @return {Promise<{orderId: string, orderKey: string, total: string, currency: string, error: string}>}
  */
 export const createTheOrder = async ( orderData, setOrderFailedError, previousRequestError ) => {
-    let response = {
-        orderId: null,
-        total: '',
-        currency: '',
-        error: ''
-    };
 
-    // Don't proceed if previous request has error.
-    if ( previousRequestError ) {
-        response.error = previousRequestError;
-        return response;
-    }
+	const response = {
+		orderId: null,
+		orderKey: '',
+		total: '',
+		currency: '',
+		error: '',
+	};
 
-    setOrderFailedError( '' );
+	// Don't proceed if a previous request already failed.
+	if ( previousRequestError ) {
+		response.error = previousRequestError;
+		return response;
+	}
 
-    try {
-        const request = await fetch( '/api/create-order', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify( orderData ),
-        } );
+	setOrderFailedError( '' );
 
-        const result = await request.json();
-        if ( result.error ) {
-            response.error = result.error
-            setOrderFailedError( 'Something went wrong. Order creation failed. Please try again' );
-        }
-        response.orderId = result?.orderId ?? '';
-        response.total = result.total ?? '';
-        response.currency = result.currency ?? '';
+	try {
+		const request = await fetch( '/api/create-order', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify( orderData ),
+		} );
 
-    } catch ( error ) {
-        // @TODO to be handled later.
-        console.warn( 'Handle create order error', error?.message );
-    }
+		const result = await request.json();
 
-    return response;
-}
+		if ( result.error ) {
+			response.error = result.error;
+			setOrderFailedError( 'Something went wrong creating your order. Please try again.' );
+
+			return response;
+		}
+
+		response.orderId = result?.orderId ?? '';
+		response.orderKey = result?.orderKey ?? '';
+		response.total = result?.total ?? '';
+		response.currency = result?.currency ?? '';
+	} catch ( error ) {
+		response.error = error?.message ?? 'Order creation failed';
+		setOrderFailedError( 'Something went wrong creating your order. Please try again.' );
+	}
+
+	return response;
+};

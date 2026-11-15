@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="https://cdn.tailwindcss.com"></script><script src="./tw.js"></script><script src="./store.js"></script></helmet>
+<sc-if value="{{ ready }}" hint-placeholder-val="{{ false }}">
+<div class="flex flex-col gap-6 text-peach">
+  <div class="flex flex-col gap-3">
+    <p class="text-xs font-semibold uppercase tracking-widest text-flame">{{ catLabel }} · {{ sub }}</p>
+    <h1 class="font-display text-5xl uppercase leading-none tracking-wide text-cream sm:text-6xl">{{ name }}</h1>
+    <div class="flex flex-wrap items-center gap-3 text-sm">
+      <span class="flex items-center gap-0.5 text-flame" role="img" aria-label="Rated {{ rating }} out of 5"><sc-for list="{{ stars }}" as="s"><dc-import name="Icon" dc-props="{{ s }}" hint-size="16px,16px"></dc-import></sc-for></span>
+      <a href="{{ reviewsHref }}" class="text-peach/80 underline decoration-peach/30 underline-offset-4 transition-colors hover:text-cream">{{ rating }} · {{ reviews }} reviews</a>
+    </div>
+    <div class="flex flex-wrap items-baseline gap-3">
+      <span class="font-display text-4xl tracking-wide text-flame">{{ priceText }}</span>
+      <sc-if value="{{ onSale }}"><span class="text-lg text-peach/60 line-through"><span class="sr-only">Regular price </span>{{ regularText }}</span><span class="rounded bg-ember px-2 py-1 text-xs font-bold uppercase tracking-wider text-midnight">Save {{ pct }}%</span></sc-if>
+    </div>
+    <p class="max-w-prose text-base leading-relaxed text-peach/85">{{ desc }}</p>
+  </div>
+  <sc-if value="{{ hasColors }}">
+    <fieldset>
+      <legend class="mb-3 text-xs font-bold uppercase tracking-widest text-cream">Colour: <span class="font-normal normal-case tracking-normal text-peach">{{ colorLabel }}</span></legend>
+      <div class="flex flex-wrap gap-2">
+        <sc-for list="{{ colorOpts }}" as="c">
+          <button type="button" onClick="{{ c.pick }}" aria-pressed="{{ c.pressed }}" class="flex min-h-11 items-center gap-2 rounded-full py-1.5 pl-1.5 pr-4 text-sm ring-1 transition duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-flame {{ c.cls }}"><span class="h-7 w-7 rounded-full ring-1 ring-white/30 {{ c.sw }}"></span>{{ c.name }}</button>
+        </sc-for>
+      </div>
+      <sc-if value="{{ colorErr }}"><p role="alert" class="mt-2 text-sm font-semibold text-flame">{{ colorErr }}</p></sc-if>
+    </fieldset>
+  </sc-if>
+  <sc-if value="{{ hasSizes }}">
+    <fieldset>
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <legend class="text-xs font-bold uppercase tracking-widest text-cream">Size: <span class="font-normal normal-case tracking-normal text-peach">{{ sizeLabel }}</span></legend>
+        <button type="button" onClick="{{ openGuide }}" class="inline-flex min-h-11 items-center gap-1.5 text-sm text-peach underline decoration-peach/40 underline-offset-4 transition-colors hover:text-flame focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-flame"><dc-import name="Icon" i="ruler" cls="h-4 w-4" hint-size="16px,16px"></dc-import>Size guide</button>
+      </div>
+      <div class="grid grid-cols-4 gap-2 sm:grid-cols-5">
+        <sc-for list="{{ sizeOpts }}" as="s">
+          <button type="button" onClick="{{ s.pick }}" disabled="{{ s.out }}" aria-pressed="{{ s.pressed }}" aria-label="{{ s.aria }}" class="relative min-h-12 overflow-hidden rounded-md text-sm font-bold ring-1 transition duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-flame disabled:cursor-not-allowed {{ s.cls }}">{{ s.name }}<sc-if value="{{ s.out }}"><span class="absolute left-1/2 top-1/2 h-px w-16 -translate-x-1/2 -translate-y-1/2 -rotate-45 bg-peach/40"></span></sc-if></button>
+        </sc-for>
+      </div>
+      <sc-if value="{{ sizeErr }}"><p role="alert" class="mt-3 flex items-center gap-2 text-sm font-semibold text-flame"><dc-import name="Icon" i="alert" cls="h-4 w-4" hint-size="16px,16px"></dc-import>{{ sizeErr }}</p></sc-if>
+    </fieldset>
+  </sc-if>
+  <p class="flex items-center gap-2 text-sm font-semibold {{ stockCls }}"><span class="h-2 w-2 rounded-full {{ stockDot }}"></span>{{ stockText }}</p>
+  <div class="flex flex-wrap items-stretch gap-3">
+    <sc-if value="{{ showQty }}">
+      <div class="flex items-center rounded-md ring-1 ring-peach/30" role="group" aria-label="Quantity">
+        <button type="button" onClick="{{ dec }}" aria-label="Decrease quantity" class="grid h-12 w-11 place-items-center text-cream transition-colors hover:text-flame focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-flame"><dc-import name="Icon" i="minus" cls="h-4 w-4" hint-size="16px,16px"></dc-import></button>
+        <span class="w-8 text-center font-bold text-cream" aria-live="polite">{{ qty }}</span>
+        <button type="button" onClick="{{ inc }}" aria-label="Increase quantity" class="grid h-12 w-11 place-items-center text-cream transition-colors hover:text-flame focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-flame"><dc-import name="Icon" i="plus" cls="h-4 w-4" hint-size="16px,16px"></dc-import></button>
+      </div>
+    </sc-if>
+    <button type="button" onClick="{{ add }}" disabled="{{ soldOut }}" class="group inline-flex min-h-12 flex-1 items-center justify-center gap-3 rounded-md bg-rust px-6 text-sm font-bold uppercase tracking-widest text-cream transition duration-200 hover:bg-ember hover:text-midnight focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-flame active:scale-95 disabled:cursor-not-allowed disabled:bg-navy disabled:text-peach/50 motion-reduce:transform-none motion-reduce:transition-none">
+      <dc-import name="Icon" i="bag" cls="h-5 w-5" hint-size="20px,20px"></dc-import>{{ addLabel }}
+    </button>
+    <button type="button" onClick="{{ wish }}" aria-pressed="{{ wished }}" aria-label="{{ wishLabel }}" class="grid h-12 w-12 place-items-center rounded-md ring-1 transition duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-flame active:scale-90 {{ wishCls }}"><dc-import name="Icon" dc-props="{{ heart }}" hint-size="20px,20px"></dc-import></button>
+  </div>
+  <sc-if value="{{ canBuyNow }}">
+    <button type="button" onClick="{{ buyNow }}" class="group -mt-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-cream px-6 text-sm font-bold uppercase tracking-widest text-midnight transition duration-200 hover:bg-peach focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-flame">Buy it now<span class="transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transform-none"><dc-import name="Icon" i="arrow-right" cls="h-4 w-4" hint-size="16px,16px"></dc-import></span></button>
+  </sc-if>
+  <sc-if value="{{ compact }}"><a href="{{ href }}" class="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-flame underline-offset-4 hover:underline">View full details<dc-import name="Icon" i="arrow-up-right" cls="h-4 w-4" hint-size="16px,16px"></dc-import></a></sc-if>
+  <sc-if value="{{ full }}">
+    <ul class="grid gap-3 rounded-md bg-navy/60 p-4 text-sm ring-1 ring-white/10 sm:grid-cols-2">
+      <li class="flex gap-3"><span class="text-flame"><dc-import name="Icon" i="truck" cls="h-5 w-5" hint-size="20px,20px"></dc-import></span><span><strong class="block text-cream">{{ shipTitle }}</strong>{{ shipText }}</span></li>
+      <li class="flex gap-3"><span class="text-flame"><dc-import name="Icon" i="returns" cls="h-5 w-5" hint-size="20px,20px"></dc-import></span><span><strong class="block text-cream">30-day returns</strong>Free exchanges within 30 days. <a href="#/page/returns" class="underline underline-offset-2 hover:text-flame">Returns policy</a></span></li>
+    </ul>
+  </sc-if>
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:520,&quot;height&quot;:760},&quot;pid&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;v-neck-t-shirt&quot;,&quot;tsType&quot;:&quot;string|number&quot;},&quot;compact&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state={size:'',color:'',qty:1,tried:false};
+  componentDidMount(){const go=()=>window.WN?(this.u=WN.subscribe(()=>this.forceUpdate()),this.init(),this.forceUpdate()):setTimeout(go,20);go();}
+  componentDidUpdate(pp){if(pp.pid!==this.props.pid)this.init();}
+  componentWillUnmount(){this.u&&this.u();}
+  init(){const p=WN.get(this.props.pid);if(p)this.setState({size:'',color:p.colors.length===1?p.colors[0]:'',qty:1,tried:false});}
+  check(p){const s=this.state;const needS=p.sizes.length&&!s.size,needC=p.colors.length>1&&!s.color;
+    if(needS||needC){this.setState({tried:true});WN.toast('Please choose '+[needS&&'a size',needC&&'a colour'].filter(Boolean).join(' and ')+' first',{tone:'warn'});return false;}
+    if(WN.comboOut(p,s.size,s.color)){WN.toast('That combination is sold out — try another',{tone:'warn'});return false;}return true;}
+  renderVals(){
+    const W=window.WN;const p=W&&W.get(this.props.pid);if(!p)return{ready:false};
+    const s=this.state,cat=W.CATS.find(c=>c.slug===p.cat),wished=W.isWished(p.id),out=p.stock==='out',compact=!!this.props.compact;
+    const unit=W.unitPrice(p,s.size);const full=Math.round(p.rating);
+    const comboOut=s.size&&s.color&&W.comboOut(p,s.size,s.color);
+    return{ready:true,compact,full:!compact,uid:p.id+(compact?'q':''),name:p.name,sub:p.sub,catLabel:cat?cat.label:'',rating:p.rating,reviews:p.reviews,desc:p.desc,href:'#/product/'+p.slug,reviewsHref:compact?'#/product/'+p.slug:'#/product/'+p.slug+'/reviews',
+      stars:[1,2,3,4,5].map(n=>({i:'star',fill:n<=full,cls:'h-4 w-4'})),
+      priceText:s.size?W.fmt(unit):W.priceLabel(p),onSale:!!p.regular,regularText:p.regular?W.fmt(p.regular):'',pct:p.regular?Math.round((1-p.price/p.regular)*100):0,
+      hasColors:p.colors.length>1,colorLabel:s.color||'Choose a colour',colorErr:s.tried&&p.colors.length>1&&!s.color?'Select a colour to continue':'',
+      colorOpts:p.colors.map(c=>({name:c,sw:W.SWATCH[c]||'bg-neutral-500',pressed:s.color===c?'true':'false',cls:s.color===c?'bg-cream text-midnight ring-cream':'text-peach ring-peach/30 hover:ring-peach',pick:()=>this.setState({color:c})})),
+      hasSizes:p.sizes.length>0,sizeLabel:s.size||'Choose a size',sizeErr:s.tried&&p.sizes.length&&!s.size?'Select a size to continue':(comboOut?`${s.size} in ${s.color} is sold out`:''),
+      sizeOpts:p.sizes.map(z=>{const o=out||p.outSizes.includes(z)||(s.color&&p.outCombos.includes(z+'|'+s.color));return{name:z,out:!!o,pressed:s.size===z?'true':'false',aria:z+(o?' — sold out':''),
+        cls:s.size===z?'bg-ember text-midnight ring-ember':o?'text-peach/30 ring-peach/15':(s.tried&&!s.size?'text-cream ring-flame':'text-cream ring-peach/30 hover:ring-cream hover:bg-white/5'),pick:()=>this.setState({size:z})}}),
+      openGuide:()=>W.ui({sizeGuide:true}),
+      stockText:out?'Out of stock':p.stock==='low'?`Low stock — only ${p.stockQty} left`:p.type==='downloadable'?'Instant digital download':'In stock, ready to ship',
+      stockCls:out?'text-peach/60':p.stock==='low'?'text-flame':'text-emerald-300',stockDot:out?'bg-peach/40':p.stock==='low'?'bg-flame':'bg-emerald-400',
+      showQty:!out&&p.type!=='downloadable',qty:s.qty,dec:()=>this.setState({qty:Math.max(1,s.qty-1)}),inc:()=>this.setState({qty:Math.min(p.stockQty||10,s.qty+1)}),
+      soldOut:out,addLabel:out?'Sold out':'Add to bag',canBuyNow:!out,
+      add:()=>{if(!this.check(p))return;W.addToCart(p.id,{size:s.size,color:s.color||p.colors[0]||'',qty:s.qty});if(compact)W.ui({quick:null});},
+      buyNow:()=>{if(!this.check(p))return;W.set({buyNow:[{key:'bn',id:p.id,size:s.size,color:s.color||p.colors[0]||'',qty:s.qty}]});W.go('/checkout/buy-now');},
+      wished:wished?'true':'false',wishLabel:wished?'Remove from wishlist':'Add to wishlist',wishCls:wished?'bg-ember text-midnight ring-ember':'text-cream ring-peach/30 hover:ring-cream hover:text-flame',heart:{i:'heart',fill:wished,cls:'h-5 w-5'},wish:()=>W.toggleWish(p.id),
+      shipTitle:p.type==='downloadable'?'Instant delivery':'Free shipping over 75 €',shipText:p.type==='downloadable'?'Download from your account right after purchase.':'Standard 3–5 working days, or express 1–2 days.'};
+  }
+}
+</script>
+</body>
+</html>

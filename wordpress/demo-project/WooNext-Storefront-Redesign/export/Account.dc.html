@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<div class="mx-auto max-w-7xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
+<sc-if value="{{ isAuth }}" hint-placeholder-val="{{ false }}">
+  <div class="grid overflow-hidden rounded-lg bg-petrol ring-1 ring-white/10 lg:grid-cols-2">
+    <div class="relative hidden min-h-full lg:block"><img src="{{ authImg }}" alt="" class="absolute inset-0 h-full w-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-midnight via-midnight/30 to-transparent"></div><div class="absolute bottom-8 left-8 right-8"><p class="font-script text-5xl text-peach">Welcome back</p><p class="font-display text-6xl uppercase leading-none text-cream">Your style,<br>saved.</p></div></div>
+    <div class="flex flex-col gap-6 p-6 sm:p-10">
+      <nav aria-label="Breadcrumb"><ol class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-peach/70"><li><a href="#/" class="hover:text-flame">Home</a></li><li aria-hidden="true">/</li><li aria-current="page" class="text-cream">{{ authCrumb }}</li></ol></nav>
+      <div><h1 class="font-display text-5xl uppercase leading-none text-cream sm:text-6xl">{{ authTitle }}</h1><p class="mt-2 text-sm text-peach/80">{{ authSub }}</p></div>
+      <sc-if value="{{ guardMsg }}"><p role="status" class="rounded-md bg-navy p-3 text-sm text-peach">{{ guardMsg }}</p></sc-if>
+      <sc-if value="{{ showDemo }}"><div class="rounded-md bg-navy p-4 text-sm ring-1 ring-ember/40"><p class="font-bold text-cream">Demo account</p><p class="text-peach/80">Email <code class="font-mono text-flame">demo@woonext.store</code> · Password <code class="font-mono text-flame">demo1234</code></p><button type="button" onClick="{{ fillDemo }}" class="mt-2 text-xs font-bold uppercase tracking-widest text-flame underline underline-offset-4">Fill in demo details</button></div></sc-if>
+      <sc-if value="{{ authDone }}"><div role="status" class="flex flex-col gap-3 rounded-md bg-navy p-5 ring-1 ring-emerald-400/40"><p class="flex items-center gap-2 font-bold text-emerald-300"><dc-import name="Icon" i="check" cls="h-5 w-5" hint-size="20px,20px"></dc-import>{{ doneTitle }}</p><p class="text-sm text-peach/85">{{ doneText }}</p><a href="{{ doneHref }}" class="inline-flex min-h-11 w-fit items-center rounded-md bg-rust px-5 text-sm font-bold uppercase tracking-widest text-cream hover:bg-ember hover:text-midnight">{{ doneCta }}</a></div></sc-if>
+      <sc-if value="{{ authForm }}">
+        <form onSubmit="{{ authSubmit }}" novalidate="novalidate" class="flex flex-col gap-4">
+          <sc-if value="{{ formErr }}"><p role="alert" class="rounded-md bg-rust p-3 text-sm font-semibold text-cream">{{ formErr }}</p></sc-if>
+          <sc-for list="{{ authFields }}" as="f">
+            <div class="flex flex-col gap-1.5">
+              <label for="{{ f.id }}" class="text-xs font-bold uppercase tracking-widest text-cream">{{ f.label }}</label>
+              <input id="{{ f.id }}" type="{{ f.type }}" autocomplete="{{ f.auto }}" value="{{ f.value }}" onChange="{{ f.on }}" aria-invalid="{{ f.inv }}" aria-describedby="{{ f.errId }}" class="min-h-12 rounded-md border-0 bg-navy px-4 text-cream ring-1 focus:ring-2 focus:ring-flame {{ f.ring }}">
+              <sc-if value="{{ f.err }}"><p id="{{ f.errId }}" class="text-sm font-semibold text-flame">{{ f.err }}</p></sc-if>
+            </div>
+          </sc-for>
+          <sc-if value="{{ isLogin }}"><div class="flex items-center justify-between text-sm"><label class="flex min-h-11 items-center gap-2 text-peach"><input type="checkbox" checked="{{ remember }}" onChange="{{ toggleRemember }}" class="h-5 w-5 rounded border-peach/40 bg-transparent text-ember focus:ring-flame focus:ring-offset-0">Remember me</label><a href="#/forgot" class="font-semibold text-flame underline-offset-4 hover:underline">Forgot password?</a></div></sc-if>
+          <button type="submit" disabled="{{ busy }}" class="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-rust px-6 text-sm font-bold uppercase tracking-widest text-cream transition hover:bg-ember hover:text-midnight disabled:opacity-70"><sc-if value="{{ busy }}"><span class="animate-spin motion-reduce:animate-none"><dc-import name="Icon" i="loader" cls="h-4 w-4" hint-size="16px,16px"></dc-import></span></sc-if>{{ authBtn }}</button>
+        </form>
+      </sc-if>
+      <p class="text-sm text-peach/80"><sc-for list="{{ authLinks }}" as="l"><a href="{{ l.href }}" class="mr-4 font-semibold text-flame underline-offset-4 hover:underline">{{ l.label }}</a></sc-for></p>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ isAccount }}">
+  <nav aria-label="Breadcrumb"><ol class="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-widest text-peach/70"><li><a href="#/" class="hover:text-flame">Home</a></li><li aria-hidden="true">/</li><li><a href="#/account" class="hover:text-flame">My account</a></li><li aria-hidden="true">/</li><li aria-current="page" class="text-cream">{{ tabLabel }}</li></ol></nav>
+  <div class="mt-4 flex flex-wrap items-end justify-between gap-3"><h1 class="font-display text-6xl uppercase leading-none text-cream sm:text-7xl">My account</h1><span class="rounded-full bg-ember px-3 py-1 text-xs font-bold uppercase tracking-widest text-midnight">Demo account · local data only</span></div>
+  <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-12">
+    <nav aria-label="Account" class="lg:col-span-3">
+      <ul class="flex gap-2 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0">
+        <sc-for list="{{ tabs }}" as="t"><li class="shrink-0"><a href="{{ t.href }}" aria-current="{{ t.cur }}" class="flex min-h-11 items-center gap-3 rounded-md px-4 text-sm font-bold uppercase tracking-widest transition duration-200 {{ t.cls }}"><dc-import name="Icon" dc-props="{{ t.icon }}" hint-size="18px,18px"></dc-import>{{ t.label }}</a></li></sc-for>
+        <li class="shrink-0"><button type="button" onClick="{{ logout }}" class="flex min-h-11 w-full items-center gap-3 rounded-md px-4 text-sm font-bold uppercase tracking-widest text-peach/80 transition hover:bg-rust hover:text-cream"><dc-import name="Icon" i="logout" cls="h-5 w-5" hint-size="18px,18px"></dc-import>Log out</button></li>
+      </ul>
+    </nav>
+    <div class="min-w-0 lg:col-span-9">
+      <sc-if value="{{ tDash }}">
+        <div class="flex flex-col gap-6">
+          <div class="rounded-md bg-gradient-to-br from-teal to-petrol p-6 ring-1 ring-white/10"><p class="font-script text-4xl text-peach">Hello, {{ userName }}</p><p class="mt-1 text-sm text-peach/85">From here you can view recent orders, manage addresses and payment methods, and edit your account details. (Not {{ userName }}? <button type="button" onClick="{{ logout }}" class="font-semibold text-flame underline">Log out</button>)</p></div>
+          <dl class="grid grid-cols-2 gap-3 sm:grid-cols-4"><sc-for list="{{ stats }}" as="s"><a href="{{ s.href }}" class="rounded-md bg-petrol p-4 ring-1 ring-white/10 transition hover:ring-ember"><dt class="text-xs font-bold uppercase tracking-widest text-peach/70">{{ s.k }}</dt><dd class="font-display text-4xl text-cream">{{ s.v }}</dd></a></sc-for></dl>
+          <div><div class="flex items-center justify-between"><h2 class="font-display text-3xl uppercase text-cream">Recent orders</h2><a href="#/account/orders" class="text-sm font-bold uppercase tracking-widest text-flame hover:underline">All orders</a></div>
+            <ul class="mt-4 flex flex-col gap-3"><sc-for list="{{ recentOrders }}" as="o"><li><a href="{{ o.href }}" class="flex flex-wrap items-center justify-between gap-3 rounded-md bg-petrol p-4 ring-1 ring-white/10 transition hover:ring-ember"><span class="font-display text-xl text-cream">{{ o.id }}</span><span class="text-sm text-peach/80">{{ o.date }}</span><span class="rounded-full px-3 py-1 text-xs font-bold uppercase tracking-widest {{ o.badge }}">{{ o.status }}</span><span class="font-semibold text-flame">{{ o.total }}</span></a></li></sc-for></ul>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ tOrders }}">
+        <div class="flex flex-wrap gap-2" role="group" aria-label="Filter by status"><sc-for list="{{ statusChips }}" as="c"><button type="button" onClick="{{ c.pick }}" aria-pressed="{{ c.pressed }}" class="min-h-10 rounded-full px-4 text-xs font-bold uppercase tracking-widest transition {{ c.cls }}">{{ c.label }} <span class="opacity-70">{{ c.n }}</span></button></sc-for></div>
+        <div class="mt-4 hidden grid-cols-12 gap-3 border-b border-white/10 px-4 pb-2 text-xs font-bold uppercase tracking-widest text-peach/60 md:grid" aria-hidden="true"><span class="col-span-3">Order</span><span class="col-span-3">Date</span><span class="col-span-2">Status</span><span class="col-span-2">Total</span><span class="col-span-2 text-right">Actions</span></div>
+        <ul class="mt-2 flex flex-col gap-2">
+          <sc-for list="{{ orders }}" as="o">
+            <li class="grid grid-cols-2 items-center gap-3 rounded-md bg-petrol p-4 ring-1 ring-white/10 md:grid-cols-12">
+              <span class="font-display text-xl text-cream md:col-span-3">{{ o.id }}</span>
+              <span class="text-right text-sm text-peach/80 md:col-span-3 md:text-left">{{ o.date }}</span>
+              <span class="md:col-span-2"><span class="rounded-full px-3 py-1 text-xs font-bold uppercase tracking-widest {{ o.badge }}">{{ o.status }}</span></span>
+              <span class="text-right text-sm text-cream md:col-span-2 md:text-left">{{ o.total }} <span class="text-peach/60">· {{ o.count }} items</span></span>
+              <span class="col-span-2 flex justify-end gap-2"><a href="{{ o.href }}" class="inline-flex min-h-10 items-center rounded-md bg-cream px-4 text-xs font-bold uppercase tracking-widest text-midnight hover:bg-peach">View</a><a href="{{ o.track }}" class="inline-flex min-h-10 items-center rounded-md px-3 text-xs font-bold uppercase tracking-widest text-cream ring-1 ring-peach/30 hover:bg-white/10">Track</a></span>
+            </li>
+          </sc-for>
+        </ul>
+        <sc-if value="{{ noOrders }}"><p class="mt-4 rounded-md bg-petrol p-6 text-center text-peach/80">No orders with this status. <a href="#/shop" class="font-semibold text-flame underline">Browse the shop</a></p></sc-if>
+        <sc-if value="{{ oPagesMany }}"><nav aria-label="Orders pagination" class="mt-6 flex justify-center gap-2"><sc-for list="{{ oPages }}" as="p"><button type="button" onClick="{{ p.go }}" aria-current="{{ p.cur }}" aria-label="Page {{ p.n }}" class="grid h-11 w-11 place-items-center rounded-full font-display text-lg {{ p.cls }}">{{ p.n }}</button></sc-for></nav></sc-if>
+      </sc-if>
+
+      <sc-if value="{{ tOrder }}">
+        <sc-if value="{{ od.missing }}"><p class="rounded-md bg-petrol p-6 text-peach">Order not found. <a href="#/account/orders" class="text-flame underline">Back to orders</a></p></sc-if>
+        <sc-if value="{{ od.found }}">
+          <div class="flex flex-col gap-6">
+            <div class="flex flex-wrap items-center justify-between gap-3"><h2 class="font-display text-4xl uppercase text-cream">Order {{ od.id }}</h2><span class="rounded-full px-3 py-1 text-xs font-bold uppercase tracking-widest {{ od.badge }}">{{ od.status }}</span></div>
+            <p class="text-sm text-peach/80">Placed on {{ od.date }} · Paid via {{ od.pay }}</p>
+            <ol class="grid grid-cols-4 gap-2" aria-label="Order progress"><sc-for list="{{ od.steps }}" as="s"><li class="flex flex-col gap-2"><span class="h-1.5 rounded-full {{ s.bar }}"></span><span class="text-xs font-bold uppercase tracking-widest {{ s.txt }}">{{ s.label }}</span></li></sc-for></ol>
+            <ul class="divide-y divide-white/10 rounded-md bg-petrol px-5 ring-1 ring-white/10"><sc-for list="{{ od.items }}" as="l"><li class="flex items-center gap-4 py-4"><span class="h-20 w-16 shrink-0 overflow-hidden rounded bg-ember"><sc-if value="{{ l.img }}" hint-placeholder-val="{{ false }}"><img src="{{ l.img }}" alt="" class="h-full w-full object-cover"></sc-if></span><span class="flex-1"><span class="block font-semibold text-cream">{{ l.name }} × {{ l.qty }}</span><span class="text-xs text-peach/70">{{ l.variation }}</span></span><span class="font-semibold text-cream">{{ l.line }}</span></li></sc-for></ul>
+            <dl class="flex flex-col gap-2 text-sm"><sc-for list="{{ od.totals }}" as="t"><div class="flex justify-between"><dt class="text-peach/80">{{ t.k }}</dt><dd class="text-cream">{{ t.v }}</dd></div></sc-for></dl>
+            <div class="grid gap-4 sm:grid-cols-2"><div class="rounded-md bg-petrol p-5 ring-1 ring-white/10"><h3 class="text-xs font-bold uppercase tracking-widest text-peach/70">Billing address</h3><address class="mt-2 text-sm not-italic text-cream"><sc-for list="{{ od.bill }}" as="x"><span class="block">{{ x }}</span></sc-for></address></div><div class="rounded-md bg-petrol p-5 ring-1 ring-white/10"><h3 class="text-xs font-bold uppercase tracking-widest text-peach/70">Shipping address</h3><address class="mt-2 text-sm not-italic text-cream"><sc-for list="{{ od.ship }}" as="x"><span class="block">{{ x }}</span></sc-for></address></div></div>
+            <div class="flex flex-wrap gap-3"><a href="#/account/orders" class="inline-flex min-h-11 items-center rounded-md px-5 text-sm font-bold uppercase tracking-widest text-cream ring-1 ring-peach/40 hover:bg-cream hover:text-midnight">Back to orders</a><a href="{{ od.trackHref }}" class="inline-flex min-h-11 items-center rounded-md bg-rust px-5 text-sm font-bold uppercase tracking-widest text-cream hover:bg-ember hover:text-midnight">Track this order</a><button type="button" onClick="{{ od.again }}" class="inline-flex min-h-11 items-center rounded-md bg-cream px-5 text-sm font-bold uppercase tracking-widest text-midnight hover:bg-peach">Order again</button></div>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <sc-if value="{{ tTrack }}">
+        <form onSubmit="{{ trackSubmit }}" class="flex max-w-lg flex-col gap-2"><label for="acc-track" class="text-xs font-bold uppercase tracking-widest text-cream">Order number</label><div class="flex gap-2"><input id="acc-track" value="{{ trackQ }}" onChange="{{ onTrackQ }}" placeholder="e.g. WN-10458" aria-describedby="acc-track-msg" class="min-h-12 flex-1 rounded-md border-0 bg-petrol px-4 uppercase text-cream ring-1 ring-peach/30 focus:ring-2 focus:ring-flame"><button type="submit" class="min-h-12 rounded-md bg-rust px-5 text-sm font-bold uppercase tracking-widest text-cream hover:bg-ember hover:text-midnight">Track</button></div><p id="acc-track-msg" aria-live="polite" class="text-sm font-semibold text-flame">{{ trackErr }}</p></form>
+        <sc-if value="{{ tr.found }}"><div class="mt-6 rounded-md bg-petrol p-6 ring-1 ring-white/10"><p class="font-display text-3xl uppercase text-cream">{{ tr.id }} · {{ tr.status }}</p><ol class="mt-4 flex flex-col gap-4 border-l-2 border-white/10 pl-6"><sc-for list="{{ tr.events }}" as="e"><li class="relative"><span class="absolute -left-8 top-1 h-3.5 w-3.5 rounded-full ring-4 ring-petrol {{ e.dot }}"></span><p class="font-bold {{ e.txt }}">{{ e.label }}</p><p class="text-xs text-peach/70">{{ e.when }}</p></li></sc-for></ol></div></sc-if>
+        <p class="mt-4 text-sm text-peach/70">Try one of your orders: <sc-for list="{{ trackSamples }}" as="s"><button type="button" onClick="{{ s.go }}" class="mr-2 font-semibold text-flame underline">{{ s.id }}</button></sc-for></p>
+      </sc-if>
+
+      <sc-if value="{{ tDownloads }}">
+        <sc-if value="{{ hasDl }}"><ul class="flex flex-col gap-3"><sc-for list="{{ downloads }}" as="d"><li class="flex flex-wrap items-center justify-between gap-3 rounded-md bg-petrol p-4 ring-1 ring-white/10"><span class="flex items-center gap-3"><span class="grid h-12 w-12 place-items-center rounded-md bg-ember font-display text-lg text-midnight">Woo</span><span><span class="block font-semibold text-cream">{{ d.name }}</span><span class="text-xs text-peach/70">Order {{ d.order }} · {{ d.left }} downloads remaining · never expires</span></span></span><button type="button" onClick="{{ d.dl }}" disabled="{{ d.none }}" class="inline-flex min-h-11 items-center gap-2 rounded-md bg-cream px-4 text-xs font-bold uppercase tracking-widest text-midnight hover:bg-peach disabled:opacity-40"><dc-import name="Icon" i="download" cls="h-4 w-4" hint-size="16px,16px"></dc-import>Download</button></li></sc-for></ul></sc-if>
+        <sc-if value="{{ noDl }}"><p class="rounded-md bg-petrol p-6 text-peach/80">No downloads available yet. <a href="#/category/accessories/Digital" class="font-semibold text-flame underline">Browse digital releases</a></p></sc-if>
+      </sc-if>
+
+      <sc-if value="{{ tAddr }}">
+        <div class="grid gap-4 md:grid-cols-2">
+          <sc-for list="{{ addrCards }}" as="a">
+            <section class="flex flex-col gap-4 rounded-md bg-petrol p-6 ring-1 ring-white/10" aria-labelledby="addr-{{ a.key }}">
+              <div class="flex items-center justify-between"><h2 id="addr-{{ a.key }}" class="font-display text-2xl uppercase text-cream">{{ a.title }}</h2><button type="button" onClick="{{ a.toggle }}" class="inline-flex min-h-10 items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-flame"><dc-import name="Icon" i="edit" cls="h-4 w-4" hint-size="16px,16px"></dc-import>{{ a.btn }}</button></div>
+              <sc-if value="{{ a.view }}"><address class="text-sm not-italic leading-relaxed text-peach"><sc-for list="{{ a.lines }}" as="x"><span class="block">{{ x }}</span></sc-for></address></sc-if>
+              <sc-if value="{{ a.editing }}">
+                <form onSubmit="{{ a.save }}" novalidate="novalidate" class="grid gap-3 sm:grid-cols-2">
+                  <sc-for list="{{ a.fields }}" as="f"><div class="flex flex-col gap-1 {{ f.span }}"><label for="{{ f.id }}" class="text-xs font-bold uppercase tracking-widest text-cream">{{ f.label }}</label><input id="{{ f.id }}" value="{{ f.value }}" onChange="{{ f.on }}" aria-invalid="{{ f.inv }}" aria-describedby="{{ f.errId }}" class="min-h-11 rounded-md border-0 bg-navy px-3 text-sm text-cream ring-1 focus:ring-2 focus:ring-flame {{ f.ring }}"><sc-if value="{{ f.err }}"><p id="{{ f.errId }}" class="text-xs font-semibold text-flame">{{ f.err }}</p></sc-if></div></sc-for>
+                  <button type="submit" class="min-h-11 rounded-md bg-rust px-5 text-sm font-bold uppercase tracking-widest text-cream hover:bg-ember hover:text-midnight sm:col-span-2">Save address</button>
+                </form>
+              </sc-if>
+            </section>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ tPay }}">
+        <p class="text-sm text-peach/80">Saved payment methods are masked mock data for this prototype. No real card details are collected or stored.</p>
+        <ul class="mt-4 grid gap-4 sm:grid-cols-2">
+          <sc-for list="{{ cards }}" as="c"><li class="flex flex-col justify-between gap-6 rounded-lg bg-gradient-to-br p-5 shadow-lg ring-1 ring-white/10 {{ c.bg }}"><div class="flex items-center justify-between"><span class="font-display text-2xl uppercase tracking-wide text-cream">{{ c.brand }}</span><sc-if value="{{ c.def }}"><span class="rounded-full bg-cream px-2.5 py-0.5 text-xs font-bold uppercase tracking-widest text-midnight">Default</span></sc-if></div><p class="font-mono text-lg tracking-widest text-cream">•••• •••• •••• {{ c.last4 }}</p><div class="flex items-center justify-between text-xs text-cream/90"><span>Expires {{ c.exp }}</span><span class="flex gap-3"><sc-if value="{{ c.notDef }}"><button type="button" onClick="{{ c.makeDef }}" class="font-bold uppercase tracking-widest underline">Make default</button></sc-if><button type="button" onClick="{{ c.remove }}" class="font-bold uppercase tracking-widest underline">Remove</button></span></div></li></sc-for>
+        </ul>
+        <button type="button" onClick="{{ addCard }}" class="mt-4 inline-flex min-h-12 items-center gap-2 rounded-md px-5 text-sm font-bold uppercase tracking-widest text-cream ring-1 ring-peach/40 hover:bg-cream hover:text-midnight"><dc-import name="Icon" i="plus" cls="h-4 w-4" hint-size="16px,16px"></dc-import>Add demo payment method</button>
+      </sc-if>
+
+      <sc-if value="{{ tDetails }}">
+        <form onSubmit="{{ saveDetails }}" novalidate="novalidate" class="flex max-w-2xl flex-col gap-6">
+          <fieldset class="grid gap-4 sm:grid-cols-2"><legend class="mb-4 font-display text-2xl uppercase text-cream">Account details</legend>
+            <sc-for list="{{ detailFields }}" as="f"><div class="flex flex-col gap-1.5 {{ f.span }}"><label for="{{ f.id }}" class="text-xs font-bold uppercase tracking-widest text-cream">{{ f.label }}</label><input id="{{ f.id }}" type="{{ f.type }}" autocomplete="{{ f.auto }}" value="{{ f.value }}" onChange="{{ f.on }}" aria-invalid="{{ f.inv }}" aria-describedby="{{ f.errId }}" class="min-h-12 rounded-md border-0 bg-petrol px-4 text-cream ring-1 focus:ring-2 focus:ring-flame {{ f.ring }}"><sc-if value="{{ f.err }}"><p id="{{ f.errId }}" class="text-sm font-semibold text-flame">{{ f.err }}</p></sc-if><sc-if value="{{ f.hint }}"><p class="text-xs text-peach/60">{{ f.hint }}</p></sc-if></div></sc-for>
+          </fieldset>
+          <fieldset class="grid gap-4 sm:grid-cols-2"><legend class="mb-4 font-display text-2xl uppercase text-cream">Password change</legend>
+            <sc-for list="{{ pwFields }}" as="f"><div class="flex flex-col gap-1.5 {{ f.span }}"><label for="{{ f.id }}" class="text-xs font-bold uppercase tracking-widest text-cream">{{ f.label }}</label><input id="{{ f.id }}" type="password" autocomplete="{{ f.auto }}" value="{{ f.value }}" onChange="{{ f.on }}" aria-invalid="{{ f.inv }}" aria-describedby="{{ f.errId }}" class="min-h-12 rounded-md border-0 bg-petrol px-4 text-cream ring-1 focus:ring-2 focus:ring-flame {{ f.ring }}"><sc-if value="{{ f.err }}"><p id="{{ f.errId }}" class="text-sm font-semibold text-flame">{{ f.err }}</p></sc-if></div></sc-for>
+          </fieldset>
+          <button type="submit" class="min-h-12 w-fit rounded-md bg-rust px-6 text-sm font-bold uppercase tracking-widest text-cream hover:bg-ember hover:text-midnight">Save changes</button>
+        </form>
+      </sc-if>
+    </div>
+  </div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const BADGE={processing:'bg-flame text-midnight',shipped:'bg-lagoon text-cream','on-hold':'bg-peach text-midnight',completed:'bg-emerald-600 text-cream',cancelled:'bg-navy text-peach ring-1 ring-peach/30'};
+const AF=[['first','First name',''],['last','Last name',''],['address','Street address','sm:col-span-2'],['city','City',''],['postcode','Postcode',''],['country','Country',''],['phone','Phone','']];
+const fa=a=>[a.first+' '+a.last,a.company,a.address,a.postcode+' '+a.city,a.country,a.phone].filter(x=>x&&String(x).trim());
+const EMAIL=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+class Component extends DCLogic {
+  state={f:{},errs:{},formErr:'',done:false,busy:false,remember:true,status:'all',opage:1,trackQ:'',trackId:'',trackErr:'',edit:null,addrDraft:{},addrErr:{},det:null,detErr:{},dl:{}};
+  componentDidMount(){const go=()=>{if(!window.WN)return setTimeout(go,20);this.u=WN.subscribe(()=>this.forceUpdate());this.forceUpdate();};go();}
+  componentDidUpdate(pp){if(pp.view!==this.props.view||pp.arg!==this.props.arg)this.setState({f:{},errs:{},formErr:'',done:false,busy:false,edit:null,trackId:pp.arg!==this.props.arg?'':this.state.trackId});}
+  componentWillUnmount(){this.u&&this.u();}
+  fld(id,label,type,auto,span,hint){const st=this.state,err=st.errs[id]||'';return{id:'f-'+id,label,type,auto,span:span||'',hint:hint||'',value:st.f[id]||'',err,inv:err?'true':'false',errId:'f-'+id+'-err',ring:err?'ring-flame':'ring-peach/30',on:e=>{const v=e.target.value;this.setState(s=>({f:{...s.f,[id]:v},errs:{...s.errs,[id]:''}}))}};}
+  renderVals(){
+    const W=window.WN;if(!W)return{};
+    const S=W.state,st=this.state,view=this.props.view,u=S.user;
+    if(view!=='account'||!u){
+      const mode=view==='account'?'login':view;const f=st.f;
+      const conf={login:{t:'Sign in',s:'Access orders, addresses and saved items.',btn:'Sign in',fields:[['email','Email address','email','email'],['pw','Password','password','current-password']],links:[['Create an account','#/register']]},
+        register:{t:'Create account',s:'Join WooNext for faster checkout and order tracking.',btn:'Create account',fields:[['name','Full name','text','name'],['email','Email address','email','email'],['pw','Password (min. 8 characters)','password','new-password'],['pw2','Confirm password','password','new-password']],links:[['Already have an account? Sign in','#/login']]},
+        forgot:{t:'Forgot password',s:'Enter your email and we’ll send a reset link (simulated).',btn:'Send reset link',fields:[['email','Email address','email','email']],links:[['Back to sign in','#/login']]},
+        reset:{t:'Reset password',s:'Choose a new password for your account.',btn:'Save new password',fields:[['pw','New password','password','new-password'],['pw2','Confirm new password','password','new-password']],links:[['Back to sign in','#/login']]}}[mode]||{};
+      const done={register:['Account created','Welcome to WooNext! You are now signed in to a local demo profile.','Go to my account','#/account'],forgot:['Check your inbox','If an account exists for that email, a reset link has been sent. In this demo, continue straight to the reset screen.','Open reset screen','#/reset'],reset:['Password updated','Your new password is saved for this demo session. Sign in to continue.','Sign in','#/login']}[mode]||[];
+      return{isAuth:true,authImg:W.img(mode==='register'?92:41,900),authCrumb:conf.t,authTitle:conf.t,authSub:conf.s,showDemo:mode==='login',guardMsg:view==='account'?'Please sign in to view your account.':'',
+        fillDemo:()=>this.setState({f:{email:'demo@woonext.store',pw:'demo1234'},errs:{},formErr:''}),
+        authDone:st.done,authForm:!st.done,doneTitle:done[0],doneText:done[1],doneCta:done[2],doneHref:done[3],
+        formErr:st.formErr,isLogin:mode==='login',remember:st.remember,toggleRemember:()=>this.setState({remember:!st.remember}),busy:st.busy,authBtn:st.busy?'Please wait…':conf.btn,
+        authFields:(conf.fields||[]).map(x=>this.fld(...x)),authLinks:(conf.links||[]).map(([label,href])=>({label,href})),
+        authSubmit:e=>{e.preventDefault();const er={};
+          if('email' in Object.fromEntries((conf.fields||[]).map(x=>[x[0],1]))){if(!f.email)er.email='Email is required';else if(!EMAIL.test(f.email))er.email='Enter a valid email address';}
+          if(mode==='register'&&!(f.name||'').trim())er.name='Please enter your name';
+          if(mode!=='forgot'){if(!f.pw)er.pw='Password is required';else if(mode!=='login'&&f.pw.length<8)er.pw='Use at least 8 characters';}
+          if((mode==='register'||mode==='reset')&&f.pw&&f.pw!==f.pw2)er.pw2='Passwords don’t match';
+          if(Object.keys(er).length)return this.setState({errs:er,formErr:''});
+          this.setState({busy:true,formErr:''});setTimeout(()=>{
+            if(mode==='login'){if(f.email.toLowerCase()==='demo@woonext.store'&&f.pw==='demo1234'||(S.regEmail&&f.email.toLowerCase()===S.regEmail)){W.set({user:{name:S.regName&&f.email.toLowerCase()===S.regEmail?S.regName:'Alex Demo',email:f.email.toLowerCase()}});W.toast('Signed in — welcome back');W.go('/account');}
+              else this.setState({busy:false,formErr:'Incorrect email or password. Use the demo account shown above.'});return;}
+            if(mode==='register'){W.set({user:{name:f.name.trim(),email:f.email.toLowerCase()},regEmail:f.email.toLowerCase(),regName:f.name.trim()});}
+            this.setState({busy:false,done:true});},700);}};
+    }
+    const tab=this.props.arg||'dashboard',oid=this.props.arg2;
+    const TABS=[['dashboard','Dashboard','grid'],['orders','Orders','package'],['track','Track order','truck'],['downloads','Downloads','download'],['addresses','Addresses','pin'],['payment','Payment methods','card'],['details','Account details','user']];
+    const activeTab=tab==='order'?'orders':tab;
+    const ordRow=o=>({id:o.id,date:W.dateFmt(o.date),status:o.status,badge:BADGE[o.status],total:W.fmt(o.total),count:o.items.reduce((a,i)=>a+i.qty,0),href:'#/account/order/'+o.id,track:'#/account/track/'+o.id});
+    const list=S.orders.filter(o=>st.status==='all'||o.status===st.status);const PER=5,pn=Math.max(1,Math.ceil(list.length/PER)),pg=Math.min(st.opage,pn);
+    const o=tab==='order'&&S.orders.find(x=>x.id===oid);
+    const stepIdx={processing:1,'on-hold':0,shipped:2,completed:3,cancelled:-1};
+    const trackId=st.trackId||(tab==='track'?oid:'');const to=trackId&&S.orders.find(x=>x.id.toUpperCase()===trackId.toUpperCase());
+    const evs=x=>{const d=x.date,day=86400000,i=stepIdx[x.status];const E=[['Order placed',d,0],['Payment confirmed & packing',d+day*0.2,1],['Shipped with DHL (simulated)',d+day,2],['Delivered',d+day*3,3]];
+      if(x.status==='cancelled')return[{label:'Order placed',when:W.dateFmt(d),dot:'bg-ember',txt:'text-cream'},{label:'Order cancelled',when:W.dateFmt(d+day*0.5),dot:'bg-peach',txt:'text-peach'}];
+      return E.map(([label,t,k])=>({label:x.status==='on-hold'&&k===1?'Awaiting bank transfer':label,when:k<=i?W.dateFmt(t):'Pending',dot:k<=i?'bg-ember':'bg-navy ring-1 ring-peach/30',txt:k<=i?'text-cream':'text-peach/50'}));};
+    const dls=[];S.orders.filter(x=>x.status!=='cancelled').forEach(x=>x.items.filter(i=>i.type==='downloadable').forEach(i=>{const k=x.id+i.id;const used=st.dl[k]||0;dls.push({name:i.name,order:x.id,left:5-used,none:used>=5,dl:()=>{this.setState(s=>({dl:{...s.dl,[k]:used+1}}));W.toast('Simulated download started: '+i.name+'.zip');}})}));
+    const det=st.det||{first:S.addr.billing.first,last:S.addr.billing.last,display:u.name,email:u.email};
+    const dErr=st.detErr;const dF=(k,label,type,auto,span,hint)=>{const err=dErr[k]||'';return{id:'d-'+k,label,type,auto,span:span||'',hint:hint||'',value:(k.startsWith('pw')?(st.f[k]||''):det[k])||'',err,inv:err?'true':'false',errId:'d-'+k+'-err',ring:err?'ring-flame':'ring-peach/30',
+      on:e=>{const v=e.target.value;if(k.startsWith('pw'))this.setState(s=>({f:{...s.f,[k]:v},detErr:{...s.detErr,[k]:''}}));else this.setState(s=>({det:{...det,...(s.det||{}),[k]:v},detErr:{...s.detErr,[k]:''}}));}}};
+    return{isAccount:true,tabLabel:o?'Order '+o.id:(TABS.find(t=>t[0]===activeTab)||TABS[0])[1],userName:u.name.split(' ')[0],
+      tabs:[...TABS.map(([id,label,i])=>{const on=activeTab===id;return{label,href:'#/account/'+(id==='dashboard'?'':id),cur:on?'page':undefined,cls:on?'bg-ember text-midnight':'text-peach hover:bg-petrol hover:text-cream',icon:{i,cls:'h-5 w-5'}}}),{label:'Wishlist ('+S.wish.length+')',href:'#/wishlist',cls:'text-peach hover:bg-petrol hover:text-cream',icon:{i:'heart',cls:'h-5 w-5'}}],
+      logout:()=>{W.set({user:null});W.toast('You have been logged out',{tone:'info'});W.go('/login');},
+      tDash:activeTab==='dashboard',tOrders:tab==='orders',tOrder:tab==='order',tTrack:tab==='track',tDownloads:tab==='downloads',tAddr:tab==='addresses',tPay:tab==='payment',tDetails:tab==='details',
+      stats:[['Orders',S.orders.length,'#/account/orders'],['In progress',S.orders.filter(x=>['processing','shipped','on-hold'].includes(x.status)).length,'#/account/orders'],['Wishlist',S.wish.length,'#/wishlist'],['In bag',W.cartTotals().count,'#/cart']].map(([k,v,href])=>({k,v,href})),
+      recentOrders:S.orders.slice(0,3).map(ordRow),
+      statusChips:['all',...W.STATUSES].map(s=>{const on=st.status===s;return{label:s==='all'?'All':s,n:s==='all'?S.orders.length:S.orders.filter(x=>x.status===s).length,pressed:on?'true':'false',cls:on?'bg-cream text-midnight':'text-peach ring-1 ring-peach/30 hover:bg-petrol',pick:()=>this.setState({status:s,opage:1})}}),
+      orders:list.slice((pg-1)*PER,pg*PER).map(ordRow),noOrders:!list.length,oPagesMany:pn>1,oPages:Array.from({length:pn},(_,i)=>({n:i+1,cur:i+1===pg?'page':undefined,cls:i+1===pg?'bg-cream text-midnight':'text-cream ring-1 ring-peach/30 hover:bg-petrol',go:()=>this.setState({opage:i+1})})),
+      od:o?{found:true,missing:false,id:o.id,status:o.status,badge:BADGE[o.status],date:W.dateFmt(o.date),pay:W.PAY[o.pay],
+        steps:['Placed','Processing','Shipped','Delivered'].map((label,k)=>{const on=o.status!=='cancelled'&&k<=stepIdx[o.status];return{label,bar:on?'bg-ember':'bg-navy',txt:on?'text-cream':'text-peach/50'}}),
+        items:o.items.map(i=>({name:i.name,qty:i.qty,img:i.img,variation:[i.size&&'Size '+i.size,i.color].filter(Boolean).join(' · ')||(i.type==='downloadable'?'Digital download':'One size'),line:W.fmt(i.unit*i.qty)})),
+        totals:[['Subtotal',W.fmt(o.sub)],...(o.disc?[['Discount','−'+W.fmt(o.disc)]]:[]),['Shipping',o.shipping?W.fmt(o.shipping):'Free'],['VAT included',W.fmt(o.vat)],['Total',W.fmt(o.total)]].map(([k,v])=>({k,v})),
+        bill:fa(o.billing),ship:fa(o.shippingAddr),trackHref:'#/account/track/'+o.id,again:()=>{o.items.forEach(i=>W.get(i.id)&&W.get(i.id).stock!=='out'&&W.addToCart(i.id,{size:i.size,color:i.color,qty:i.qty}));W.ui({cart:true});}}:{found:false,missing:true},
+      trackQ:st.trackQ,onTrackQ:e=>this.setState({trackQ:e.target.value,trackErr:''}),trackErr:st.trackErr,
+      trackSubmit:e=>{e.preventDefault();const q=st.trackQ.trim().toUpperCase();if(!q)return this.setState({trackErr:'Enter an order number.'});if(!S.orders.find(x=>x.id===q))return this.setState({trackErr:`We couldn’t find ${q}. Check the number in your confirmation email.`,trackId:''});this.setState({trackId:q,trackErr:''});},
+      tr:to?{found:true,id:to.id,status:to.status,events:evs(to)}:{found:false},trackSamples:S.orders.slice(0,3).map(x=>({id:x.id,go:()=>this.setState({trackId:x.id,trackQ:x.id,trackErr:''})})),
+      hasDl:dls.length>0,noDl:!dls.length,downloads:dls,
+      addrCards:['billing','shipping'].map(key=>{const a=S.addr[key],editing=st.edit===key,dr=st.addrDraft;return{key,title:key==='billing'?'Billing address':'Shipping address',btn:editing?'Cancel':'Edit',view:!editing,editing,lines:fa(a),
+        toggle:()=>this.setState({edit:editing?null:key,addrDraft:{...a},addrErr:{}}),
+        fields:AF.map(([k,label,span])=>{const err=st.addrErr[k]||'';return{id:key+'-'+k,label,span,value:dr[k]||'',err,inv:err?'true':'false',errId:key+'-'+k+'-err',ring:err?'ring-flame':'ring-peach/30',on:e=>{const v=e.target.value;this.setState(s=>({addrDraft:{...s.addrDraft,[k]:v},addrErr:{...s.addrErr,[k]:''}}))}}}),
+        save:e=>{e.preventDefault();const er={};AF.forEach(([k,l])=>{if(!String(dr[k]||'').trim())er[k]=l+' is required'});if(Object.keys(er).length)return this.setState({addrErr:er});W.set({addr:{...S.addr,[key]:{...a,...dr}}});this.setState({edit:null});W.toast((key==='billing'?'Billing':'Shipping')+' address saved');}}}),
+      cards:S.cards.map((c,i)=>({...c,bg:['from-rust to-ember','from-teal to-petrol','from-navy to-lagoon'][i%3],notDef:!c.def,makeDef:()=>W.set({cards:S.cards.map(x=>({...x,def:x.id===c.id}))}),remove:()=>{const rest=S.cards.filter(x=>x.id!==c.id);if(c.def&&rest[0])rest[0]={...rest[0],def:true};W.set({cards:rest});W.toast(c.brand+' •••• '+c.last4+' removed',{tone:'info'});}})),
+      addCard:()=>{const b=['Visa','Mastercard','Amex'][S.cards.length%3];const c={id:'c'+Date.now(),brand:b,last4:String(1000+Math.floor(Math.random()*8999)),exp:'0'+(1+Math.floor(Math.random()*8))+'/2'+(7+Math.floor(Math.random()*3)),def:!S.cards.length};W.set({cards:[...S.cards,c]});W.toast('Demo '+b+' •••• '+c.last4+' added');},
+      detailFields:[dF('first','First name','text','given-name'),dF('last','Last name','text','family-name'),dF('display','Display name','text','nickname','sm:col-span-2','Shown in your account and reviews.'),dF('email','Email address','email','email','sm:col-span-2')],
+      pwFields:[dF('pwc','Current password','password','current-password','sm:col-span-2'),dF('pwn','New password','password','new-password'),dF('pwn2','Confirm new password','password','new-password')],
+      saveDetails:e=>{e.preventDefault();const er={};const f=st.f;if(!det.first.trim())er.first='First name is required';if(!det.last.trim())er.last='Last name is required';if(!det.display.trim())er.display='Display name is required';if(!EMAIL.test(det.email))er.email='Enter a valid email';
+        if(f.pwc||f.pwn||f.pwn2){if(f.pwc!=='demo1234')er.pwc='Current password is incorrect (demo: demo1234)';if(!f.pwn||f.pwn.length<8)er.pwn='Use at least 8 characters';if(f.pwn!==f.pwn2)er.pwn2='Passwords don’t match';}
+        if(Object.keys(er).length)return this.setState({detErr:er});W.set({user:{...u,name:det.display,email:det.email},addr:{...S.addr,billing:{...S.addr.billing,first:det.first,last:det.last}}});this.setState({f:{},detErr:{}});W.toast(f.pwn?'Details and password updated (demo)':'Account details saved');}};
+  }
+}
+</script>
+</body>
+</html>

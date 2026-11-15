@@ -55,11 +55,30 @@ export default async function handler( req, res ) {
         return res.status( 405 ).json( { error: 'Method Not Allowed' } );
     }
 
-    const { products, customerEmail, metadata, currency, successUrl, cancelUrl } = req.body ?? {};
+    const { products, customerEmail, metadata, currency, successUrl, cancelUrl, amountTotal, amountLabel } = req.body ?? {};
 
-    if ( isEmpty( products ) ) {
+    if ( isEmpty( products ) && ! amountTotal ) {
         return res.status( 400 ).json( { error: 'Required data not sent' } );
     }
+
+    /**
+     * Charge the order total as a single line when one is supplied.
+     *
+     * Itemising in Stripe drifts from what WooCommerce says is owed as soon as
+     * delivery or a coupon is involved, and the customer would be charged the
+     * wrong amount. WooCommerce stays the record of what was bought; Stripe
+     * only needs the figure to collect.
+     */
+    const lineItems = amountTotal
+        ? [ {
+            quantity: 1,
+            price_data: {
+                currency: ( currency || 'eur' ).toLowerCase(),
+                unit_amount: Math.round( amountTotal * 100 ),
+                product_data: { name: amountLabel || 'Order total' },
+            },
+        } ]
+        : getStripeLineItems( products, ( currency || 'usd' ).toLowerCase() );
 
     try {
         const session = await stripe.checkout.sessions.create( {
@@ -70,7 +89,7 @@ export default async function handler( req, res ) {
              * ones enabled in the Stripe Dashboard (dynamic payment methods).
              * To restrict them here, use `allowed_payment_method_types`.
              */
-            line_items: getStripeLineItems( products, ( currency || 'usd' ).toLowerCase() ),
+            line_items: lineItems,
             customer_email: customerEmail,
             metadata,
             success_url: successUrl,

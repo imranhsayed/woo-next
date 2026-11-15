@@ -312,6 +312,20 @@ export const removeItemFromCart = ( productId ) => {
 };
 
 /**
+ * Format an amount the way the store displays money.
+ *
+ * Kept here so `getFormattedCart` stays self-contained; `utils/price` exports
+ * the same formatter for components.
+ *
+ * @param {number} amount Amount.
+ *
+ * @return {string} Formatted price.
+ */
+const formatStorePrice = ( amount ) => `${ ( Math.round( ( amount || 0 ) * 100 ) / 100 )
+	.toFixed( 2 )
+	.replace( '.', ',' ) } €`;
+
+/**
  * Returns cart data in the required format.
  * @param {String} data Cart data
  */
@@ -332,20 +346,53 @@ export const getFormattedCart = ( data ) => {
 
 	for( let i = 0; i < givenProducts.length; i++  ) {
 		const givenProduct = givenProducts?.[ i ]?.product?.node;
+		const givenVariation = givenProducts?.[ i ]?.variation;
 		const product = {};
-		const total = getFloatVal( givenProducts[ i ].total );
+		/**
+		 * List price for this line, before any coupon.
+		 *
+		 * WooCommerce reports a line's `subtotal` net and pre-discount with its
+		 * tax alongside, while `total` is gross and post-discount. The cart
+		 * table shows list prices and accounts for the discount once in the
+		 * summary, so the pre-discount pair is the one to add up here.
+		 *
+		 * `parsePriceNumber` rather than `getFloatVal`: the store formats money
+		 * as "1.234,56 €", whose cents `getFloatVal` drops.
+		 */
+		const lineSubtotal = parsePriceNumber( givenProducts[ i ].subtotal );
+		const lineSubtotalTax = parsePriceNumber( givenProducts[ i ].subtotalTax );
+		const total = ( Number.isNaN( lineSubtotal ) ? 0 : lineSubtotal )
+			+ ( Number.isNaN( lineSubtotalTax ) ? 0 : lineSubtotalTax );
 
 		product.productId = givenProduct?.productId ?? '';
 		product.cartKey = givenProducts?.[ i ]?.key ?? '';
 		product.name = givenProduct?.name ?? '';
+		product.slug = givenProduct?.slug ?? '';
+		product.type = givenProduct?.type ?? '';
 		product.qty = givenProducts?.[ i ]?.quantity;
 		product.price = total / product?.qty;
-		product.totalPrice = decodeHtmlEntities( givenProducts?.[ i ]?.total ?? '' );
+		product.totalPrice = formatStorePrice( total );
+
+		/**
+		 * Chosen variation, as "Size M · Rust".
+		 *
+		 * Attribute values arrive as term slugs, so title-case them for display;
+		 * the `pa_` prefix is dropped from the attribute name.
+		 */
+		product.variationId = givenVariation?.node?.variationId ?? '';
+		product.attributes = ( givenVariation?.attributes ?? [] ).map( ( attribute ) => ( {
+			name: ( attribute?.name ?? '' ).replace( /^pa_/, '' ),
+			value: attribute?.value ?? '',
+		} ) );
+
+		// A variation image is more specific than the parent's, when WooCommerce has one.
+		const image = givenVariation?.node?.image ?? givenProduct?.image;
+
 		product.image = {
-			sourceUrl: givenProduct?.image?.sourceUrl ?? '',
-			srcSet: givenProduct?.image?.srcSet ?? '',
-			title: givenProduct?.image?.title ?? '',
-			altText: givenProduct?.image?.altText ?? ''
+			sourceUrl: image?.sourceUrl ?? '',
+			srcSet: image?.srcSet ?? '',
+			title: image?.title ?? '',
+			altText: image?.altText ?? ''
 		};
 
 		totalProductsCount += givenProducts?.[ i ]?.quantity;
@@ -354,8 +401,58 @@ export const getFormattedCart = ( data ) => {
 		formattedCart.products.push( product );
 	}
 
+	const cart = data?.cart ?? {};
+
 	formattedCart.totalProductsCount = totalProductsCount;
-	formattedCart.totalProductsPrice = decodeHtmlEntities( data?.cart?.total ?? '' );
+	formattedCart.totalProductsPrice = decodeHtmlEntities( cart.total ?? '' );
+
+	/**
+	 * Customer-facing totals.
+	 *
+	 * Catalog prices include VAT, but WooCommerce reports each cart figure net
+	 * with its tax alongside, so the amount a shopper recognises is the sum of
+	 * the two. `total` is already gross, and `totalTax` is the VAT inside it.
+	 */
+	const grossOf = ( net, tax ) => {
+		const netValue = parsePriceNumber( net ?? '0' );
+		const taxValue = parsePriceNumber( tax ?? '0' );
+
+		return ( Number.isNaN( netValue ) ? 0 : netValue ) + ( Number.isNaN( taxValue ) ? 0 : taxValue );
+	};
+
+	formattedCart.totals = {
+		subtotal: grossOf( cart.subtotal, cart.subtotalTax ),
+		discount: grossOf( cart.discountTotal, cart.discountTax ),
+		shipping: grossOf( cart.shippingTotal, cart.shippingTax ),
+		vat: parsePriceNumber( cart.totalTax ?? '0' ) || 0,
+		total: parsePriceNumber( cart.total ?? '0' ) || 0,
+	};
+
+	// Kept for the drawer's free-shipping meter, which compares against 75 €.
+	formattedCart.subtotal = decodeHtmlEntities( cart.subtotal ?? '' );
+	formattedCart.subtotalValue = formattedCart.totals.subtotal;
+
+	formattedCart.coupons = ( cart.appliedCoupons ?? [] ).map( ( coupon ) => ( {
+		// WooCommerce stores codes lowercased; the design shows them as entered.
+		code: ( coupon?.code ?? '' ).toUpperCase(),
+		description: coupon?.description ?? '',
+		discount: grossOf( coupon?.discountAmount, coupon?.discountTax ),
+	} ) );
+
+	/**
+	 * Shipping rates for the one package this store ships.
+	 *
+	 * `availableShippingMethods` is null for an address outside every shipping
+	 * zone, which the cart surfaces as "no delivery to this country".
+	 */
+	formattedCart.shippingRates = ( cart.availableShippingMethods?.[ 0 ]?.rates ?? [] ).map( ( rate ) => ( {
+		id: rate.id,
+		label: rate.label,
+		cost: parsePriceNumber( rate.cost ?? '0' ) || 0,
+	} ) );
+
+	formattedCart.chosenShippingMethod = cart.chosenShippingMethods?.[ 0 ] ?? '';
+	formattedCart.needsShippingAddress = !! cart.needsShippingAddress;
 
 	return formattedCart;
 

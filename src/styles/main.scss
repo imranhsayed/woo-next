@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  /**
+   * The WooNext palette is dark-first: `midnight` is the page ground and
+   * `peach` the body ink. Set both here so the background survives overscroll
+   * and route transitions, before any component paints.
+   */
+  html {
+    background-color: theme('colors.midnight');
+  }
+
+  body {
+    @apply bg-midnight text-peach antialiased;
+  }
+}

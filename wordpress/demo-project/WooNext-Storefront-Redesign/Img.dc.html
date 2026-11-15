@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<sc-if value="{{ has }}" hint-placeholder-val="{{ false }}"><img src="{{ src }}" alt="{{ alt }}" class="{{ cls }}" loading="lazy"></sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:200,&quot;height&quot;:260},&quot;src&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;alt&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;cls&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;h-full w-full object-cover&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals(){const s=this.props.src||'';return{has:!!s&&s.indexOf('{{')<0,src:s,alt:this.props.alt||'',cls:this.props.cls||'h-full w-full object-cover'};}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="https://cdn.tailwindcss.com"></script><script src="./tw.js"></script><script src="./store.js"></script></helmet>
+<div class="pb-16">
+<sc-if value="{{ is404 }}" hint-placeholder-val="{{ false }}">
+  <section aria-labelledby="nf-title" class="relative isolate overflow-hidden bg-petrol">
+    <img src="{{ nfImg }}" alt="" class="absolute inset-0 -z-10 h-full w-full object-cover opacity-30">
+    <div class="mx-auto flex max-w-4xl flex-col items-center gap-6 px-4 py-24 text-center">
+      <p class="font-display text-giant leading-none text-flame" aria-hidden="true">404</p>
+      <h1 id="nf-title" class="font-display text-5xl uppercase leading-none text-cream sm:text-6xl">This page stepped out of style</h1>
+      <p class="max-w-md text-peach/85">The link may be broken or the page may have moved. Try searching, or head somewhere fresh.</p>
+      <form onSubmit="{{ nfSearch }}" role="search" class="flex w-full max-w-md overflow-hidden rounded-md bg-cream"><label for="nf-q" class="sr-only">Search products</label><input id="nf-q" value="{{ nfQ }}" onChange="{{ onNfQ }}" placeholder="Search WooNext" class="min-h-12 flex-1 border-0 bg-transparent px-4 font-semibold text-midnight placeholder-midnight/50 focus:outline-none focus:ring-0"><button type="submit" class="bg-rust px-5 text-sm font-bold uppercase tracking-widest text-cream hover:bg-midnight">Search</button></form>
+      <ul class="flex flex-wrap justify-center gap-3"><sc-for list="{{ nfLinks }}" as="l"><li><a href="{{ l.href }}" class="inline-flex min-h-11 items-center rounded-full px-5 text-sm font-bold uppercase tracking-widest text-cream ring-1 ring-peach/40 hover:bg-cream hover:text-midnight">{{ l.label }}</a></li></sc-for></ul>
+    </div>
+  </section>
+</sc-if>
+<sc-if value="{{ isPage }}">
+  <section class="relative isolate overflow-hidden bg-petrol">
+    <img src="{{ heroImg }}" alt="" class="absolute inset-y-0 right-0 -z-10 hidden h-full w-1/2 object-cover md:block">
+    <div class="absolute inset-0 -z-10 bg-gradient-to-r from-petrol via-petrol to-transparent"></div>
+    <div class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+      <nav aria-label="Breadcrumb"><ol class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-peach/70"><li><a href="#/" class="hover:text-flame">Home</a></li><li aria-hidden="true">/</li><li aria-current="page" class="text-cream">{{ title }}</li></ol></nav>
+      <p class="font-script text-4xl text-peach">{{ kicker }}</p>
+      <h1 class="max-w-2xl font-display text-6xl uppercase leading-none text-cream sm:text-7xl">{{ title }}</h1>
+      <p class="max-w-xl text-base leading-relaxed text-peach/85">{{ intro }}</p>
+    </div>
+  </section>
+  <div class="mx-auto max-w-7xl px-4 pt-10 sm:px-6 lg:px-8">
+    <sc-if value="{{ legal }}"><p role="note" class="mb-8 flex items-start gap-3 rounded-md bg-navy p-4 text-sm text-peach ring-1 ring-ember/40"><dc-import name="Icon" i="info" cls="h-5 w-5 shrink-0 text-flame" hint-size="20px,20px"></dc-import>Sample copy for prototype purposes only. The store owner must review and replace this text with legally approved terms before launch.</p></sc-if>
+
+    <sc-if value="{{ hasSections }}">
+      <div class="grid grid-cols-1 gap-10 lg:grid-cols-12">
+        <nav aria-label="On this page" class="hidden lg:col-span-3 lg:block"><ul class="sticky top-28 flex flex-col gap-2 border-l border-white/10 pl-4 text-sm"><sc-for list="{{ sections }}" as="s"><li><a href="{{ s.href }}" onClick="{{ s.jump }}" class="text-peach/75 transition-colors hover:text-flame">{{ s.h }}</a></li></sc-for></ul></nav>
+        <div class="flex flex-col gap-10 lg:col-span-9">
+          <sc-for list="{{ sections }}" as="s"><section id="{{ s.id }}" class="scroll-mt-28"><h2 class="font-display text-3xl uppercase tracking-wide text-cream sm:text-4xl">{{ s.h }}</h2><sc-for list="{{ s.p }}" as="p"><p class="mt-3 max-w-prose leading-relaxed text-peach/85">{{ p }}</p></sc-for></section></sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isAbout }}">
+      <div class="mt-12 grid gap-4 md:grid-cols-3"><sc-for list="{{ aboutImgs }}" as="a"><figure class="group relative aspect-portrait overflow-hidden rounded-md"><img src="{{ a.src }}" alt="{{ a.alt }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105"><figcaption class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-midnight/90 p-4 font-display text-2xl uppercase text-cream">{{ a.cap }}</figcaption></figure></sc-for></div>
+      <ul class="mt-4 grid gap-4 md:grid-cols-3"><sc-for list="{{ values }}" as="v"><li class="rounded-md bg-petrol p-6 ring-1 ring-white/10"><span class="grid h-11 w-11 place-items-center rounded-full bg-ember text-midnight"><dc-import name="Icon" dc-props="{{ v.icon }}" hint-size="20px,20px"></dc-import></span><h3 class="mt-4 font-display text-2xl uppercase text-cream">{{ v.h }}</h3><p class="mt-2 text-sm leading-relaxed text-peach/80">{{ v.p }}</p></li></sc-for></ul>
+    </sc-if>
+
+    <sc-if value="{{ isContact }}">
+      <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+        <div class="lg:col-span-7">
+          <sc-if value="{{ cSent }}"><div role="status" class="rounded-md bg-navy p-6 ring-1 ring-emerald-400/40"><p class="flex items-center gap-2 font-display text-3xl uppercase text-emerald-300"><dc-import name="Icon" i="check" cls="h-6 w-6" hint-size="24px,24px"></dc-import>Message received</p><p class="mt-2 text-peach/85">Thanks, {{ cName }}. This is a demo form — in the live store our team would reply within one working day.</p><button type="button" onClick="{{ cReset }}" class="mt-4 text-sm font-bold uppercase tracking-widest text-flame underline">Send another message</button></div></sc-if>
+          <sc-if value="{{ cForm }}">
+            <form onSubmit="{{ cSubmit }}" novalidate="novalidate" class="grid gap-4 sm:grid-cols-2">
+              <sc-for list="{{ cFields }}" as="f"><div class="flex flex-col gap-1.5 {{ f.span }}"><label for="{{ f.id }}" class="text-xs font-bold uppercase tracking-widest text-cream">{{ f.label }}</label><input id="{{ f.id }}" type="{{ f.type }}" value="{{ f.value }}" onChange="{{ f.on }}" aria-invalid="{{ f.inv }}" aria-describedby="{{ f.errId }}" class="min-h-12 rounded-md border-0 bg-petrol px-4 text-cream ring-1 focus:ring-2 focus:ring-flame {{ f.ring }}"><sc-if value="{{ f.err }}"><p id="{{ f.errId }}" class="text-sm font-semibold text-flame">{{ f.err }}</p></sc-if></div></sc-for>
+              <div class="flex flex-col gap-1.5 sm:col-span-2"><label for="c-topic" class="text-xs font-bold uppercase tracking-widest text-cream">Topic</label><select id="c-topic" value="{{ cTopic }}" onChange="{{ onTopic }}" class="min-h-12 rounded-md border-0 bg-petrol px-4 text-cream ring-1 ring-peach/30 focus:ring-2 focus:ring-flame"><option>Order question</option><option>Returns &amp; exchanges</option><option>Sizing advice</option><option>Wholesale &amp; press</option><option>Something else</option></select></div>
+              <div class="flex flex-col gap-1.5 sm:col-span-2"><label for="c-msg" class="text-xs font-bold uppercase tracking-widest text-cream">Message</label><textarea id="c-msg" rows="5" value="{{ cMsg }}" onChange="{{ onMsg }}" aria-invalid="{{ cMsgInv }}" aria-describedby="c-msg-err" class="rounded-md border-0 bg-petrol px-4 py-3 text-cream ring-1 focus:ring-2 focus:ring-flame {{ cMsgRing }}"></textarea><sc-if value="{{ cMsgErr }}"><p id="c-msg-err" class="text-sm font-semibold text-flame">{{ cMsgErr }}</p></sc-if></div>
+              <button type="submit" disabled="{{ cBusy }}" class="min-h-12 rounded-md bg-rust px-6 text-sm font-bold uppercase tracking-widest text-cream hover:bg-ember hover:text-midnight disabled:opacity-70 sm:w-fit">{{ cBtn }}</button>
+            </form>
+          </sc-if>
+        </div>
+        <ul class="flex flex-col gap-4 lg:col-span-5"><sc-for list="{{ contactCards }}" as="c"><li class="flex gap-4 rounded-md bg-petrol p-5 ring-1 ring-white/10"><span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-ember text-midnight"><dc-import name="Icon" dc-props="{{ c.icon }}" hint-size="20px,20px"></dc-import></span><span><span class="block font-display text-xl uppercase text-cream">{{ c.h }}</span><span class="text-sm text-peach/80">{{ c.p }}</span></span></li></sc-for></ul>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isFaq }}">
+      <div class="flex flex-col gap-10">
+        <sc-for list="{{ faqGroups }}" as="g">
+          <section><h2 class="font-display text-3xl uppercase text-cream">{{ g.h }}</h2>
+            <ul class="mt-4 flex flex-col gap-3"><sc-for list="{{ g.items }}" as="f"><li class="overflow-hidden rounded-md bg-petrol ring-1 transition-colors duration-300 {{ f.ring }}"><h3><button type="button" id="{{ f.bid }}" onClick="{{ f.toggle }}" aria-expanded="{{ f.exp }}" aria-controls="{{ f.pid }}" class="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-lg font-medium text-cream hover:text-flame focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-flame">{{ f.q }}<span class="grid h-8 w-8 shrink-0 place-items-center rounded-full transition duration-300 {{ f.icon }}"><dc-import name="Icon" i="chevron-down" cls="h-4 w-4" hint-size="16px,16px"></dc-import></span></button></h3><div id="{{ f.pid }}" role="region" aria-labelledby="{{ f.bid }}" class="overflow-hidden transition-all duration-300 {{ f.panel }}"><p class="px-5 pb-5 leading-relaxed text-peach/85">{{ f.a }}</p></div></li></sc-for></ul>
+          </section>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isSize }}">
+      <div class="flex flex-col gap-10">
+        <sc-for list="{{ sizeTables }}" as="t">
+          <section><h2 class="font-display text-3xl uppercase text-cream">{{ t.h }}</h2><p class="mt-1 text-sm text-peach/75">{{ t.note }}</p>
+            <div class="mt-4 overflow-x-auto rounded-md ring-1 ring-white/10"><table class="w-full min-w-max text-left text-sm"><thead class="bg-teal"><tr><sc-for list="{{ t.cols }}" as="c"><th scope="col" class="px-4 py-3 font-bold uppercase tracking-widest text-cream">{{ c }}</th></sc-for></tr></thead><tbody class="divide-y divide-white/10 bg-petrol"><sc-for list="{{ t.rows }}" as="r"><tr><sc-for list="{{ r }}" as="c"><td class="px-4 py-3 text-peach">{{ c }}</td></sc-for></tr></sc-for></tbody></table></div>
+          </section>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isTrack }}">
+      <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+        <form onSubmit="{{ tSubmit }}" novalidate="novalidate" class="flex flex-col gap-4 rounded-md bg-petrol p-6 ring-1 ring-white/10 lg:col-span-5">
+          <sc-for list="{{ tFields }}" as="f"><div class="flex flex-col gap-1.5"><label for="{{ f.id }}" class="text-xs font-bold uppercase tracking-widest text-cream">{{ f.label }}</label><input id="{{ f.id }}" type="{{ f.type }}" value="{{ f.value }}" onChange="{{ f.on }}" aria-invalid="{{ f.inv }}" aria-describedby="{{ f.errId }}" placeholder="{{ f.ph }}" class="min-h-12 rounded-md border-0 bg-navy px-4 text-cream ring-1 placeholder-peach/40 focus:ring-2 focus:ring-flame {{ f.ring }}"><sc-if value="{{ f.err }}"><p id="{{ f.errId }}" class="text-sm font-semibold text-flame">{{ f.err }}</p></sc-if></div></sc-for>
+          <button type="submit" class="min-h-12 rounded-md bg-rust px-6 text-sm font-bold uppercase tracking-widest text-cream hover:bg-ember hover:text-midnight">Track order</button>
+          <p class="text-xs text-peach/70">Demo: try <button type="button" onClick="{{ tDemo }}" class="font-semibold text-flame underline">{{ tDemoId }}</button> with demo@woonext.store</p>
+        </form>
+        <div class="lg:col-span-7" aria-live="polite">
+          <sc-if value="{{ tNone }}"><p role="alert" class="rounded-md bg-rust p-5 font-semibold text-cream">{{ tNoneMsg }}</p></sc-if>
+          <sc-if value="{{ tFound }}"><div class="rounded-md bg-petrol p-6 ring-1 ring-white/10"><p class="text-xs font-bold uppercase tracking-widest text-flame">Order {{ tr.id }}</p><p class="font-display text-4xl uppercase text-cream">{{ tr.status }}</p><ol class="mt-6 flex flex-col gap-5 border-l-2 border-white/10 pl-6"><sc-for list="{{ tr.events }}" as="e"><li class="relative"><span class="absolute -left-8 top-1 h-3.5 w-3.5 rounded-full ring-4 ring-petrol {{ e.dot }}"></span><p class="font-bold {{ e.txt }}">{{ e.label }}</p><p class="text-xs text-peach/70">{{ e.when }}</p></li></sc-for></ol><a href="{{ tr.href }}" class="mt-6 inline-flex text-sm font-bold uppercase tracking-widest text-flame hover:underline">View order details</a></div></sc-if>
+          <sc-if value="{{ tIdle }}"><div class="flex h-full min-h-56 flex-col items-center justify-center gap-3 rounded-md bg-navy p-6 text-center"><dc-import name="Icon" i="truck" cls="h-10 w-10 text-flame" hint-size="40px,40px"></dc-import><p class="text-peach/80">Enter your order number and email to see live status.</p></div></sc-if>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const EMAIL=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const PAGES={
+ about:{k:'Our story',t:'About WooNext',img:62,i:'WooNext started with a simple idea: retro style deserves modern quality. We design bold, wearable pieces inspired by the colour and confidence of decades past.',s:[['Where we began','WooNext grew out of a love for vintage markets, film photography and the warm palettes of seventies design. We wanted those looks without the hunt — pieces that feel special but fit into everyday life.'],['How we design','Every collection is drawn in-house and produced in small runs. We favour sturdy fabrics, generous seams and colours that age well, so your favourites last more than a season.'],['Who we are','A small team of designers, stylists and customer-care specialists. We answer every message ourselves and love hearing how you wear WooNext.']]},
+ shipping:{k:'Delivery info',t:'Shipping & delivery',img:96,i:'Fast, tracked delivery across the EU, UK and Switzerland. All prices and times are shown at checkout before you pay.',s:[['Delivery options','Standard delivery (3–5 working days) costs 4,95 € and is free on orders over 75 €. Express delivery (1–2 working days) costs 12,95 €. Store pickup is free and ready within 24 hours.'],['Processing times','Orders placed before 2pm on working days are usually packed the same day. Bank-transfer orders ship once payment clears.'],['International orders','Orders to the UK and Switzerland may take 1–2 extra days for customs clearance. Any import duties are shown at checkout where applicable.'],['Tracking','You’ll receive a tracking link as soon as your parcel leaves our studio. You can also use the Track Order page or your account.']]},
+ returns:{k:'Changed your mind?',t:'Returns & refunds',img:3,i:'Free returns within 30 days of delivery. Exchanges are quick, and refunds go back to your original payment method.',s:[['Return window','You have 30 days from delivery to return unworn items with their original tags attached.'],['How to return','Start a return from My Account → Orders, or contact us with your order number. We’ll email you a prepaid label.'],['Refunds','Once your return arrives and is checked, we issue your refund within 5 working days. Your bank may take a few extra days to show it.'],['Exceptions','For hygiene reasons, earrings and digital downloads cannot be returned unless faulty.']]},
+ privacy:{k:'Your data',t:'Privacy policy',img:31,legal:1,i:'How WooNext collects, uses and protects your personal information.',s:[['Information we collect','We collect the details you give us when you place an order, create an account or contact us — such as your name, email, addresses and order history.'],['How we use it','To process and deliver orders, provide customer support, and — only with your consent — send marketing emails.'],['Cookies','We use essential cookies to run the store and, with consent, analytics cookies to understand how the site is used.'],['Your rights','You can request access to, correction of, or deletion of your personal data at any time by contacting us.'],['This prototype','This demo stores cart, wishlist and order data only in your browser’s local storage. No data is sent to a server.']]},
+ terms:{k:'The fine print',t:'Terms & conditions',img:40,legal:1,i:'The terms that apply when you shop with WooNext.',s:[['Orders','Placing an order is an offer to buy. A contract is formed when we confirm dispatch by email.'],['Prices & payment','Prices include VAT where applicable. We reserve the right to correct pricing errors before an order is confirmed.'],['Delivery & risk','Risk passes to you on delivery. Delivery estimates are not guaranteed but we will keep you informed of delays.'],['Returns','Your statutory rights are not affected. See our Returns & refunds page for our extended 30-day policy.'],['Governing law','These terms are governed by the laws of the store owner’s country of registration.']]},
+};
+class Component extends DCLogic {
+  state={nfQ:'',c:{},cErr:{},cTopic:'Order question',cMsg:'',cSent:false,cBusy:false,faq:'0-0',t:{},tErr:{},tId:'',tNone:''};
+  componentDidMount(){const go=()=>{if(!window.WN)return setTimeout(go,20);this.u=WN.subscribe(()=>this.forceUpdate());const b=WN.route.b;if(this.props.page==='track-order'&&b)this.setState({t:{id:b,email:'demo@woonext.store'},tId:b});this.forceUpdate();};go();}
+  componentDidUpdate(pp){if(pp.page!==this.props.page)this.setState({cSent:false,tId:'',tNone:''});}
+  componentWillUnmount(){this.u&&this.u();}
+  f(store,errKey,id,label,type,span,ph){const st=this.state,err=st[errKey][id]||'';return{id:store+'-'+id,label,type,span:span||'',ph:ph||'',value:st[store][id]||'',err,inv:err?'true':'false',errId:store+'-'+id+'-err',ring:err?'ring-flame':'ring-peach/30',on:e=>{const v=e.target.value;this.setState(s=>({[store]:{...s[store],[id]:v},[errKey]:{...s[errKey],[id]:''}}))}};}
+  renderVals(){
+    const W=window.WN;if(!W)return{};
+    const st=this.state,pg=this.props.page;const known=['about','contact','faq','shipping','returns','size-guide','track-order','privacy','terms'];
+    if(!known.includes(pg))return{is404:true,nfImg:W.img(15,1400),nfQ:st.nfQ,onNfQ:e=>this.setState({nfQ:e.target.value}),nfSearch:e=>{e.preventDefault();if(st.nfQ.trim())W.go('/search/'+encodeURIComponent(st.nfQ.trim()))},
+      nfLinks:[['Home','/'],['Shop all','/shop'],['New arrivals','/category/new'],['Contact us','/page/contact']].map(([label,h])=>({label,href:'#'+h}))};
+    const P=PAGES[pg]||{contact:{k:'Say hello',t:'Contact us',img:65,i:'Questions about an order, sizing or a collaboration? Send us a message and our team will get back to you.'},faq:{k:'Help centre',t:'FAQ',img:92,i:'Quick answers to the questions we hear most. Can’t find what you need? Contact us.'},'size-guide':{k:'Find your fit',t:'Size guide',img:2,i:'All measurements are body measurements in centimetres. If you’re between sizes, size up for a relaxed fit.'},'track-order':{k:'Where’s my parcel?',t:'Track your order',img:75,i:'Enter your order number and the email used at checkout to see the latest status.'}}[pg];
+    const S=W.state;
+    const fq=[['Orders',[['How do I place an order?','Choose your size and colour on the product page, add to bag, then select Checkout. You can check out as a guest or sign in.'],['Can I change or cancel my order?','Yes, while it is still “Processing”. Contact us quickly with your order number.'],['Do you offer gift wrapping?','Add a note at checkout and we’ll gift-wrap your order with a handwritten card at no extra cost.']]],['Shipping',[['Do you offer international shipping?','We ship to the EU, UK and Switzerland. Costs and delivery times are shown at checkout.'],['How do I track my order?','Use the tracking link in your shipping email, the Track Order page, or My Account → Orders.']]],['Returns',[['What is your return policy?','Free returns within 30 days on unworn items with tags attached.'],['What if my item is damaged or incorrect?','Contact us within 14 days with a photo and we’ll arrange a free replacement or refund.']]],['Payment',[['Which payment methods do you accept?','Major credit and debit cards, PayPal, bank transfer and cash on delivery (EU). In this prototype all payments are simulated.'],['Is my payment secure?','The live store would use an encrypted, PCI-compliant payment provider. This demo never asks for card details.']]]];
+    const to=st.tId&&S.orders.find(x=>x.id.toUpperCase()===st.tId.toUpperCase());
+    const stepIdx={processing:1,'on-hold':0,shipped:2,completed:3,cancelled:-1};
+    const events=o=>{const d=o.date,day=86400000,i=stepIdx[o.status];if(o.status==='cancelled')return[{label:'Order placed',when:W.dateFmt(d),dot:'bg-ember',txt:'text-cream'},{label:'Order cancelled',when:W.dateFmt(d+day/2),dot:'bg-peach',txt:'text-peach'}];
+      return[['Order placed',0],[o.status==='on-hold'?'Awaiting bank transfer':'Payment confirmed & packing',1],['Shipped (simulated carrier)',2],['Delivered',3]].map(([label,k])=>({label,when:k<=i?W.dateFmt(d+day*[0,0.2,1,3][k]):'Pending',dot:k<=i?'bg-ember':'bg-navy ring-1 ring-peach/30',txt:k<=i?'text-cream':'text-peach/50'}));};
+    const secs=P.s?P.s.map(([h,p],i)=>({h,p:[p],id:'sec-'+i,href:'#sec-'+i,jump:e=>{e.preventDefault();const el=document.getElementById('sec-'+i);el&&window.scrollTo({top:el.getBoundingClientRect().top+scrollY-110,behavior:'smooth'})}})):[];
+    return{isPage:true,title:P.t,kicker:P.k,intro:P.i,heroImg:W.img(P.img,1000),legal:!!P.legal,hasSections:secs.length>0,sections:secs,
+      isAbout:pg==='about',aboutImgs:[[35,'Colour first'],[38,'Built to last'],[17,'For everyone']].map(([k,cap])=>({src:W.img(k,700),alt:'',cap})),
+      values:[['sparkle','Designed in-house','Every print, cut and colourway is created by our own studio team.'],['shield','Made to last','Durable fabrics and reinforced seams, tested for everyday wear.'],['returns','Easy returns','30 days to change your mind — exchanges are always free.']].map(([i,h,p])=>({icon:{i,cls:'h-5 w-5'},h,p})),
+      isContact:pg==='contact',cSent:st.cSent,cForm:!st.cSent,cName:(st.c.name||'').split(' ')[0],
+      cFields:[this.f('c','cErr','name','Full name','text'),this.f('c','cErr','email','Email address','email'),this.f('c','cErr','order','Order number (optional)','text','sm:col-span-2')],
+      cTopic:st.cTopic,onTopic:e=>this.setState({cTopic:e.target.value}),cMsg:st.cMsg,onMsg:e=>this.setState({cMsg:e.target.value,cErr:{...st.cErr,msg:''}}),cMsgErr:st.cErr.msg||'',cMsgInv:st.cErr.msg?'true':'false',cMsgRing:st.cErr.msg?'ring-flame':'ring-peach/30',
+      cBusy:st.cBusy,cBtn:st.cBusy?'Sending…':'Send message',cReset:()=>this.setState({cSent:false,c:{},cMsg:''}),
+      cSubmit:e=>{e.preventDefault();const er={};if(!(st.c.name||'').trim())er.name='Please enter your name';if(!EMAIL.test(st.c.email||''))er.email='Enter a valid email address';if(st.cMsg.trim().length<10)er.msg='Please write at least 10 characters';if(Object.keys(er).length)return this.setState({cErr:er});this.setState({cBusy:true});setTimeout(()=>this.setState({cBusy:false,cSent:true}),800);},
+      contactCards:[['mail','Email','hello@woonext.store — replies within one working day'],['phone','Phone','+49 30 0000 0000 · Mon–Fri, 9:00–17:00 CET'],['pin','Studio','Kaiserstraße 12, 10115 Berlin (by appointment)'],['clock','Live chat','Weekdays 10:00–16:00 from the help icon in the live store']].map(([i,h,p])=>({icon:{i,cls:'h-5 w-5'},h,p})),
+      isFaq:pg==='faq',faqGroups:fq.map(([h,items],g)=>({h,items:items.map(([q,a],i)=>{const k=g+'-'+i,o=st.faq===k;return{q,a,bid:'fqb'+k,pid:'fqp'+k,exp:o?'true':'false',ring:o?'ring-ember/60':'ring-white/10',icon:o?'rotate-180 bg-ember text-midnight':'text-cream ring-1 ring-peach/40',panel:o?'max-h-96 opacity-100':'max-h-0 opacity-0',toggle:()=>this.setState({faq:o?'':k})}})})),
+      isSize:pg==='size-guide',sizeTables:[{h:'Women & men — tops and outerwear',note:'Chest measured at the fullest point, waist at the natural waistline.',cols:['Size','EU','Chest','Waist','Hips'],rows:[['XS','32–34','80–84','62–66','86–90'],['S','36–38','85–89','67–71','91–95'],['M','40–42','90–95','72–77','96–101'],['L','44–46','96–102','78–84','102–108'],['XL','48–50','103–110','85–92','109–116']]},
+        {h:'Kids',note:'Sizes follow age; check height for the best fit.',cols:['Size','Height','Chest','Waist'],rows:[['0–6M','56–68','40–44','40–44'],['6–12M','68–80','44–47','44–46'],['12–18M','80–86','47–49','46–48'],['4Y','98–104','54–56','51–53'],['6Y','110–116','58–60','54–56'],['8Y','122–128','62–65','57–59'],['10Y','134–140','67–70','60–62']]},
+        {h:'Footwear',note:'Measure your foot from heel to longest toe.',cols:['EU','UK','US (W)','US (M)','Foot length'],rows:[['38','5','7.5','6','24.0'],['39','6','8.5','7','24.6'],['40','6.5','9','7.5','25.3'],['41','7.5','10','8.5','26.0'],['42','8','10.5','9','26.6'],['43','9','11.5','10','27.3'],['44','9.5','12','10.5','28.0']]}],
+      isTrack:pg==='track-order',tFields:[this.f('t','tErr','id','Order number','text','','WN-10458'),this.f('t','tErr','email','Billing email','email','','name@example.com')],
+      tDemoId:S.orders[0]?S.orders[0].id:'',tDemo:()=>this.setState({t:{id:S.orders[0].id,email:'demo@woonext.store'},tErr:{}}),
+      tSubmit:e=>{e.preventDefault();const er={};const id=(st.t.id||'').trim().toUpperCase();if(!id)er.id='Enter your order number';if(!EMAIL.test(st.t.email||''))er.email='Enter the email used at checkout';if(Object.keys(er).length)return this.setState({tErr:er});
+        const o=S.orders.find(x=>x.id===id);if(!o)return this.setState({tId:'',tNone:`We couldn’t find order ${id}. Check the number and try again.`});this.setState({tId:id,tNone:''});},
+      tNone:!!st.tNone,tNoneMsg:st.tNone,tFound:!!to,tIdle:!to&&!st.tNone,tr:to?{id:to.id,status:to.status,events:events(to),href:'#/account/order/'+to.id}:{}};
+  }
+}
+</script>
+</body>
+</html>

@@ -28,6 +28,8 @@ export default async function handler(req, res) {
     const responseData = {
         success: false,
         orderId: '',
+        orderNumber: '',
+        orderKey: '',
         total: '',
         currency: '',
         error: ''
@@ -49,7 +51,14 @@ export default async function handler(req, res) {
         );
 
         responseData.success = true;
-        responseData.orderId = data.number;
+        /**
+         * `id` identifies the order to the REST API, `number` is what the
+         * customer sees, and `order_key` is the token the confirmation page
+         * presents to prove it may read this order.
+         */
+        responseData.orderId = data.id;
+        responseData.orderNumber = data.number;
+        responseData.orderKey = data.order_key;
         responseData.total = data.total;
         responseData.currency = data.currency;
 
